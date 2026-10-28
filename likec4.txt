@@ -1,0 +1,1542 @@
+specification {
+  element actor {
+    style {
+      shape person
+      color indigo
+    }
+  }
+  element channel {
+    style {
+      shape browser
+      color slate
+    }
+  }
+  element gateway {
+    style {
+      shape rectangle
+      color blue
+    }
+  }
+  element vnet {
+    style {
+      shape rectangle
+      color sky
+      opacity 15%
+      border dashed
+    }
+  }
+  element subsystem {
+    style {
+      shape rectangle
+      color blue
+      opacity 20%
+    }
+  }
+  element pipeline {
+    style {
+      shape rectangle
+      color sky
+    }
+  }
+  element compute {
+    style {
+      shape rectangle
+      color sky
+    }
+  }
+  element ai_service {
+    style {
+      shape rectangle
+      color indigo
+    }
+  }
+  element queue_bus {
+    style {
+      shape queue
+      color amber
+    }
+  }
+  element orchestrator {
+    style {
+      shape rectangle
+      color green
+    }
+  }
+  element agent {
+    style {
+      shape rectangle
+      color green
+    }
+  }
+  element critic {
+    style {
+      shape rectangle
+      color indigo
+    }
+  }
+  element mcp_tool {
+    style {
+      shape rectangle
+      color sky
+    }
+  }
+  element rules_engine {
+    style {
+      shape rectangle
+      color amber
+    }
+  }
+  element rule_store {
+    style {
+      shape storage
+      color amber
+    }
+  }
+  element store {
+    style {
+      shape storage
+      color slate
+    }
+  }
+  element schema_entity {
+    style {
+      shape rectangle
+      color slate
+    }
+  }
+  element governance {
+    style {
+      shape rectangle
+      color red
+    }
+  }
+  element app_ui {
+    style {
+      shape browser
+      color red
+    }
+  }
+  element observability {
+    style {
+      shape rectangle
+      color muted
+    }
+  }
+  element outcome {
+    style {
+      shape rectangle
+      color green
+    }
+  }
+  element external_system {
+    style {
+      shape rectangle
+      color gray
+    }
+  }
+
+  tag security
+  tag private_endpoint
+  tag mcp
+  tag deterministic
+  tag hitl
+  tag pii_protected
+  tag schema_def
+  tag observability
+  tag versioning
+  tag critic_pattern
+}
+
+model {
+
+  // =========================================================================
+  // 1. EXTERNAL ACTORS & ENTRY CHANNELS
+  // =========================================================================
+  claimant = actor 'Versicherungsnehmer (Claimant)' {
+    summary 'Meldet Schaden, reicht schadensartspezifische Belege nach & erhält EOB'
+    icon bootstrap:person
+  }
+
+  adjuster = actor 'Spezial-Sachbearbeiter (HITL)' {
+    #hitl
+    summary 'Prüft eskalierte Fälle in der HITL-App (mit Highlighting & KI-Vorarbeit)'
+    icon bootstrap:headset
+  }
+
+  // Diese 3 Rollen werden erst im Drill-Down von Policy Management (Level 2C) eingeblendet
+  business_analyst = actor 'Business Analyst (Fachbereich)' {
+    summary 'Erstellt interne Unternehmens- & Prozessregeln in natürlicher Sprache'
+    icon bootstrap:person-gear
+  }
+
+  actuary_legal = actor 'Produktmanagement & Aktuariat (Legal)' {
+    #versioning
+    summary 'Veröffentlicht neue vertragliche AVB-Generationen & Tarifwerke'
+    icon bootstrap:bank
+  }
+
+  risk_compliance_manager = actor 'Risk & Governance Manager (2. Prüfer)' {
+    #security #versioning
+    summary '4-Augen-Prinzip: Prüft Backtest-Impact & gibt neue Regeln für Produktion frei'
+    icon bootstrap:person-check-fill
+  }
+
+  channels = channel 'Omnichannel Frontend & IVR' {
+    summary 'Webportal (teilw. vorklassifiziert), App, E-Mail, Chat & Telefon (IVR)'
+    icon bootstrap:window-stack
+  }
+
+  // =========================================================================
+  // 2. ISOLATED AZURE VNET (SECURITY PERIMETER)
+  // =========================================================================
+  azure_vnet = vnet 'Azure Virtual Network (Isolated Spoke – Zero Public Access)' {
+    #security #private_endpoint
+    icon bootstrap:diagram-3
+    description '''
+      ### Enterprise Security & Network Perimeter
+      | Sicherheits-Aspekt | Umsetzung in Azure |
+      | :--- | :--- |
+      | **Netzwerk-Isolation** | Dediziertes Spoke-VNet (`10.42.0.0/16`) mit NSGs & Azure Firewall Egress-Filtering |
+      | **Private Endpoints** | Alle 5 Data Stores, Event Hubs, AI Foundry & Langfuse sind **ausschließlich** über `Azure Private Link` erreichbar (`publicNetworkAccess: Disabled`) |
+      | **Authentifizierung (IAM)** | System-Assigned **Managed Identities** (Entra ID RBAC) für jeden Agenten und Service – keinerlei Passwörter oder API-Keys im Code |
+      | **Verschlüsselung** | TLS 1.3 in Transit + Customer-Managed Keys (CMK) in Azure Key Vault at Rest |
+      | **Data Residency & AI Privacy**| EU Data Boundary (Germany West Central / Sweden Central), Zero Data Retention bei Azure AI Services (kein Microsoft-Modelltraining) |
+    '''
+    metadata {
+      private_link_enforced 'true (Azure Policy: Deny Public Network Access)'
+      encryption_at_rest 'Customer-Managed Keys (Azure Key Vault HSM)'
+      ai_data_governance 'EU Data Boundary + Abuse Monitoring Opt-Out (Zero Retention)'
+    }
+
+    // -----------------------------------------------------------------------
+    // A. INGESTION, EXTRAKTION & PII-TOKENIZATION (INKL. GATEWAY & EVENT HUB)
+    // -----------------------------------------------------------------------
+    extraction_pipeline = pipeline '1. Ingestion, Extraction & PII-Tokenization' {
+      #pii_protected #security
+      summary 'Foundry Tools Pipeline: Content Understanding (2025-11-01 GA / Agentic Mode), Doc Intel v4.0, MAI-Transcribe-2, Text Analytics for Health & PII'
+      icon bootstrap:file-earmark-text
+      description '''
+        **Kombiniert alle 6 spezialisierten Foundry Tools (Stand 2026) in einer revisionssicheren Pipeline:**
+        0. **Edge Security & Event Hub (intern):** WAF/APIM (AI Gateway + Verified Reverse Proxy für Face Liveness) prüft Auth-Token; `Azure Event Hub` puffert Lastspitzen.
+        1. **Modality Router:** Archiviert sofort das unveränderte Original in `blob_raw` (WORM).
+        2. **Hybride Spezial-Extraktion (Foundry Tools):**
+           - **Content Understanding (`2025-11-01` GA / `2026-06-01-preview`):** Nutzt `enableSegment: true` & `allowInPageSegments: true` zur automatischen Dokumenten-Trennung (z.B. Rechnung + Ausweis + Polizeibericht in einem PDF), `estimateFieldSourceAndConfidence: true` für Source-Grounding `D(page,x1,y1..)` und `workflow: "agentic"` für komplexe Mehr-Dokumenten-Abgleiche.
+           - **Document Intelligence v4.0 (`2024-11-30` GA):** Spezialisierte Extraktion für `prebuilt-invoice`, `prebuilt-idDocument` und `Custom Neural v4.0` (mit Table/Row/Cell-Confidence, Signature Detection, `queryFields` & HTML-Tabellen mit `rowspan`/`colspan`).
+           - **Speech (`MAI-Transcribe-2` & `Voice Live 2026-01-01-preview`):** Telefon-IVR über `Voice Live` (`azure_semantic_vad_multilingual`, `End-of-Utterance Detection`, `auto_truncate`, `LlmInterimResponseConfig`, `MAI-Voice-2.1-Flash`) sowie Fast Transcription mit Diarization (`maxSpeakers`, `phraseList` für Versicherungsvokabular).
+           - **Vision & Azure Face (`detection_03` / `recognition_04`):** Schadensfoto-Analyse, **DSGVO-konformes Face-Blurring** unbeteiligter Dritter (`returnFaceId: false`) und optionale **iBeta Level 1/2 Face Liveness Verification** (`detectLivenessWithVerify/singleModal` + `deviceCorrelationId`).
+        3. **Sprach-, Medizin- & Übersetzungs-Pipeline:**
+           - **Azure AI Language (`2026-05-01` GA):** `Language Detection` (inkl. `scriptCode` & `countryHint`), **Text Analytics for Health** (für Personenschäden: ICD-10/UMLS Entity Linking, `Assertion Detection` für Vorerkrankungen `temporal: past` vs. `current` & **HL7 FHIR v4.0.1 Bundle**) sowie **PII Detection** (Text, Conversation mit Audio-Timing & Document-PII; Kategorien inkl. `IBAN`, `VIN`, `LicensePlate`, `DriversLicenseNumber`, `valueExclusionPolicy` für Partnerwerkstätten & `loggingOptOut=true`).
+           - **Azure AI Translator (`2026-06-06` Text GA & `2026-03-01` Document GA):** Layout-erhaltende PDF-Dokumentenübersetzung (mit Document Intelligence & TSV-Glossaren) sowie NMT / Adaptive Custom Translation (`adaptiveDatasetId`).
+        4. **PII-Tokenization & Assembly:** Ersetzt PII konsistent durch Tokens (`<PII:IBAN_1>`, `<PII:VIN_1>`), speichert das Mapping im `table_pii_vault` und legt `canonical-claim.json` in `blob_state` ab.
+      '''
+
+      front_door_apim = gateway '0a. Azure Front Door (WAF) & APIM AI Gateway' {
+        #security #private_endpoint
+        summary 'DDoS-Schutz, OWASP-WAF, TLS 1.3, Entra ID Kunden-AuthZ, Token-Rate-Limiting & Face Liveness Reverse Proxy'
+        icon bootstrap:shield-lock
+      }
+
+      ingestion_event_hub = queue_bus '0b. Azure Event Hub: Raw Ingestion & DLQ' {
+        #private_endpoint
+        summary 'Puffert eingehende Multi-Channel Payloads vor der Textextraktion (inkl. Dead-Letter Queue)'
+        icon bootstrap:inbox-fill
+        metadata {
+          sku 'Premium Event Hub / Service Bus'
+          retention '7 Days'
+          dead_letter 'dlq-raw-ingestion'
+        }
+      }
+
+      channel_router = compute '1. Input Modality Router & Archiver' {
+        summary 'Speichert Original in blob_raw & routet nach Dateityp (Audio, PDF/DOCX, Bild, Text)'
+        icon bootstrap:signpost-split
+      }
+      speech_svc = ai_service '2a. Azure Speech (MAI-Transcribe-2 & Voice Live Agent)' {
+        summary 'IVR Voice Live (Semantic VAD, EOU, Interim Responses, MAI-Voice-2.1-Flash) & Fast Transcription (Diarization + PhraseList)'
+        icon bootstrap:mic
+        metadata {
+          transcription 'MAI-Transcribe-2 (60 langs, word timestamps, diarization, phraseList), MAI-Transcribe-2-Streaming'
+          voice_live 'Voice Live API (2026-01-01-preview): azure_semantic_vad_multilingual, EOU, auto_truncate, LlmInterimResponseConfig'
+          synthesis 'MAI-Voice-2.1-Flash & DragonHDLatestNeural (SSML, paralinguistics)'
+        }
+      }
+      doc_intel = ai_service '2b. Content Understanding & Document Intelligence v4.0' {
+        summary 'Auto-Segmentation (inkl. In-Page), Agentic Mode, Prebuilt-Invoice & Custom Neural v4.0 (Cell Confidence, Signatures, Polygons)'
+        icon bootstrap:file-earmark-text
+        metadata {
+          content_understanding 'API 2025-11-01 GA / 2026-06-01-preview: enableSegment, allowInPageSegments, estimateFieldSourceAndConfidence, workflow=agentic'
+          document_intelligence 'API v4.0 (2024-11-30 GA): prebuilt-invoice, prebuilt-idDocument, Custom Neural (table/row/cell confidence, signatures, queryFields)'
+          outputs 'Markdown + HTML Tables (rowspan/colspan), Field Confidence [0..1], Source Grounding D(page,x1,y1..)'
+        }
+      }
+      vision_svc = ai_service '2c. Azure Vision & Face (Damage Analysis, Face Blur & Liveness)' {
+        summary 'Prüft Schadensfotos, verpixelt Gesichter Dritter (detection_03) & prüft Identität via ISO-30107-3 Face Liveness (recognition_04)'
+        icon bootstrap:camera
+        metadata {
+          privacy_redaction 'Face Detect (detection_03, returnFaceId=false) für DSGVO-Gesichtsverpixelung auf Unfallfotos'
+          kyc_anti_spoofing 'DetectLivenessWithVerify (iBeta Level 1/2 0% PAD, recognition_04, deviceCorrelationId Abuse Monitoring)'
+        }
+      }
+      lang_svc = ai_service '3a. Azure AI Language (PII 2026-05-01, Health FHIR & NER)' {
+        #pii_protected
+        summary 'Erkennt 50+ PII-Typen (IBAN, VIN, KFZ), analysiert Arztbriefe (Text Analytics for Health -> FHIR v4.0.1 & Assertions) & Sprache'
+        icon bootstrap:translate
+        metadata {
+          pii_detection 'API 2026-05-01 GA: Text, Conversation (includeAudioRedaction) & Document PII; entitySynonyms, valueExclusionPolicy, loggingOptOut=true'
+          health_analytics 'Text Analytics for Health: UMLS/ICD-10 Linking, Assertion Detection (certainty=negative, temporal=past vs current), FHIR 4.0.1 Bundle'
+          mcp_integration 'Remote/Local Azure Language MCP Server (/language/mcp?api-version=2025-11-15-preview)'
+        }
+      }
+      translator_svc = ai_service '3b. Azure AI Translator (Text 2026-06-06 & Doc 2026-03-01 GA)' {
+        summary 'Übersetzt Auslands-Belege layouttreu (Document Translation + Doc Intel + TSV-Glossar) & Text (NMT / AdaptCT)'
+        icon bootstrap:globe
+        metadata {
+          text_api 'API 2026-06-06 GA: NMT (Private Endpoint kompatibel) & Adaptive Custom Translation (adaptiveDatasetId, tone=formal)'
+          doc_api 'API 2026-03-01 GA: Sync/Batch Document Translation mit Document Intelligence Layout-Erhalt, Bild-Übersetzung & Fachglossar'
+          privacy 'Strict No-Trace Policy (Zero Data Retention)'
+        }
+      }
+      pii_tokenizer = compute '4. PII Tokenizer & Canonical Assembler' {
+        #pii_protected #security
+        summary 'Ersetzt PII durch konsistente Tokens (<PII:IBAN_1>, <PII:VIN_1>), speichert Mapping im Vault & JSON in blob_state'
+        icon bootstrap:key-fill
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // B. KLASSIFIKATION & DETERMINISTISCHE SCHADENANLAGE
+    // -----------------------------------------------------------------------
+    classification_pipeline = pipeline '2. Klassifikation & Deterministische Schadenanlage' {
+      summary 'Prüft Konfidenz, klassifiziert via Microsoft-Decision-1 (SystemOne API) & legt Schaden im PAS an'
+      icon bootstrap:check-circle
+      description '''
+        **Workflow nach der Textextraktion:**
+        - Ist die Meldung bereits aus dem Portal vorklassifiziert, wird die KI-Klassifikation übersprungen.
+        - Ist die Extraktions-Konfidenz eines Pflichtfelds zu niedrig (`< 0.80`), geht ein Korrektur-Task an das HITL-System.
+        - Unstrukturierte Eingänge werden über **`Microsoft-Decision-1` (`/providers/microsoft/v1/systemone`)** typisiert klassifiziert:
+          - `choice`: Exakte Schadensart (`AUTO_GLASS`, `WATER_DAMAGE`, `BODILY_INJURY`) + Wahrscheinlichkeitsverteilung.
+          - `score`: Geordnete Schaden-Schwere (`Cosmetic`, `Minor`, `Major`, `Critical`).
+          - `noul`: Binäres Gate für Personenschaden / Anwaltsschreiben (`0.0 - 1.0`).
+        - Für authentifizierte Kunden wird deterministisch der Vertrag geprüft, die **zum Vertragsabschluss gültige AVB-Generation (`AvbVersionId`)** ermittelt und die Schadenakte angelegt.
+      '''
+
+      check_preclassified = compute '1. Vor-Klassifikations- & Qualitäts-Weiche' {
+        summary 'Prüft OCR-Konfidenz (>=0.80) & ob Schadensart bereits durch Kanal bekannt ist'
+        icon bootstrap:signpost-2
+      }
+      classifier_service = ai_service '2. Microsoft-Decision-1 Classifier (SystemOne API)' {
+        summary 'Deterministisch strukturierte Entscheidung (choice: Schadensart, score: Schwere, noul: BI-Gate) mit Kalibrierung'
+        icon bootstrap:tags
+        metadata {
+          endpoint '/providers/microsoft/v1/systemone (Microsoft-Decision-1)'
+          primitives 'choice (claimType), score (severity 0..3), noul (bodilyInjuryGate)'
+        }
+      }
+      pas_claim_creator = compute '3. Deterministische Schadenanlage & AVB-Bindung' {
+        #deterministic #versioning
+        summary 'Prüft Kunden-Auth, liest historische AvbVersionId des Vertrags & legt Schadenakte an'
+        icon bootstrap:journal-plus
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // C. MULTI-AGENT CLAIM PROCESSING SYSTEM (INKL. CLAIMS SERVICE BUS)
+    // -----------------------------------------------------------------------
+    multi_agent_system = pipeline '3. Multi-Agent Claim Processing System' {
+      summary 'Foundry Hosted Agents (Responses API v1, Model Router, Toolbox MCP & Foundry Guardrails/Prompt Shields)'
+      icon bootstrap:robot
+      description '''
+        **Microsoft Foundry Agent Service (2026 Reference Architecture):**
+        0. **Azure Service Bus Queue (intern):** Entkoppelt und puffert angelegte Schadenfälle (`session_enabled: claimId`).
+        1. **Foundry Hosted Agents (Responses Protocol `2.0.0`):** Laufen in isolierten Micro-VM-Sandboxes mit dedizierter **Microsoft Entra Agent Identity** je Agent und `FoundryToolbox` MCP-Anbindung.
+        2. **Foundry Model Router (`2025-11-18`) & PTU Spillover:**
+           - `router-frontier` (`Quality`-Mode: `gpt-6-sol`, `gpt-5.6-sol`, `claude-sonnet-5`) für Orchestrator, Coverage & Critics.
+           - `router-balanced` (`Balanced`-Mode: `gpt-5.4-mini`, `gpt-5.6-luna`) für Standard-Tool-Calls.
+           - Nutzt **Prompt Caching Breakpoints** für AVB-Kontexte und **PTU Traffic Spillover** (`DataZoneProvisionedManaged` &rarr; `DataZoneStandard`).
+        3. **Foundry Guardrails an 4 Intervention Points (`User Input`, `Tool Call`, `Tool Response`, `Output`):**
+           - **Prompt Shields & Spotlighting:** Schutz gegen indirekte Prompt-Injections (XPIA) in hochgeladenen PDFs/Rechnungen.
+           - **Groundedness Detection & Task Adherence:** Verhindert Halluzinationen und Abweichungen vom Schadensart-Playbook.
+      '''
+
+      claims_event_bus = queue_bus '0. Azure Service Bus: Claims Processing Queue' {
+        #private_endpoint
+        summary 'Puffert angelegte Schäden nach Schadensart & Priorität für die Agenten-Verarbeitung'
+        icon bootstrap:hdd-stack
+        metadata {
+          queue_name 'claims-processing-queue'
+          session_enabled 'true (claimId)'
+        }
+      }
+
+      playbook_loader = compute '1. Claim-Type Playbook & Skill Loader' {
+        summary 'Lädt je Schadensart die Dokumenten-Checkliste, Agenten-Skills & Systemprompts aus Langfuse'
+        icon bootstrap:list-check
+      }
+
+      orchestrator = orchestrator '2. Magentic Claims Orchestrator' {
+        summary 'Zentrales Gehirn: Steuert Sub-Agenten nach Schadensart-Playbook & kann aktiv an HITL eskalieren'
+        icon bootstrap:cpu-fill
+        metadata {
+          pattern 'Magentic Orchestrator + Self-Escalation Capability'
+          prompt_source 'Langfuse Prompt Registry (by claimType)'
+        }
+      }
+
+      // --- AGENT 1: CUSTOMER COMMUNICATION & INTAKE ---
+      customer_agent = agent 'Customer Communication & Intake Agent' {
+        #critic_pattern
+        summary 'Einziger Agent mit Kundenkontakt: Nutzt Generator-Critic für rechtssichere EOBs & Rückfragen'
+        icon bootstrap:chat-dots-fill
+
+        comm_critic = critic 'Internal Compliance & Groundedness Critic' {
+          #critic_pattern
+          summary 'Prüft EOB-Entwürfe auf Halluzinationsfreiheit, korrekte AVB-Zitate & Tonalität vor Versand'
+          icon bootstrap:person-badge
+        }
+
+        tool_request_docs = mcp_tool 'MCP: request_checklist_documents' {
+          #mcp
+          summary 'Liest offene Punkte der Schadensart-Checkliste & fordert fehlende Belege beim Kunden an'
+        }
+
+        tool_send_msg = mcp_tool 'MCP: send_customer_notification' {
+          #mcp #pii_protected
+          summary 'De-tokenisiert Empfängerdaten (<PII:NAME_1>) über den PII-Vault & versendet Nachricht'
+        }
+
+        tool_gen_eob = mcp_tool 'MCP: generate_eob_letter' {
+          #mcp #versioning #pii_protected
+          summary 'Holt AVB-Originalzitate aus AI Search, de-tokenisiert PII & rendert das PDF-Schreiben'
+        }
+      }
+
+      // --- AGENT 2: COVERAGE & BENEFITS ---
+      coverage_agent = agent 'Coverage & Benefits Agent' {
+        #versioning
+        summary 'Prüft Deckung & Ausschlüsse exakt gegen die bei Vertragsabschluss gültige AVB-Generation'
+        icon bootstrap:file-earmark-check-fill
+
+        tool_get_policy = mcp_tool 'MCP: get_policy_at_loss_date' {
+          #mcp #versioning
+          summary 'Liest Vertrag, Deckungen & die historisch gebundene AvbVersionId aus Azure SQL (PAS)'
+        }
+
+        tool_search_clauses = mcp_tool 'MCP: search_historical_avb_clauses' {
+          #mcp #versioning
+          summary 'Vektorsuche in Azure AI Search mit striktem Filter auf die AvbVersionId des Vertrags'
+        }
+
+        tool_save_coverage = mcp_tool 'MCP: record_coverage_determination' {
+          #mcp
+          summary 'Speichert Deckungsentscheidung, geprüfte Limits & gefundene AVB-Zitate im Claim Dossier'
+        }
+      }
+
+      // --- AGENT 3: FRAUD & RISK ---
+      fraud_agent = agent 'Fraud & Risk Agent' {
+        summary 'Prüft schadensartspezifische Betrugsindikatoren, Bild-Hashes, Vorschäden & Anomalien'
+        icon bootstrap:eye-fill
+
+        tool_check_image_hash = mcp_tool 'MCP: check_image_duplicates' {
+          #mcp
+          summary 'Vergleicht Perceptual Hashes & EXIF-Daten aus blob_raw mit bestehenden Schäden'
+        }
+
+        tool_score_anomaly = mcp_tool 'MCP: score_claim_anomaly' {
+          #mcp
+          summary 'Prüft Vorschadenhistorie in PAS SQL, Kundenrisiko & extrahierte Rechnungsdaten auf Ausreißer'
+        }
+      }
+
+      // --- AGENT 4: ADJUDICATION & PRICING ---
+      adjudication_agent = agent 'Adjudication & Pricing Agent' {
+        #versioning #critic_pattern
+        summary 'Mappt Rechnungspositionen auf Tarifcodes (mit Coding Critic) & ruft die Rules Engine auf'
+        icon bootstrap:calculator-fill
+
+        coding_critic = critic 'Internal Coding & Tariff Critic' {
+          #critic_pattern
+          summary 'Prüft das Mapping von Freitext-Rechnungspositionen auf offizielle Gebühren-/Reparaturcodes'
+          icon bootstrap:check2-all
+        }
+
+        tool_map_items = mcp_tool 'MCP: map_invoice_to_tariff_codes' {
+          #mcp
+          summary 'Liest extrahierte Positionen aus blob_state & gleicht mit Reparatur-Richtlinien in AI Search ab'
+        }
+
+        tool_exec_rules = mcp_tool 'MCP: evaluate_versioned_payout_rules' {
+          #mcp #deterministic #versioning
+          summary 'Sendet normierten RulesEvaluationRequest an die Rules Engine & schreibt Ergebnis ins Dossier'
+        }
+      }
+
+      // --- AGENT 5: FINANCIAL & SETTLEMENT ---
+      financial_agent = agent 'Financial & Settlement Agent' {
+        summary 'Bucht Schadenrückstellungen & führt bei STP-Freigabe die Auszahlung im ERP aus'
+        icon bootstrap:cash-coin
+
+        tool_post_payment = mcp_tool 'MCP: post_erp_disbursement' {
+          #mcp #pii_protected
+          summary 'De-tokenisiert <PII:IBAN_1> über den PII-Vault & bucht die Auszahlung im SAP/ERP'
+        }
+
+        tool_update_reserve = mcp_tool 'MCP: update_claim_reserve_and_status' {
+          #mcp
+          summary 'Aktualisiert Rückstellungen & schließt Schadenakte in Cosmos DB & Azure SQL (PAS)'
+        }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // D. DETERMINISTIC RULES ENGINE & POLICY MANAGEMENT (4-AUGEN-WORKFLOW)
+    // -----------------------------------------------------------------------
+    rules_engine = rules_engine 'Deterministic Rules Runtime' {
+      #deterministic #private_endpoint #versioning
+      summary 'Einheitliche, versionierte Rules Engine für historische AVB-Tarife & interne Unternehmensregeln'
+      icon bootstrap:gear-wide-connected
+      description '''
+        **Deterministische Ausführung & Datenstrukturen (Input / Output):**
+        Die Engine enthält **ein einziges, versioniertes Rule Repository**, in dem sowohl die historisch gebundenen AVB-Regeln (`avbVersionId`) als auch die zum Stichtag gültigen internen Unternehmensregeln liegen.
+
+        ### Beispiel Input-Struktur (`RulesEvaluationRequest`):
+        ```json
+        {
+          "claimId": "CLM-2026-9812",
+          "claimType": "AUTO_GLASS",
+          "contract": {
+            "policyNumber": "POL-2021-8812",
+            "contractCreatedAt": "2021-05-14",
+            "boundAvbVersionId": "AVB-KFZ-2021-V1",
+            "deductibleAmount": 150.00,
+            "coverageLimit": 5000.00
+          },
+          "claimFacts": {
+            "lossDate": "2026-03-12",
+            "isPartnerWorkshop": true,
+            "lineItems": [
+              { "tariffCode": "GLAS_WINDSHIELD_REPL", "claimedAmount": 420.00, "laborHours": 2.5 },
+              { "tariffCode": "ADAS_CAMERA_CALIB", "claimedAmount": 165.00, "laborHours": 1.0 }
+            ]
+          }
+        }
+        ```
+
+        ### Beispiel Output-Struktur (`RulesEvaluationResponse`):
+        ```json
+        {
+          "evaluationId": "EVAL-99412",
+          "deterministicStatus": "APPROVED_PARTIAL",
+          "appliedRules": [
+            { "ruleId": "AVB-2021-GLAS-01", "version": "1.0", "type": "CONTRACTUAL_AVB", "effect": "Maximaler Stundensatz 140 EUR" },
+            { "ruleId": "CORP-PARTNER-BONUS-04", "version": "3.2", "type": "INTERNAL_POLICY", "effect": "Halbierung SB bei Partnerwerkstatt (-75 EUR)" }
+          ],
+          "calculationBreakdown": {
+            "totalClaimed": 585.00,
+            "tariffCapDeduction": -30.00,
+            "eligibleAmount": 555.00,
+            "appliedDeductible": -75.00,
+            "finalNetPayout": 480.00
+          }
+        }
+        ```
+      '''
+
+      rule_evaluator = compute 'Deterministic DSL Evaluator & Schema Validator' {
+        #deterministic
+        summary 'Prüft Input-Schema, lädt passende Regelversionen & berechnet exakt das Output-JSON'
+        icon bootstrap:sliders
+      }
+
+      versioned_rule_repo = rule_store 'Unified Versioned Rule Repository' {
+        #versioning
+        summary 'Speichert alle historischen AVB-Regelgenerationen & versionierten internen Unternehmensregeln'
+        icon bootstrap:archive-fill
+      }
+    }
+
+    rule_authoring_subsystem = pipeline 'Policy Management & Rule Authoring' {
+      #versioning #security
+      summary 'Steuert & aktualisiert die Rules Engine (AVB-Generationen & interne Regeln im 4-Augen-Prozess)'
+      icon bootstrap:file-earmark-code
+      description '''
+        **Auf Level 1 als kompakte Einheit dargestellt – im Drill-Down (Level 2C) mit allen 3 Rollen & 5 Prüfschritten:**
+        1. **Zwei Intakes:** Vertragliche AVBs (`actuary_legal`) & interne Unternehmensregeln (`business_analyst`).
+        2. **KI-Transformation:** Übersetzung in typisiertes DSL + Unit-Tests.
+        3. **Z3-Konfliktprüfung & Backtesting:** Mathematische Widerspruchsprüfung & Simulation gegen 10.000 historische Claims.
+        4. **4-Augen-Freigabe:** `risk_compliance_manager` prüft den finanziellen Impact und gibt das Deployment frei.
+      '''
+
+      avb_intake = compute '1A. AVB & Tarifwerk-Ingestion (Vertraglich)' {
+        #versioning
+        summary 'Extrahiert neue AVB-Generation, indexiert Text in AI Search & übergibt Klauseln'
+        icon bootstrap:file-earmark-medical
+      }
+
+      internal_rule_intake = app_ui '1B. Natural-Language Rule Studio (Interne Regeln)' {
+        summary 'UI für Business Analysten: Eingabe interner Unternehmensregeln in natürlicher Sprache'
+        icon bootstrap:terminal
+      }
+
+      authoring_agent = agent '2. Rule & Policy Authoring Agent (NL-to-DSL)' {
+        summary 'Generiert aus AVB-Klauseln oder Freitext typisiertes YAML-DSL & synthetische Unit-Tests'
+        icon bootstrap:robot
+      }
+
+      conflict_simulator = compute '3. SMT Conflict Solver & Historical Backtester' {
+        #deterministic
+        summary 'Prüft Logik-Konflikte per Z3-Solver & simuliert finanziellen Impact auf 10.000 historische Claims'
+        icon bootstrap:intersect
+      }
+
+      impact_approval_portal = app_ui '4. Governance & Impact Approval Portal (4-Augen-UI)' {
+        #security #versioning
+        summary 'Entscheidungs-UI für den 2. Prüfer: Zeigt Regel-Diff, Konfliktbericht & Backtest-Finanz-Impact'
+        icon bootstrap:clipboard-data
+      }
+
+      rule_deployer = compute '5. Versioned Rule Compiler & CI/CD Deployer' {
+        #versioning
+        summary 'Kompiliert freigegebene Regeln nach Sign-Off in das Unified Versioned Rule Repository'
+        icon bootstrap:cloud-upload
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // E. CIRCUIT BREAKER & HITL SACHBEARBEITER-APPLIKATION
+    // -----------------------------------------------------------------------
+    governance_svc = governance '4. Circuit Breaker & HITL Escalation Platform' {
+      #hitl #security
+      summary 'Deterministische Guardrail-Middleware, Dokumenten-Highlighting, HITL-Workbench & Direkt-Abwicklung'
+      icon bootstrap:shield-exclamation
+
+      circuit_breaker = governance '1. Deterministic Circuit Breaker Middleware' {
+        #hitl #security #deterministic
+        summary 'Code-basierter Interceptor: Prüft JSON-Outputs nach jedem Schritt & fängt Orchestrator-Eskalationen ab'
+        icon bootstrap:exclamation-octagon-fill
+      }
+
+      dossier_compiler = compute '2. AI Summary & Document Highlighting Compiler' {
+        #hitl
+        summary 'Erstellt Fall-Zusammenfassung, markiert Eskalationsgründe & highlighted Stellen per Bounding-Box'
+        icon bootstrap:highlighter
+      }
+
+      adjuster_notifier = compute '3. Priority Routing & Notification Service' {
+        #hitl
+        summary 'Benachrichtigt den Spezial-Sachbearbeiter über den neuen HITL-Fall'
+        icon bootstrap:bell-fill
+      }
+
+      adjuster_app = app_ui '4. Specialist Adjuster Workbench App (HITL UI)' {
+        #hitl #pii_protected
+        summary 'Sachbearbeiter-App: Zeigt KI-Summary, gehighlightete Originaldokumente & Gründe (de-tokenisiert PII)'
+        icon bootstrap:display
+      }
+
+      direct_hitl_executor = compute '5. Direct HITL Settlement & Letter Executor (Kein Agent)' {
+        #deterministic #hitl
+        summary 'Setzt finale Sachbearbeiter-Entscheidungen (Ablehnung / Großschaden-Zahlung) direkt & deterministisch um'
+        icon bootstrap:check2-square
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // F. LANGFUSE OBSERVABILITY & PROMPT MANAGEMENT
+    // -----------------------------------------------------------------------
+    langfuse = observability 'Langfuse Observability & Prompt Platform' {
+      #observability #pii_protected #private_endpoint
+      summary 'Self-Hosted im Azure VNet: Verwaltet Systemprompts/Skills & zeichnet PII-freie Traces auf'
+      icon bootstrap:activity
+
+      otel_pii_gateway = compute '1. OpenTelemetry Collector & Azure AI PII Guard' {
+        #pii_protected #security
+        summary 'Nimmt OTel-Traces von Agenten & Circuit Breaker entgegen und filtert Freitext-PII via Azure AI Language'
+        icon bootstrap:funnel-fill
+      }
+
+      langfuse_core = observability '2. Langfuse Tracing & Cost Analytics Server' {
+        #observability
+        summary 'Speichert Agenten-Traces, Latenz-Spans, Token-Kosten & Circuit-Breaker-Events'
+        icon bootstrap:graph-up
+      }
+
+      prompt_registry = observability '3. Langfuse Prompt & Claim-Type Skill Registry' {
+        #observability #versioning
+        summary 'Liefert versionierte Systemprompts, Agenten-Instruktionen & Checklisten je Schadensart zur Laufzeit'
+        icon bootstrap:braces-asterisk
+      }
+
+      eval_engine = observability '4. Langfuse & Foundry Evaluation Engine (RAG Triad & Agent Metrics)' {
+        #observability
+        summary 'Testet klassische RAG- & Agenten-Metriken (Relevance, Groundedness, Coherence, NDCG@3, Tool Accuracy) & nutzt HITL-Overrides'
+        icon bootstrap:award
+        description '''
+          **Kontinuierliche & Batch-Evaluation (Langfuse + Foundry Evaluators):**
+          Prüft sowohl gesampelte Produktions-Traces als auch synthetische/kuratierte Golden Datasets gegen die Wissensbasis (`vector_search`) und die Schadenakte (`cosmos_claims`):
+          - **Klassische RAG-Triad-Metriken:**
+            - `builtin.relevance` (Answer Relevance zur Schadenfrage)
+            - `builtin.groundedness` (Halluzinationsfreiheit gegenüber abgerufenen AVB-Chunks & Rules-Output)
+            - `builtin.document_retrieval` (`ndcg@3`, `xdcg@3`, `fidelity` der Azure AI Search Treffer)
+            - `builtin.coherence` & `builtin.fluency` (Schreibqualität der EOB-Entwürfe)
+          - **Agentic Process & System Metriken:**
+            - `builtin.tool_call_accuracy` & `builtin.tool_selection` (Korrekte MCP-Tool-Wahl & `AvbVersionId`-Parameter)
+            - `builtin.task_adherence` & `builtin.task_completion` (Einhaltung des Schadensart-Playbooks)
+        '''
+        metadata {
+          rag_metrics 'Relevance (1-5), Groundedness (1-5), Document Retrieval (NDCG@3, Fidelity), Coherence (1-5)'
+          agent_metrics 'Tool Call Accuracy, Tool Selection, Task Adherence, Output Quality Composite'
+          judge_model 'gpt-5.6-luna / gpt-5.4-mini (LLM-as-a-Judge)'
+        }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // G. DEFINIERTE OUTCOMES
+    // -----------------------------------------------------------------------
+    claims_outcomes = subsystem 'Claims Processing Outcomes' {
+      summary 'Die drei definierten End-Zustände der Schadenbearbeitung'
+
+      outcome_stp = outcome 'Komplette Dunkelverarbeitung (STP)' {
+        summary 'Vollautomatische Regulierung, Auszahlung & EOB-Versand ohne menschlichen Eingriff'
+        icon bootstrap:check2-circle
+      }
+      outcome_comm = outcome 'Customer Communication Loop' {
+        summary 'Schadensartspezifische Dokumenten-Nachforderung oder Zustellung des Abrechnungsschreibens'
+        icon bootstrap:chat-dots
+      }
+      outcome_hitl = outcome 'HITL-Abschluss (Durch Spezialist entschieden)' {
+        summary 'Abgeschlossene manuelle Freigabe, Kürzung oder geprüfte Ablehnung (ohne erneuten Agenten-Lauf)'
+        icon bootstrap:person-check-fill
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // H. PERSISTENTE AZURE DATA STORES (AUF LEVEL 1 ALS EINE KOMPAKTE BOX)
+    // -----------------------------------------------------------------------
+    data_stores = store 'Secured Azure Data & Knowledge Platform (Private Link)' {
+      #security #private_endpoint #pii_protected
+      summary 'Konsolidierte Datenhaltung (Blobs, Cosmos DB, AI Search, PAS SQL) – komplett hinter Private Endpoints'
+      icon bootstrap:database-fill-lock
+      description '''
+        ### Datenschutz-, Privacy- & Security-Matrix der 5 Speicher (Klicke auf Lupe für Tabellen-Drill-Down)
+        Alle Speicher sind ausschließlich über **Azure Private Endpoints (`privatelink.*`)** im isolierten VNet erreichbar und mit **Customer-Managed Keys (CMK)** im Azure Key Vault verschlüsselt.
+
+        | Azure Ressource | Gespeicherte Daten | PII / Datenschutz-Status | Zugriff durch KI-Agenten (LLMs) |
+        | :--- | :--- | :--- | :--- |
+        | **1. Azure Blob (`raw-artifacts`)** | Original-PDFs, Schadensfotos, Audio, EOB-PDFs | **Enthält Original-PII** (WORM Legal Hold) | **Kein direkter LLM-Textzugriff** (nur Hash-Prüfung & HITL-Viewer) |
+        | **2. Azure Blob (`extracted-state`)** | Extrahierte JSONs, Tabellen & Bounding-Boxes | **Pseudonymisiert** (`<PII:NAME_1>`, `<PII:IBAN_1>`) | **Ja** (sicher, da PII bereits durch Tokens ersetzt) |
+        | **3a. Cosmos DB (`claim_dossiers` & `hitl`)** | Schadenakte, Checkliste, Rules-Output, HITL-Dossier | **Pseudonymisiert** (arbeitet mit `claimId` & Tokens) | **Ja** (über typisierte MCP-Tools) |
+        | **3b. Cosmos DB (`pii_token_vault`)** | Mapping `<PII:IBAN_1>` &rarr; echte IBAN / Name | **Streng vertraulich (Klartext-PII Vault)** | **NEIN (Strikt gesperrt für LLMs!)** Nur für deterministische Ausgangs-Adapter & HITL-UI |
+        | **4. Azure AI Search (`policy-knowledge`)** | Historische & aktuelle AVB-Generationen, Tarife | **Keine PII** (reine Produkt- & Rechtsdokumente) | **Ja** (Read-Only RAG mit `AvbVersionId`-Filter) |
+        | **5. Azure SQL (`pas-core`)** | Verträge, Deckungslimits, `AvbVersionId`, Claims | **Pseudonymisierter Lesezugriff** über `PolicyNumber` | **Nur über eingeschränkte MCP-Views** (ohne Klartext-Kontodaten) |
+      '''
+      metadata {
+        network_isolation '100% Azure Private Link (No Public Internet Endpoints)'
+        key_management 'Azure Key Vault HSM (Customer-Managed Keys)'
+        gdpr_deletion 'Automated TTL & Crypto-Shredding via pii_token_vault'
+      }
+
+      // 0. Security & Key Vault Node (Sichtbar im Store Drill-Down)
+      security_vault = governance 'Azure Key Vault & Private Link DNS' {
+        #security #private_endpoint
+        summary 'Verwaltet Customer-Managed Keys (CMK), Private DNS Zones & Managed Identity Policies'
+        icon bootstrap:shield-lock-fill
+      }
+
+      // 1. Raw Document Blob
+      blob_raw = store 'Azure Blob: raw-artifacts' {
+        #private_endpoint
+        summary 'Container für Original-Uploads des Kunden (PDF, Fotos, Audio) & generierte EOB-PDFs'
+        icon bootstrap:archive
+        description '''
+          ### Storage: `raw-artifacts` (Private Endpoint: `privatelink.blob.core.windows.net`)
+          | Eigenschaft | Wert / Beschreibung |
+          | :--- | :--- |
+          | **Pfad-Struktur** | `/{tenantId}/{claimId}/raw/{documentId}_{filename}` |
+          | **PII-Klassifizierung** | **Hoch (Originaldokumente)** – Zugriff nur für Extraktions-Pipeline, EOB-Archivierung & HITL-Viewer |
+          | **Rechtssicherheit** | Time-based retention (WORM Legal Hold) |
+        '''
+      }
+
+      // 2. Extracted State Blob
+      blob_state = store 'Azure Blob: extracted-state' {
+        #pii_protected #private_endpoint
+        summary 'Pseudonymisierte Extraktions-JSONs (<PII:...>) inkl. Bounding-Boxes für Highlighting'
+        icon bootstrap:file-earmark-code
+        description '''
+          ### Schema: `canonical-claim.json` (Pseudonymisiert – Sicher für KI-Agenten)
+          | Feld | Typ | Beschreibung |
+          | :--- | :--- | :--- |
+          | **claimId** | `string` | Eindeutige Schadennummer (`CLM-2026-9812`) |
+          | **claimType** | `enum` | `AUTO_GLASS`, `WATER_DAMAGE`, `BODILY_INJURY`, etc. |
+          | **overallConfidence** | `float` | Aggregierte Extraktions-Konfidenz (`0.00 - 1.00`) |
+          | **sanitizedText** | `string` | Text mit Platzhaltern (`<PII:CLAIMANT_NAME_1>`, `<PII:IBAN_1>`) |
+          | **extractedFields** | `array` | `{ fieldName, tokenOrValue, confidence, page, boundingBox: [x1,y1,x2,y2] }` |
+        '''
+      }
+
+      // 3. Transactional Claims Cosmos DB
+      cosmos_claims = store 'Azure Cosmos DB: active-claims' {
+        #private_endpoint #pii_protected
+        summary 'Operative Schadenakten, PII-Token-Vault, HITL-Dossiers & Audit-Trail'
+        icon bootstrap:database-fill-gear
+
+        table_claim_dossier = schema_entity 'Container: claim_dossiers' {
+          #schema_def #versioning
+          summary 'Operative Schadenakte inkl. gebundener AvbVersionId, Checkliste & Rules-Ergebnis'
+          description '''
+            ### Container: `claim_dossiers` (Partition Key: `/claimId`)
+            | Feld | Datentyp | Beschreibung |
+            | :--- | :--- | :--- |
+            | **id** | `string [PK]` | Eindeutige Dossier-ID (`CLM-2026-9812`) |
+            | **policyNumber** | `string` | Verknüpfte Vertragsnummer |
+            | **boundAvbVersionId** | `string` | **Historische AVB-Generation bei Vertragsabschluss** (`AVB-KFZ-2021-V1`) |
+            | **claimType** | `string` | Schadensart (steuert Playbook, Prompts & Checkliste) |
+            | **checklistStatus** | `object` | `{ requiredDocs: [...], receivedDocs: [...], isComplete: boolean }` |
+            | **rulesEvaluation** | `object` | Vollständiger `RulesEvaluationResponse` der deterministischen Rules Engine |
+            | **agentDecisions** | `array` | `{ agent, rationale, confidence, citedClauses, timestamp }` |
+          '''
+        }
+
+        table_hitl_queue = schema_entity 'Container: hitl_escalations' {
+          #schema_def #hitl
+          summary 'Aufbereitete HITL-Fälle mit KI-Zusammenfassung, Eskalationsgründen & Highlight-Koordinaten'
+          description '''
+            ### Container: `hitl_escalations` (Partition Key: `/escalationId`)
+            | Feld | Datentyp | Beschreibung |
+            | :--- | :--- | :--- |
+            | **escalationId** | `string [PK]` | UUID des HITL-Eskalationsfalls |
+            | **claimId** | `string` | Referenzierte Schadenakte |
+            | **escalationType** | `enum` | `EXTRACTION_LOW_CONFIDENCE` (Resume Agent) \| `TERMINAL_DECISION` (Denial/HighSum/Fraud) |
+            | **triggerReasons** | `array<string>` | Klartext-Erklärung für das rote Banner in der Sachbearbeiter-App |
+            | **executiveSummary** | `markdown` | Kompakte KI-Zusammenfassung des Falls |
+            | **documentHighlights** | `array` | `{ docUri, page, boundingBox, color, label, confidence }` |
+          '''
+        }
+
+        table_pii_vault = schema_entity 'Container: pii_token_vault (Strictly Secured)' {
+          #schema_def #pii_protected #security
+          summary 'Hochgesicherte Zuordnungstabelle zwischen Platzhalter-Tokens (<PII:IBAN_1>) & Klartext'
+          description '''
+            ### Container: `pii_token_vault` (Partition Key: `/claimId`, Always Encrypted / CMK)
+            **Kein LLM hat Zugriff auf diesen Container!** Nur die deterministischen Ausgangs-Adapter (MCP-Tools für ERP-Zahlung, Briefversand) und die HITL-Workbench dürfen Tokens auflösen (De-Tokenization).
+
+            | Feld | Datentyp | Beschreibung |
+            | :--- | :--- | :--- |
+            | **claimId** | `string [PK]` | Zugehörige Schadennummer |
+            | **tokenMap** | `map<string,string>`| `{ "<PII:CLAIMANT_NAME_1>": "Max Mustermann", "<PII:IBAN_1>": "DE893704..." }` |
+            | **createdAt** | `datetime` | Zeitpunkt der Tokenisierung bei der Extraktion |
+            | **retentionExpiry** | `datetime` | Automatische Löschfrist nach DSGVO (Crypto-Shredding) |
+          '''
+        }
+      }
+
+      // 4. Vector Store (Azure AI Search & Foundry IQ)
+      vector_search = store 'Azure AI Search & Foundry IQ: policy-knowledge' {
+        #versioning #private_endpoint
+        summary 'Integrated Vectorization Indexer, Hybrid Search (BM25 + HNSW), RRF & L2 Semantic Reranker'
+        icon bootstrap:search
+        description '''
+          ### Enterprise RAG & Foundry IQ Knowledge Base (`policy-knowledge`)
+          Kombiniert **Integrated Vectorization**, **strikte AVB-Versionsfilterung** und **mehrstufiges Reranking**:
+          1. **Indexer & Skillset Pipeline (`search_indexer`):**
+             - **Document Intelligence Layout Skill:** Zerlegt juristische AVB-PDFs und Tarif-Tabellen strukturтреu nach Paragraphen (`§`) und Markdown-Tabellen (kein Zerschneiden von Tabellenzeilen).
+             - **Text Split Skill:** Semantisches Chunking (`~800-1000` Tokens, `150` Tokens Overlap) unter Vererbung von `avbVersionId`, `productLine` und `clauseCode`.
+             - **Azure OpenAI Embedding Skill:** Erzeugt Vektoren via `text-embedding-3-large` (3.072 Dimensionen) über Shared Private Link.
+          2. **Stage 1 Retrieval — Pre-Filtered Hybrid Search (`table_vector_index`):**
+             - **Harter OData Pre-Filter:** `avbVersionId eq '<ContractBoundVersion>' and productLine eq '<ClaimType>'`.
+             - **BM25 Keyword Search:** Findet exakte Paragraphen (`§ 12 Abs. 2 AKB`), Tarifcodes und juristische Fachbegriffe.
+             - **HNSW Vector Search:** Findet semantische Äquivalenzen (Cosine Similarity).
+          3. **Stage 2 & 3 — RRF Fusion & L2 Semantic Reranker (`semantic_reranker`):**
+             - **Reciprocal Rank Fusion (RRF)** kombiniert Top-50 BM25 + Top-50 Vektor-Treffer.
+             - **L2 Cross-Encoder Semantic Ranker** berechnet `@search.rerankerScore (0.0 - 4.0)` (Cutoff `< 2.2`) und liefert Extractive Captions für rechtssichere EOB-Zitate.
+        '''
+
+        search_indexer = compute '1. Integrated Vectorization Indexer & Layout Skillset' {
+          #versioning
+          summary 'ContentUnderstandingSkill (Semantic Token Chunking), text-embedding-3-large & Index Projections'
+          icon bootstrap:gear-wide
+          metadata {
+            skillset 'ContentUnderstandingSkill (method: semantic, unit: tokens, max: 500) + AzureOpenAIEmbeddingSkill'
+            projection_mode 'skipIndexingParentDocuments (one-to-many child chunk projection)'
+            execution_environment 'private (Shared Private Link to blob storage & Azure OpenAI)'
+            change_detection 'HighWaterMarkChangeDetectionPolicy + Native Blob Soft Delete'
+          }
+        }
+
+        table_vector_index = schema_entity '2. Hybrid Index: policy-knowledge-idx (BM25 + HNSW SQ8)' {
+          #schema_def #versioning
+          summary 'Speichert AVB-Generationen: HNSW (m:4, ef:400) mit Int8-Quantisierung, Rescoring, stored:false & Index Alias'
+          description '''
+            ### Index: `policy-knowledge-idx` (Aktiver Alias: `policy-knowledge-active`)
+            | Feld | Typ | Attribute / Optimierung |
+            | :--- | :--- | :--- |
+            | **chunkId** | `String [Key]` | Eindeutiger Hash-Schlüssel des Chunks (`analyzer: keyword`) |
+            | **parentDocId** | `String [Filter]` | Referenz auf das Ursprungs-AVB-Dokument im Blob Storage |
+            | **avbVersionId** | `String [Filter]` | **Strikter OData Pre-Filter** (`AVB-KFZ-2021-V1`, `AVB-KFZ-2026-V2`) |
+            | **docCategory** | `String [Filter]` | `CONTRACTUAL_AVB`, `TARIFF_TABLE`, `REPAIR_GUIDELINE` |
+            | **productLine** | `String [Filter, Facet]`| Sparte (`AUTO_GLASS`, `WATER_DAMAGE`, `BODILY_INJURY`) |
+            | **clauseCode** | `String [Filter, Facet]`| Exakte Klausel-Referenz (`§ 12 Abs. 2 AKB`, `Ziff. 4.1`) |
+            | **clauseText** | `String [Search, Retrievable]` | Deutscher Fließtext (`analyzer: de.microsoft`, Lemmatisierung & Komposita) |
+            | **embedding** | `Collection(Edm.Single)` | `text-embedding-3-large` (3.072 Dims, `stored: false`, `searchable: true`) |
+            | **sensitivityLabel**| `String [Filter]` | Microsoft Purview Schutzlabel (`purviewEnabled: true`) |
+
+            ### Vektor-Komprimierung & Speicher-Optimierung:
+            - **Algorithmus:** HNSW (`m: 4`, `efConstruction: 400`, `efSearch: 500`, `metric: cosine`).
+            - **Scalar Quantization (SQ8):** Komprimiert Float32-Embeddings auf `int8` (4-fache RAM-Reduktion).
+            - **Rescoring & Oversampling:** `enableRescoring: true`, `defaultOversampling: 10`, `rescoreStorageMethod: preserveOriginals`.
+            - **Zero-Downtime Migration:** Produktions-Agenten adressieren den Index-Alias `policy-knowledge-active`.
+          '''
+        }
+
+        semantic_reranker = ai_service '3. L2 Semantic Ranker & Foundry IQ Agentic Retrieval' {
+          #versioning
+          summary 'Pre-Filtered Hybrid RRF (maxTextRecallSize: 1000), Cross-Encoder L2 Reranker, Captions & Query Rewrites'
+          icon bootstrap:funnel
+          metadata {
+            vector_filter_mode 'preFilter (strikter OData-Filter vor/während HNSW-Traversierung)'
+            hybrid_ranking 'Reciprocal Rank Fusion (RRF k=60, maxTextRecallSize=1000, countRetrievableResults)'
+            semantic_l2 'Cross-Encoder Reranker (@search.rerankerScore >= 2.2 Cutoff, max 2048 tokens context)'
+            query_rewriting 'generative|count-5 (queryLanguage: de-DE, Synonyme & Tippfehler-Korrektur)'
+            agentic_mcp_tool 'knowledge_base_retrieve (Foundry IQ MCP-Server Endpunkt auf Port 443)'
+          }
+        }
+      }
+
+      // 5. Relational Policy Admin Core (PAS)
+      sql_pas = store 'Azure SQL: pas-core' {
+        #versioning #private_endpoint
+        summary 'Bestandssystem: Kunden, Verträge (mit fest gebundener AvbVersionId), Deckungen & Schäden'
+        icon bootstrap:database
+
+        table_customers = schema_entity 'Table: Customers' {
+          #schema_def
+          summary 'Kundenstamm (CustomerId, CustomerNumber, Risikostatus, Auth-Binding)'
+          description '''
+            ### Schema: `dbo.Customers`
+            | Spalte | Datentyp | Constraints / Referenzen | Beschreibung |
+            | :--- | :--- | :--- | :--- |
+            | **CustomerId** | `BIGINT` | `PK`, `IDENTITY(1,1)` | Eindeutige Kunden-ID |
+            | **CustomerNumber** | `VARCHAR(30)` | `NOT NULL`, `UNIQUE` | Externe Kundennummer |
+            | **RiskClassification** | `VARCHAR(20)` | `NOT NULL` | Risikoklasse (`LOW`, `MEDIUM`, `HIGH`) |
+            | **EntraObjectId** | `UNIQUEIDENTIFIER`| `NOT NULL` | Verknüpfung für Kunden-Authentifizierung |
+          '''
+        }
+
+        table_policies = schema_entity 'Table: Policies' {
+          #schema_def #versioning
+          summary 'Verträge inkl. Vertragsabschlussdatum & der dauerhaft gültigen AvbVersionId'
+          description '''
+            ### Schema: `dbo.Policies`
+            | Spalte | Datentyp | Constraints / Referenzen | Beschreibung |
+            | :--- | :--- | :--- | :--- |
+            | **PolicyId** | `BIGINT` | `PK`, `IDENTITY(1,1)` | Eindeutige interne ID der Police |
+            | **CustomerId** | `BIGINT` | `FK` &rarr; `Customers(CustomerId)` | Versicherungsnehmer |
+            | **PolicyNumber** | `VARCHAR(50)` | `NOT NULL`, `UNIQUE` | Externe Vertragsnummer (`POL-2021-8812`) |
+            | **ProductLine** | `VARCHAR(30)` | `NOT NULL` | Sparte (`AUTO_COMPREHENSIVE`, `BUILDING`) |
+            | **ContractCreatedAt**| `DATETIME2` | `NOT NULL` | **Zeitpunkt des Vertragsabschlusses (Stichtag für AVB!)** |
+            | **AvbVersionId** | `VARCHAR(40)` | `NOT NULL` | **Dauerhaft gültige AVB-Generation** (`AVB-KFZ-2021-V1`) |
+            | **Status** | `VARCHAR(20)` | `NOT NULL` | `ACTIVE`, `SUSPENDED`, `CANCELLED` |
+          '''
+        }
+
+        table_coverages = schema_entity 'Table: Coverages & Endorsements' {
+          #schema_def
+          summary 'Vertraglich vereinbarte Deckungssummen, Tarifbausteine & Selbstbehalte'
+          description '''
+            ### Schema: `dbo.Coverages`
+            | Spalte | Datentyp | Constraints / Referenzen | Beschreibung |
+            | :--- | :--- | :--- | :--- |
+            | **CoverageId** | `BIGINT` | `PK`, `IDENTITY(1,1)` | Eindeutige Deckungs-ID |
+            | **PolicyId** | `BIGINT` | `FK` &rarr; `Policies(PolicyId)` | Referenzierte Police |
+            | **CoverageCode** | `VARCHAR(30)` | `NOT NULL` | Baustein (`AUTO_GLASS`, `WATER`, `LIABILITY`) |
+            | **LimitAmount** | `DECIMAL(12,2)` | `NOT NULL` | Maximale Deckungssumme |
+            | **DeductibleAmount** | `DECIMAL(12,2)` | `NOT NULL` | Vereinbarte Selbstbeteiligung |
+          '''
+        }
+
+        table_pas_claims = schema_entity 'Table: Claims' {
+          #schema_def #versioning
+          summary 'Bestands-Schadensakten (ClaimId, PolicyId, AppliedAvbVersionId, Status)'
+          description '''
+            ### Schema: `dbo.Claims`
+            | Spalte | Datentyp | Constraints / Referenzen | Beschreibung |
+            | :--- | :--- | :--- | :--- |
+            | **ClaimId** | `BIGINT` | `PK`, `IDENTITY(1,1)` | Interne Schaden-ID |
+            | **ClaimNumber** | `VARCHAR(40)` | `NOT NULL`, `UNIQUE` | Externe Schadennummer |
+            | **PolicyId** | `BIGINT` | `FK` &rarr; `Policies(PolicyId)` | Zugehörige Police |
+            | **CustomerId** | `BIGINT` | `FK` &rarr; `Customers(CustomerId)` | Authentifizierter Kunde |
+            | **AppliedAvbVersionId**| `VARCHAR(40)` | `NOT NULL` | Aus dem Vertrag übernommene historische AVB-Version |
+            | **ClaimType** | `VARCHAR(30)` | `NOT NULL` | Schadensart (`AUTO_GLASS`, `WATER_DAMAGE`, etc.) |
+            | **ClaimStatus** | `VARCHAR(20)` | `NOT NULL` | `OPEN`, `HITL_REVIEW`, `SETTLED`, `DENIED` |
+            | **TotalPaidAmount** | `DECIMAL(12,2)` | `DEFAULT 0.00` | Ausgezahlter Erstattungsbetrag |
+          '''
+        }
+      }
+    }
+  }
+
+  // =========================================================================
+  // 3. EXTERNAL ERP (Nur in Level 2 & 3 sichtbar, nicht auf Level 1)
+  // =========================================================================
+  erp_finance = external_system 'Core ERP & Settlement (SAP / Banking)' {
+    summary 'Überweisung & Buchung im Hauptbuch (GL/AP)'
+    icon bootstrap:building-check
+  }
+
+  // =========================================================================
+  // 4. BEZIEHUNGEN & WORKFLOWS
+  // =========================================================================
+
+  // --- Entry & Stage 1: Extraktion & PII-Tokenization ---
+  claimant -> channels 'Meldet Schaden & Belege'
+  channels -> azure_vnet.extraction_pipeline.front_door_apim 'HTTPS Payload + Auth'
+  azure_vnet.extraction_pipeline.front_door_apim -> azure_vnet.extraction_pipeline.ingestion_event_hub 'Geprüfter Traffic'
+  azure_vnet.extraction_pipeline.ingestion_event_hub -> azure_vnet.extraction_pipeline.channel_router '1. Roh-Event'
+
+  azure_vnet.extraction_pipeline.channel_router -> azure_vnet.data_stores.blob_raw 'Original speichern'
+  azure_vnet.extraction_pipeline.channel_router -> azure_vnet.extraction_pipeline.speech_svc 'Audio / IVR'
+  azure_vnet.extraction_pipeline.channel_router -> azure_vnet.extraction_pipeline.doc_intel 'PDF / Rechnung'
+  azure_vnet.extraction_pipeline.channel_router -> azure_vnet.extraction_pipeline.vision_svc 'Schadensfoto'
+  azure_vnet.extraction_pipeline.channel_router -> azure_vnet.extraction_pipeline.lang_svc 'E-Mail / Chat'
+
+  azure_vnet.extraction_pipeline.speech_svc -> azure_vnet.extraction_pipeline.lang_svc 'Transkript'
+  azure_vnet.extraction_pipeline.doc_intel -> azure_vnet.extraction_pipeline.lang_svc 'Roh-Text'
+  azure_vnet.extraction_pipeline.lang_svc -> azure_vnet.extraction_pipeline.translator_svc 'Fremdsprache'
+
+  azure_vnet.extraction_pipeline.doc_intel -> azure_vnet.extraction_pipeline.pii_tokenizer 'Tabellen & Boxes'
+  azure_vnet.extraction_pipeline.vision_svc -> azure_vnet.extraction_pipeline.pii_tokenizer 'Bild-Analyse'
+  azure_vnet.extraction_pipeline.lang_svc -> azure_vnet.extraction_pipeline.pii_tokenizer 'Entitäten & PII'
+  azure_vnet.extraction_pipeline.translator_svc -> azure_vnet.extraction_pipeline.pii_tokenizer 'Übersetzung'
+
+  azure_vnet.extraction_pipeline.pii_tokenizer -> azure_vnet.data_stores.cosmos_claims.table_pii_vault 'PII-Mapping (<PII:IBAN_1>)'
+  azure_vnet.extraction_pipeline.pii_tokenizer -> azure_vnet.data_stores.blob_state 'Pseudonymisiertes JSON'
+
+  // --- Stage 2: Klassifikation & Deterministische Schadenanlage ---
+  azure_vnet.extraction_pipeline.pii_tokenizer -> azure_vnet.classification_pipeline.check_preclassified 'Extrahierte Daten'
+  azure_vnet.classification_pipeline.check_preclassified -> azure_vnet.governance_svc.dossier_compiler 'OCR < 0.80 (HITL)'
+  azure_vnet.classification_pipeline.check_preclassified -> azure_vnet.classification_pipeline.pas_claim_creator 'Pfad A: Vorklassifiziert'
+  azure_vnet.classification_pipeline.check_preclassified -> azure_vnet.classification_pipeline.classifier_service 'Pfad B: Unstrukturiert'
+  azure_vnet.classification_pipeline.classifier_service -> azure_vnet.classification_pipeline.pas_claim_creator 'Schadensart & Schwere'
+
+  azure_vnet.classification_pipeline.pas_claim_creator -> azure_vnet.data_stores.sql_pas.table_policies 'Liest Vertrag & AvbVersionId'
+  azure_vnet.classification_pipeline.pas_claim_creator -> azure_vnet.data_stores.sql_pas.table_pas_claims 'Legt PAS-Schaden an'
+  azure_vnet.classification_pipeline.pas_claim_creator -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Initialisiert Dossier'
+  azure_vnet.classification_pipeline.pas_claim_creator -> azure_vnet.multi_agent_system.claims_event_bus 'Übergibt angelegten Schaden'
+
+  // --- Stage 3: Multi-Agent System & Langfuse Prompt Loading ---
+  azure_vnet.multi_agent_system.claims_event_bus -> azure_vnet.multi_agent_system.playbook_loader '1. Nimmt Schaden aus Queue'
+  azure_vnet.multi_agent_system.playbook_loader -> azure_vnet.langfuse.prompt_registry '2. Lädt Prompts & Checkliste'
+  azure_vnet.multi_agent_system.playbook_loader -> azure_vnet.multi_agent_system.orchestrator '3. Startet Orchestrator'
+
+  // --- Orchestrator <-> Sub-Agents ---
+  azure_vnet.multi_agent_system.orchestrator <-> azure_vnet.multi_agent_system.customer_agent 'Checkliste & EOB'
+  azure_vnet.multi_agent_system.orchestrator <-> azure_vnet.multi_agent_system.coverage_agent 'Deckung (AvbVersionId)'
+  azure_vnet.multi_agent_system.orchestrator <-> azure_vnet.multi_agent_system.fraud_agent 'Betrugs- & Risiko-Check'
+  azure_vnet.multi_agent_system.orchestrator <-> azure_vnet.multi_agent_system.adjudication_agent 'Tarif-Mapping & Rules'
+  azure_vnet.multi_agent_system.orchestrator <-> azure_vnet.multi_agent_system.financial_agent 'STP-Auszahlung & Reserven'
+
+  // --- Generator-Critic Internal Loops & MCP Tool Calls ---
+  // 1. Customer Agent
+  azure_vnet.multi_agent_system.customer_agent.comm_critic -> azure_vnet.multi_agent_system.customer_agent.tool_gen_eob 'Gibt EOB-Entwurf frei'
+  azure_vnet.multi_agent_system.customer_agent.tool_request_docs -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Liest offene Checkliste'
+  azure_vnet.multi_agent_system.customer_agent.tool_request_docs -> channels 'Rückfrage / EOB an Kunden'
+  azure_vnet.multi_agent_system.customer_agent.tool_send_msg -> azure_vnet.data_stores.cosmos_claims.table_pii_vault 'De-tokenisiert Empfänger'
+  azure_vnet.multi_agent_system.customer_agent.tool_send_msg -> channels 'Rückfrage / EOB an Kunden'
+  azure_vnet.multi_agent_system.customer_agent.tool_gen_eob -> azure_vnet.data_stores.vector_search.table_vector_index 'Liest AVB-Zitate (AvbVersionId)'
+  azure_vnet.multi_agent_system.customer_agent.tool_gen_eob -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Liest Abrechnungsdetails'
+  azure_vnet.multi_agent_system.customer_agent.tool_gen_eob -> azure_vnet.data_stores.cosmos_claims.table_pii_vault 'De-tokenisiert Name & IBAN'
+  azure_vnet.multi_agent_system.customer_agent.tool_gen_eob -> azure_vnet.data_stores.blob_raw 'Speichert EOB-PDF'
+  azure_vnet.multi_agent_system.customer_agent.tool_gen_eob -> channels 'Rückfrage / EOB an Kunden'
+
+  // 2. Coverage Agent
+  azure_vnet.multi_agent_system.coverage_agent.tool_get_policy -> azure_vnet.data_stores.sql_pas.table_policies 'Liest Vertrag & AvbVersionId'
+  azure_vnet.multi_agent_system.coverage_agent.tool_get_policy -> azure_vnet.data_stores.sql_pas.table_coverages 'Liest Limits & SB'
+  azure_vnet.multi_agent_system.coverage_agent.tool_search_clauses -> azure_vnet.data_stores.vector_search.table_vector_index 'Suche (Filter: AvbVersionId)'
+  azure_vnet.multi_agent_system.coverage_agent.tool_save_coverage -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Speichert Deckung'
+
+  // 3. Fraud Agent
+  azure_vnet.multi_agent_system.fraud_agent.tool_check_image_hash -> azure_vnet.data_stores.blob_raw 'Prüft Bild-Hashes'
+  azure_vnet.multi_agent_system.fraud_agent.tool_check_image_hash -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Dubletten-Abgleich'
+  azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.sql_pas.table_pas_claims 'Liest Vorschäden'
+  azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.sql_pas.table_customers 'Liest Risikoklasse'
+  azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.blob_state 'Liest Rechnungs-Features'
+
+  // 4. Adjudication Agent
+  azure_vnet.multi_agent_system.adjudication_agent.tool_map_items -> azure_vnet.data_stores.blob_state 'Liest Rechnungspositionen'
+  azure_vnet.multi_agent_system.adjudication_agent.tool_map_items -> azure_vnet.data_stores.vector_search.table_vector_index 'Liest Tarif-Richtlinien'
+  azure_vnet.multi_agent_system.adjudication_agent.coding_critic -> azure_vnet.multi_agent_system.adjudication_agent.tool_exec_rules 'Gibt Code-Mapping frei'
+  azure_vnet.multi_agent_system.adjudication_agent.tool_exec_rules -> azure_vnet.rules_engine.rule_evaluator 'Berechnet Tarif & SB'
+  azure_vnet.rules_engine.rule_evaluator -> azure_vnet.rules_engine.versioned_rule_repo 'Lädt Regelversion'
+  azure_vnet.multi_agent_system.adjudication_agent.tool_exec_rules -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Speichert Rules-Output'
+
+  // 5. Financial Agent
+  azure_vnet.multi_agent_system.financial_agent.tool_post_payment -> azure_vnet.data_stores.cosmos_claims.table_pii_vault 'De-tokenisiert <PII:IBAN_1>'
+  azure_vnet.multi_agent_system.financial_agent.tool_post_payment -> erp_finance 'SEPA-Auszahlung (AP/GL)'
+  azure_vnet.multi_agent_system.financial_agent.tool_update_reserve -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Status: SETTLED'
+  azure_vnet.multi_agent_system.financial_agent.tool_update_reserve -> azure_vnet.data_stores.sql_pas.table_pas_claims 'Synchronisiert PAS-Akte'
+
+  // --- Stage 4: Policy Management & Rule Authoring (4-Augen-Workflow) ---
+  actuary_legal -> azure_vnet.rule_authoring_subsystem.avb_intake '1A. Neue AVB-Generation'
+  azure_vnet.rule_authoring_subsystem.avb_intake -> azure_vnet.data_stores.vector_search.search_indexer 'Triggert AVB-Indexer'
+  azure_vnet.data_stores.vector_search.search_indexer -> azure_vnet.data_stores.vector_search.table_vector_index 'Layout-Chunking & Embeddings'
+  azure_vnet.data_stores.vector_search.table_vector_index -> azure_vnet.data_stores.vector_search.semantic_reranker 'Top-50 Hybrid RRF Kandidaten'
+  azure_vnet.data_stores.vector_search.semantic_reranker -> azure_vnet.multi_agent_system.coverage_agent.tool_search_clauses 'Reranked Clauses & Captions'
+  azure_vnet.rule_authoring_subsystem.avb_intake -> azure_vnet.rule_authoring_subsystem.authoring_agent 'Tarif- & Deckungsklauseln'
+
+  business_analyst -> azure_vnet.rule_authoring_subsystem.internal_rule_intake '1B. Interne Regel (Freitext)'
+  azure_vnet.rule_authoring_subsystem.internal_rule_intake -> azure_vnet.rule_authoring_subsystem.authoring_agent 'Natürlichsprachige Regel'
+
+  azure_vnet.rule_authoring_subsystem.authoring_agent -> azure_vnet.rule_authoring_subsystem.conflict_simulator '2. Typisiertes DSL & Tests'
+  azure_vnet.rule_authoring_subsystem.conflict_simulator -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier '3. Backtest (10.000 Claims)'
+  azure_vnet.rule_authoring_subsystem.conflict_simulator -> azure_vnet.rule_authoring_subsystem.impact_approval_portal '4. Konfliktbericht & Impact'
+
+  risk_compliance_manager -> azure_vnet.rule_authoring_subsystem.impact_approval_portal '5. Prüft Impact & gibt frei'
+  azure_vnet.rule_authoring_subsystem.impact_approval_portal -> azure_vnet.rule_authoring_subsystem.rule_deployer '6. Sign-Off (4-Augen)'
+  azure_vnet.rule_authoring_subsystem.rule_deployer -> azure_vnet.rules_engine.versioned_rule_repo 'Deployt geprüfte Regeln'
+
+  // --- Stage 5: Circuit Breaker & HITL (Zwei getrennte Auflösungswege!) ---
+  azure_vnet.multi_agent_system.orchestrator -> azure_vnet.governance_svc.circuit_breaker 'Prüft Guardrails / Eskalation'
+  azure_vnet.governance_svc.circuit_breaker -> azure_vnet.langfuse.otel_pii_gateway 'Loggt Abbruchgrund'
+  azure_vnet.governance_svc.circuit_breaker -> azure_vnet.governance_svc.dossier_compiler 'Triggert HITL-Dossier'
+
+  azure_vnet.governance_svc.dossier_compiler -> azure_vnet.data_stores.blob_state 'Liest Bounding-Boxes'
+  azure_vnet.governance_svc.dossier_compiler -> azure_vnet.data_stores.cosmos_claims.table_hitl_queue 'Speichert Summary & Highlights'
+  azure_vnet.governance_svc.dossier_compiler -> azure_vnet.governance_svc.adjuster_notifier 'Sendet Alert'
+  azure_vnet.governance_svc.adjuster_notifier -> adjuster 'Benachrichtigt Spezialist'
+  azure_vnet.governance_svc.dossier_compiler -> azure_vnet.governance_svc.adjuster_app 'Übergibt HITL-Dossier'
+
+  adjuster -> azure_vnet.governance_svc.adjuster_app 'Prüft Highlights & entscheidet'
+  azure_vnet.governance_svc.adjuster_app -> azure_vnet.data_stores.blob_raw 'Lädt Original mit Highlights'
+  azure_vnet.governance_svc.adjuster_app -> azure_vnet.data_stores.cosmos_claims.table_pii_vault 'Löst PII für Anzeige auf'
+
+  // Auflösungsweg 1: Nur bei ungenauer Extraktion (Mid-Flight) -> Zurück zum Agenten
+  azure_vnet.governance_svc.adjuster_app -> azure_vnet.multi_agent_system.orchestrator 'Pfad 1 (OCR-Korrektur): Fortsetzen'
+
+  // Auflösungsweg 2: Finale Sachentscheidung (Ablehnung / Großschaden / Betrug) -> KEIN Agent mehr!
+  azure_vnet.governance_svc.adjuster_app -> azure_vnet.governance_svc.direct_hitl_executor 'Pfad 2 (Finale Entscheidung): Direkt'
+  azure_vnet.governance_svc.direct_hitl_executor -> erp_finance 'Bucht Zahlung direkt'
+  azure_vnet.governance_svc.direct_hitl_executor -> azure_vnet.data_stores.sql_pas.table_pas_claims 'Setzt Status SETTLED / DENIED'
+  azure_vnet.governance_svc.direct_hitl_executor -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Schließt Dossier'
+  azure_vnet.governance_svc.direct_hitl_executor -> channels 'Sendet Entscheidungsbrief'
+
+  // --- Stage 6: Langfuse Observability & Classical RAG/Agent Evaluations ---
+  azure_vnet.multi_agent_system.orchestrator -> azure_vnet.langfuse.otel_pii_gateway 'OTel-Traces (ohne PII)'
+  azure_vnet.governance_svc.adjuster_app -> azure_vnet.langfuse.eval_engine 'Loggt HITL-Override (Golden Dataset)'
+  azure_vnet.langfuse.otel_pii_gateway -> azure_vnet.langfuse.langfuse_core 'Speichert Traces, Latenz & Kosten'
+  azure_vnet.langfuse.langfuse_core -> azure_vnet.langfuse.eval_engine '1. Traces, Query, Context & Output'
+  azure_vnet.langfuse.eval_engine -> azure_vnet.data_stores.vector_search.table_vector_index '2. Prüft Context Relevance & NDCG@3'
+  azure_vnet.langfuse.eval_engine -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier '3. Prüft Groundedness & Answer Relevance'
+  azure_vnet.langfuse.eval_engine -> azure_vnet.langfuse.prompt_registry '4. Eval-Scores für Prompt/Skill-Tuning'
+
+  // --- Outcomes ---
+  azure_vnet.multi_agent_system.financial_agent -> azure_vnet.claims_outcomes.outcome_stp 'STP-Abschluss'
+  azure_vnet.multi_agent_system.customer_agent -> azure_vnet.claims_outcomes.outcome_comm 'Kunden-Dialog'
+  azure_vnet.governance_svc.direct_hitl_executor -> azure_vnet.claims_outcomes.outcome_hitl 'HITL-Abschluss'
+
+  // --- Orchestrator State Persistence ---
+  azure_vnet.multi_agent_system.orchestrator -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier 'Aktualisiert Workflow-State'
+}
+
+// ===========================================================================
+// 5. HIERARCHISCHE ANSICHTEN (LEVEL 1 CLEAN OVERVIEW -> LEVEL 2 -> LEVEL 3)
+// ===========================================================================
+views {
+
+  // -------------------------------------------------------------------------
+  // LEVEL 1: AUFGERÄUMTE MANAGEMENT- & ARCHITEKTUR-ÜBERSICHT (CLEAN OVERVIEW)
+  // -------------------------------------------------------------------------
+  view index {
+    title 'Level 1: Gesamtsystem – Clean Architecture Overview'
+    description '''
+      **Aufgeräumte End-to-End Übersicht (ohne Detail-Überladung):**
+      - **Kernfluss (1 &rarr; 2 &rarr; 3 &rarr; 4):** Von `1. Ingestion, Extraction & PII-Tokenization` über `2. Klassifikation & Schadenanlage` in das `3. Multi-Agent Claim Processing System` und bei Bedarf in `4. Circuit Breaker & HITL`.
+      - **Kompakte Blöcke mit Drill-Down (Lupe anklicken!):**
+        - `Policy Management & Rule Authoring` kapselt die 3 Rollen (Business Analyst, Aktuariat, Risk Manager) und den 4-Augen-Freigabeprozess (Level 2C).
+        - `Secured Azure Data & Knowledge Platform` fasst alle 5 Private-Link-Speicher zusammen (inkl. vollständiger **Security- & Data-Privacy-Matrix** beim Anklicken!).
+        - `Event Hubs`, `Front Door / APIM` und `Core ERP` liegen sauber in den jeweiligen Subsystemen (Level 2).
+    '''
+
+    include
+      claimant,
+      adjuster,
+      channels,
+      azure_vnet,
+      azure_vnet.extraction_pipeline,
+      azure_vnet.classification_pipeline,
+      azure_vnet.multi_agent_system,
+      azure_vnet.rules_engine,
+      azure_vnet.rule_authoring_subsystem,
+      azure_vnet.governance_svc,
+      azure_vnet.langfuse,
+      azure_vnet.data_stores,
+      azure_vnet.claims_outcomes,
+      azure_vnet.claims_outcomes.*
+
+    autoLayout TopBottom
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2A: DRILL-DOWN EXTRAKTIONS- & PII-TOKENIZATION-PIPELINE (INKL. WAF & EVENT HUB)
+  // -------------------------------------------------------------------------
+  view view_extraction_pipeline of azure_vnet.extraction_pipeline {
+    title 'Level 2A: Workflow Ingestion (WAF/Event Hub), Textextraktion & PII-Tokenization'
+    description '''
+      **Detaillierter Eingangs- & Datenschutz-Workflow:**
+      - Zeigt `0a. Azure Front Door & APIM` sowie `0b. Azure Event Hub` (die auf Level 1 bewusst eingeklappt sind).
+      - `channel_router` speichert das Original in `blob_raw` und verteilt nach Medientyp.
+      - `pii_tokenizer` ersetzt alle PII-Daten durch Platzhalter (`<PII:IBAN_1>`), speichert das echte Mapping im hochgesicherten `table_pii_vault` und legt das pseudonymisierte JSON in `blob_state` ab.
+    '''
+
+    include
+      channels,
+      azure_vnet.extraction_pipeline,
+      azure_vnet.extraction_pipeline.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims.table_pii_vault,
+      azure_vnet.classification_pipeline.check_preclassified
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2B: DRILL-DOWN KLASSIFIKATION & VERTRAGS-AVB-SCHADENANLAGE
+  // -------------------------------------------------------------------------
+  view view_classification_pipeline of azure_vnet.classification_pipeline {
+    title 'Level 2B: Workflow Klassifikation, Historische AVB-Bindung & Schadenanlage'
+    description '''
+      **Detaillierter Klassifikations- & Anlage-Workflow:**
+      - Bei zu niedriger OCR-Konfidenz (`< 0.80`) wird direkt eine Feld-Korrektur im HITL angefordert.
+      - Vorklassifizierte Fälle überspringen den `classifier_service`.
+      - `pas_claim_creator` ermittelt aus `table_policies` die zum Vertragsabschluss gültige `AvbVersionId`, legt den Schaden deterministisch an und übergibt an den `claims_event_bus`.
+    '''
+
+    include
+      azure_vnet.extraction_pipeline.pii_tokenizer,
+      azure_vnet.classification_pipeline,
+      azure_vnet.classification_pipeline.*,
+      azure_vnet.governance_svc.dossier_compiler,
+      azure_vnet.data_stores.sql_pas.table_policies,
+      azure_vnet.data_stores.sql_pas.table_pas_claims,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.multi_agent_system.claims_event_bus
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2C: DRILL-DOWN POLICY MANAGEMENT (MIT ALLEN 3 ROLLEN & 4-AUGEN-PRINZIP)
+  // -------------------------------------------------------------------------
+  view view_rule_authoring of azure_vnet.rule_authoring_subsystem {
+    title 'Level 2C: Workflow Policy Management – Rollen, Z3-Konfliktanalyse & 4-Augen-Prinzip'
+    description '''
+      **Hier werden die 3 Fachrollen sichtbar, die auf Level 1 ausgeblendet sind:**
+      1. **Intake:** Vertragliche AVBs (`actuary_legal`) oder interne Unternehmensregeln (`business_analyst`).
+      2. **DSL-Transformation:** `authoring_agent` erzeugt YAML-DSL und Unit-Tests.
+      3. **Konflikt- & Impact-Analyse (`conflict_simulator`):** Prüft per Z3-Solver auf logische Widersprüche und simuliert gegen 10.000 historische Claims aus `table_claim_dossier`.
+      4. **4-Augen-Prüfung (`impact_approval_portal`):** Der `risk_compliance_manager` prüft das finanzielle Impact-Delta und gibt die Regel frei.
+    '''
+
+    include
+      actuary_legal,
+      business_analyst,
+      risk_compliance_manager,
+      azure_vnet.rule_authoring_subsystem,
+      azure_vnet.rule_authoring_subsystem.*,
+      azure_vnet.rules_engine,
+      azure_vnet.rules_engine.*,
+      azure_vnet.data_stores.vector_search.table_vector_index,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2D: DRILL-DOWN MULTI-AGENT SYSTEM (INKL. SERVICE BUS, LANGFUSE, STORES & ERP)
+  // -------------------------------------------------------------------------
+  view view_multi_agent_system of azure_vnet.multi_agent_system {
+    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 5 Stores'
+    description '''
+      **Detailansicht des Multi-Agent-Systems (hier mit aufgeschlüsselten Datenbanken & ERP):**
+      - `claims_event_bus` puffert die eingehenden Fälle.
+      - `playbook_loader` lädt für die jeweilige Schadensart die Systemprompts, Agenten-Skills und Dokumenten-Checklisten aus `langfuse.prompt_registry`.
+      - Klicke auf einen beliebigen der 5 Agenten, um in seine internen MCP-Tools, Critics und Datenbank-Tabellen hineinzuzoomen (Level 3A–3E)!
+    '''
+
+    include
+      azure_vnet.classification_pipeline.pas_claim_creator,
+      azure_vnet.multi_agent_system.claims_event_bus,
+      azure_vnet.multi_agent_system.playbook_loader,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.customer_agent,
+      azure_vnet.multi_agent_system.coverage_agent,
+      azure_vnet.multi_agent_system.fraud_agent,
+      azure_vnet.multi_agent_system.adjudication_agent,
+      azure_vnet.multi_agent_system.financial_agent,
+      azure_vnet.rules_engine,
+      azure_vnet.governance_svc.circuit_breaker,
+      azure_vnet.langfuse.prompt_registry,
+      azure_vnet.langfuse.otel_pii_gateway,
+      azure_vnet.claims_outcomes.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.sql_pas,
+      erp_finance
+
+    autoLayout TopBottom
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2E: DRILL-DOWN CIRCUIT BREAKER & HITL (ZWEI AUFLÖSUNGSWEGE)
+  // -------------------------------------------------------------------------
+  view view_governance_hitl of azure_vnet.governance_svc {
+    title 'Level 2E: Workflow Circuit Breaker, Highlighting & Die 2 HITL-Auflösungswege'
+    description '''
+      **Präzise Trennung nach der Sachbearbeiter-Entscheidung in der `adjuster_app`:**
+      - **Pfad 1 (Reine OCR-/Daten-Bestätigung bei Low Confidence):** Der Sachbearbeiter bestätigt lediglich den markierten Wert -> Rückgabe an den `orchestrator`, damit die Agenten den Fall normal zu Ende führen.
+      - **Pfad 2 (Finale Sachentscheidung: Ablehnung, Großschaden, Betrug):** Es geht **NICHT** zurück an den Agenten! Der `direct_hitl_executor` führt die Entscheidung deterministisch aus (ERP-Zahlung, Status-Update, Versand des Ablehnungs-/Entscheidungsschreibens).
+    '''
+
+    include
+      adjuster,
+      channels,
+      erp_finance,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.governance_svc,
+      azure_vnet.governance_svc.*,
+      azure_vnet.langfuse.otel_pii_gateway,
+      azure_vnet.langfuse.eval_engine,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims.table_hitl_queue,
+      azure_vnet.data_stores.cosmos_claims.table_pii_vault,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.data_stores.sql_pas.table_pas_claims,
+      azure_vnet.claims_outcomes.outcome_hitl
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2F: DRILL-DOWN LANGFUSE OBSERVABILITY & RAG/AGENT EVALUATION
+  // -------------------------------------------------------------------------
+  view view_langfuse of azure_vnet.langfuse {
+    title 'Level 2F: Detailansicht Langfuse – OTel PII Guard, Prompt Registry & Klassische RAG-Metriken (Relevance, Groundedness)'
+    description '''
+      **Architektur der Observability-, Prompt- & Evaluation-Plattform:**
+      1. `otel_pii_gateway` empfängt OpenTelemetry-Traces (`invoke_agent`, `execute_tool`) und filtert Freitext-PII über Azure AI Language.
+      2. `langfuse_core` speichert die PII-freien Traces, Token-Kosten und Latenzen.
+      3. `eval_engine` berechnet kontinuierlich klassische RAG- & Agenten-Metriken (**Relevance**, **Groundedness**, **Coherence**, **Document Retrieval NDCG@3**, **Tool Call Accuracy**) gegen `table_vector_index` und `table_claim_dossier` und nutzt HITL-Overrides als Golden Dataset für `prompt_registry`.
+    '''
+
+    include
+      azure_vnet.multi_agent_system.playbook_loader,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.governance_svc.circuit_breaker,
+      azure_vnet.governance_svc.adjuster_app,
+      azure_vnet.data_stores.vector_search.table_vector_index,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.langfuse,
+      azure_vnet.langfuse.*
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 2G: DRILL-DOWN DETERMINISTIC RULES ENGINE (INPUT / OUTPUT & REPO)
+  // -------------------------------------------------------------------------
+  view view_rules_engine of azure_vnet.rules_engine {
+    title 'Level 2G: Deterministic Rules Runtime – Einheitliches Repository & I/O-Struktur'
+    description '''
+      **Funktionsweise der Rules Engine:**
+      - Klicke auf `Deterministic Rules Runtime`, um im rechten Seitenpanel das vollständige JSON für `RulesEvaluationRequest` (Input) und `RulesEvaluationResponse` (Output) zu sehen!
+      - Alle Regeln (historische AVB-Generationen + interne Unternehmensregeln) liegen versioniert im `versioned_rule_repo`.
+    '''
+
+    include
+      azure_vnet.multi_agent_system.adjudication_agent.tool_exec_rules,
+      azure_vnet.rule_authoring_subsystem.rule_deployer,
+      azure_vnet.rules_engine,
+      azure_vnet.rules_engine.*,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3A: DEEP-DIVE CUSTOMER COMMUNICATION & INTAKE AGENT
+  // -------------------------------------------------------------------------
+  view view_customer_agent of azure_vnet.multi_agent_system.customer_agent {
+    title 'Level 3A: Deep-Dive Customer Agent – Critic Pattern, AVB-Zitate & PII De-Tokenizing'
+    description '''
+      **Interner Aufbau des Customer Communication & Intake Agenten:**
+      - `comm_critic` prüft jeden EOB-Entwurf auf rechtliche Korrektheit und Groundedness.
+      - `tool_gen_eob` greift auf `table_vector_index` (für exakte AVB-Zitate), `table_claim_dossier` (Abrechnungsbeträge) und `table_pii_vault` (De-Tokenizing von Name & IBAN) zu!
+    '''
+
+    include
+      channels,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.customer_agent,
+      azure_vnet.multi_agent_system.customer_agent.*,
+      azure_vnet.data_stores.vector_search.table_vector_index,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.data_stores.cosmos_claims.table_pii_vault,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.claims_outcomes.outcome_comm
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3B: DEEP-DIVE COVERAGE & BENEFITS AGENT
+  // -------------------------------------------------------------------------
+  view view_coverage_agent of azure_vnet.multi_agent_system.coverage_agent {
+    title 'Level 3B: Deep-Dive Coverage Agent – Historischer AVB-Abgleich mit Hybrid Search & Semantic Reranker'
+    description '''
+      **Interner Aufbau des Coverage & Benefits Agenten:**
+      - `tool_get_policy` liest den Vertrag inkl. `AvbVersionId` aus `table_policies` und Deckungslimits aus `table_coverages`.
+      - `tool_search_clauses` führt über `table_vector_index` (Pre-Filter: `AvbVersionId`) und `semantic_reranker` (L2 Cross-Encoder) eine mehrstufige RAG-Suche durch.
+      - `tool_save_coverage` persistiert das Ergebnis im `table_claim_dossier`.
+    '''
+
+    include
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.coverage_agent,
+      azure_vnet.multi_agent_system.coverage_agent.*,
+      azure_vnet.data_stores.vector_search.table_vector_index,
+      azure_vnet.data_stores.vector_search.semantic_reranker,
+      azure_vnet.data_stores.sql_pas.table_policies,
+      azure_vnet.data_stores.sql_pas.table_coverages,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3C: DEEP-DIVE FRAUD & RISK AGENT
+  // -------------------------------------------------------------------------
+  view view_fraud_agent of azure_vnet.multi_agent_system.fraud_agent {
+    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik & Anomalie-Scoring'
+    description '''
+      **Interner Aufbau des Fraud & Risk Agenten:**
+      - `tool_check_image_hash` prüft hochgeladene Fotos/PDFs in `blob_raw` auf Bildmanipulation, EXIF-Anomalien und Dubletten über bestehende Dossiers (`table_claim_dossier`).
+      - `tool_score_anomaly` korreliert Rechnungsmerkmale (`blob_state`) mit der Vorschadenhistorie (`table_pas_claims`) und der Risikoklasse (`table_customers`).
+    '''
+
+    include
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.fraud_agent,
+      azure_vnet.multi_agent_system.fraud_agent.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.data_stores.sql_pas.table_pas_claims,
+      azure_vnet.data_stores.sql_pas.table_customers
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3D: DEEP-DIVE ADJUDICATION & PRICING AGENT
+  // -------------------------------------------------------------------------
+  view view_adjudication_agent of azure_vnet.multi_agent_system.adjudication_agent {
+    title 'Level 3D: Deep-Dive Adjudication Agent – Tarif-Mapping, Coding Critic & Rules Call'
+    description '''
+      **Interner Aufbau des Adjudication & Pricing Agenten:**
+      - `tool_map_items` liest die extrahierten Rechnungspositionen aus `blob_state` und gleicht sie mit Reparatur-Richtlinien in `table_vector_index` ab.
+      - `coding_critic` prüft das Tarif-Mapping auf Plausibilität.
+      - `tool_exec_rules` ruft die deterministische Rules Engine (`rule_evaluator`) auf und schreibt das Ergebnis in `table_claim_dossier`.
+    '''
+
+    include
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.adjudication_agent,
+      azure_vnet.multi_agent_system.adjudication_agent.*,
+      azure_vnet.rules_engine.rule_evaluator,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.vector_search.table_vector_index,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3E: DEEP-DIVE FINANCIAL & SETTLEMENT AGENT
+  // -------------------------------------------------------------------------
+  view view_financial_agent of azure_vnet.multi_agent_system.financial_agent {
+    title 'Level 3E: Deep-Dive Financial Agent – PII-De-Tokenizing, ERP-Payout & Reserve-Sync'
+    description '''
+      **Interner Aufbau des Financial & Settlement Agenten:**
+      - `tool_post_payment` löst das Token `<PII:IBAN_1>` über `table_pii_vault` in die echte IBAN auf und führt die Auszahlung im `erp_finance` aus.
+      - `tool_update_reserve` aktualisiert die Rückstellungen und schließt die Schadenakte in `table_claim_dossier` und `table_pas_claims`.
+    '''
+
+    include
+      erp_finance,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.financial_agent,
+      azure_vnet.multi_agent_system.financial_agent.*,
+      azure_vnet.data_stores.cosmos_claims.table_pii_vault,
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.data_stores.sql_pas.table_pas_claims,
+      azure_vnet.claims_outcomes.outcome_stp
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3F: DRILL-DOWN IN ALLE 5 DATENBANKEN, SCHEMATA & SECURITY/PRIVACY
+  // -------------------------------------------------------------------------
+  view view_database_schemas of azure_vnet.data_stores {
+    title 'Level 3F: Detailansicht der 5 Enterprise Data Stores, Private Link & Schemata'
+    description '''
+      **Vollständige Datenbank-, Security- & Schema-Übersicht:**
+      - Hier sind alle 5 Speicher einzeln aufgefächert (die auf Level 1 für die Übersichtlichkeit zu einer Plattform-Box zusammengefasst sind).
+      - Enthält `Azure Key Vault & Private Link DNS` sowie den `pii_token_vault`.
+      - Klicke auf ein beliebiges Element, um rechts im Inspektor die Markdown-Tabellen und Privacy-Klassifizierungen zu sehen!
+    '''
+
+    include
+      azure_vnet.data_stores.security_vault,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims,
+      azure_vnet.data_stores.cosmos_claims.*,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.vector_search.*,
+      azure_vnet.data_stores.sql_pas,
+      azure_vnet.data_stores.sql_pas.*
+
+    autoLayout TopBottom
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3G: DEEP-DIVE AZURE AI SEARCH & FOUNDRY IQ (INDEXER, HYBRID & RERANKER)
+  // -------------------------------------------------------------------------
+  view view_ai_search_pipeline of azure_vnet.data_stores.vector_search {
+    title 'Level 3G: Deep-Dive Azure AI Search & Foundry IQ – Indexer Skillset, Hybrid RRF & L2 Semantic Reranker'
+    description '''
+      **Detailarchitektur der Wissensbasis (`policy-knowledge`) & Evaluation-Verbindung:**
+      1. **Ingestion & Integrated Vectorization (`search_indexer`):** Nutzt den `Document Intelligence Layout Skill` für tabellen- und paragraphentreues Chunking + `text-embedding-3-large` (3072 dims).
+      2. **Pre-Filtered Hybrid Search (`table_vector_index`):** Filtert strikt auf `avbVersionId` und kombiniert BM25 (exakte Paragraphen/Tarifcodes) mit HNSW-Vektorsuche.
+      3. **RRF & L2 Semantic Reranker (`semantic_reranker`):** Fusioniert Top-50 Treffer per Reciprocal Rank Fusion und bewertet sie mit dem Cross-Encoder (`@search.rerankerScore >= 2.2`) inkl. Extractive Captions.
+      4. **RAG-Evaluation (`eval_engine`):** Prüft kontinuierlich Context Relevance, NDCG@3 und Groundedness gegen die abgerufenen Chunks.
+    '''
+
+    include
+      azure_vnet.rule_authoring_subsystem.avb_intake,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.vector_search.*,
+      azure_vnet.multi_agent_system.coverage_agent.tool_search_clauses,
+      azure_vnet.multi_agent_system.adjudication_agent.tool_map_items,
+      azure_vnet.multi_agent_system.customer_agent.tool_gen_eob,
+      azure_vnet.langfuse.eval_engine
+
+    autoLayout LeftRight
+  }
+}
