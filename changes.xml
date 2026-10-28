@@ -151,4 +151,4 @@ Dieses Repository enthält eine fertige GitHub Actions Pipeline (`.github/workfl
 2. **Interaktives C4-Modell in IcePanel öffnen:**
    - Gehe auf [app.icepanel.io](https://app.icepanel.io) $\rightarrow$ *Import Landscape* $\rightarrow$ Lade [`diagrams/icepanel-landscape.yaml`](diagrams/icepanel-landscape.yaml) hoch.
 3. **Detaillierte Anleitung:** Siehe [`docs/04-ide-visualization-guide.md`](docs/04-ide-visualization-guide.md).
->>>>>>> REPLACE
+>>>>>>> REPLACEh
