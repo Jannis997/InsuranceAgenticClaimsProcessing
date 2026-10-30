@@ -1,0 +1,2432 @@
+{
+  _type: 'element',
+  tags: null,
+  links: null,
+  _stage: 'layouted',
+  sourcePath: 'architecture.c4',
+  description: {
+    md: '**Aufgeräumte End-to-End Übersicht (ohne Detail-Überladung):**\n- **Kernfluss (1 &rarr; 2 &rarr; 3 &rarr; 4):** Von `1. Ingestion, Extraction & PII-Tokenization` über `2. Klassifikation & Schadenanlage` in das `3. Multi-Agent Claim Processing System` und bei Bedarf in `4. Circuit Breaker & HITL`.\n- **Kompakte Blöcke mit Drill-Down (Lupe anklicken!):**\n  - `Policy Management & Rule Authoring` kapselt die 3 Rollen (Business Analyst, Aktuariat, Risk Manager) und den 4-Augen-Freigabeprozess (Level 2C).\n  - `Secured Azure Data, Knowledge & Databricks Platform` fasst alle 6 Private-Link-Speicher & Analyse-Systeme zusammen (inkl. vollständiger **Security- & Data-Privacy-Matrix** beim Anklicken!).\n  - `Event Hubs`, `Front Door / APIM` und `Core ERP` liegen sauber in den jeweiligen Subsystemen (Level 2).',
+  },
+  title: 'Level 1: Gesamtsystem – Clean Architecture Overview',
+  id: 'index',
+  autoLayout: {
+    direction: 'TB',
+  },
+  hash: 'yd27A3e0yz-8xUwfaGTE7l8Kz2QJtnEpF2rjX5bGpVM',
+  bounds: {
+    x: 339,
+    y: -60,
+    width: 3586,
+    height: 1946,
+  },
+  nodes: [
+    {
+      id: 'claimant',
+      parent: null,
+      level: 0,
+      children: [],
+      inEdges: [],
+      outEdges: [
+        '135chvv',
+      ],
+      title: 'Versicherungsnehmer (Claimant)',
+      modelRef: 'claimant',
+      shape: 'person',
+      color: 'indigo',
+      icon: 'bootstrap:person',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Meldet Schaden, reicht schadensartspezifische Belege nach & erhält EOB',
+      },
+      tags: [],
+      kind: 'actor',
+      x: 3488,
+      y: 633,
+      width: 417,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 356,
+        height: 83,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'adjuster',
+      parent: null,
+      level: 0,
+      children: [],
+      inEdges: [
+        '15b9zqu',
+      ],
+      outEdges: [
+        '69kjxy',
+      ],
+      title: 'Spezial-Sachbearbeiter (HITL)',
+      modelRef: 'adjuster',
+      shape: 'person',
+      color: 'indigo',
+      icon: 'bootstrap:headset',
+      style: {
+        opacity: 15,
+        size: 'md',
+        border: 'none',
+      },
+      description: {
+        txt: 'Prüft eskalierte Fälle in der HITL-App (mit Highlighting & KI-Vorarbeit)',
+      },
+      tags: [
+        'hitl',
+      ],
+      kind: 'actor',
+      x: 3341,
+      y: 1038,
+      width: 394,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 332,
+        height: 83,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'channels',
+      parent: null,
+      level: 0,
+      children: [],
+      inEdges: [
+        '135chvv',
+        'ublkni',
+        '1egr5n0',
+      ],
+      outEdges: [
+        'ftvgj',
+      ],
+      title: 'Omnichannel Frontend & IVR',
+      modelRef: 'channels',
+      shape: 'browser',
+      color: 'slate',
+      icon: 'bootstrap:window-stack',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Webportal (teilw. vorklassifiziert), App, E-Mail, Chat & Telefon (IVR)',
+      },
+      tags: [],
+      kind: 'channel',
+      x: 3056,
+      y: 631,
+      width: 385,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 324,
+        height: 83,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'azure_vnet',
+      parent: null,
+      level: 0,
+      children: [
+        'azure_vnet.extraction_pipeline',
+        'azure_vnet.rule_authoring_subsystem',
+        'azure_vnet.classification_pipeline',
+        'azure_vnet.multi_agent_system',
+        'azure_vnet.rules_engine',
+        'azure_vnet.governance_svc',
+        'azure_vnet.langfuse',
+        'azure_vnet.claims_outcomes',
+        'azure_vnet.data_stores',
+      ],
+      inEdges: [
+        'ftvgj',
+        '69kjxy',
+      ],
+      outEdges: [
+        'ublkni',
+        '15b9zqu',
+        '1egr5n0',
+      ],
+      title: 'Azure Virtual Network (Isolated Spoke – Zero Public Access)',
+      modelRef: 'azure_vnet',
+      shape: 'rectangle',
+      color: 'sky',
+      icon: 'bootstrap:diagram-3',
+      style: {
+        border: 'dashed',
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        md: '### Enterprise Security & Network Perimeter\n| Sicherheits-Aspekt | Umsetzung in Azure |\n| :--- | :--- |\n| **Netzwerk-Isolation** | Dediziertes Spoke-VNet (`10.42.0.0/16`) mit NSGs & Azure Firewall Egress-Filtering |\n| **Private Endpoints** | Alle 6 Data & Analytics Stores, Event Hubs, AI Foundry & Langfuse sind **ausschließlich** über `Azure Private Link` erreichbar (`publicNetworkAccess: Disabled`) |\n| **Authentifizierung (IAM)** | System-Assigned **Managed Identities** (Entra ID RBAC) für jeden Agenten und Service – keinerlei Passwörter oder API-Keys im Code |\n| **Verschlüsselung** | TLS 1.3 in Transit + Customer-Managed Keys (CMK) in Azure Key Vault at Rest |\n| **Data Residency & AI Privacy**| EU Data Boundary (Germany West Central / Sweden Central), Zero Data Retention bei Azure AI Services (kein Microsoft-Modelltraining) |',
+      },
+      tags: [
+        'security',
+        'private_endpoint',
+      ],
+      metadata: {
+        private_link_enforced: 'true (Azure Policy: Deny Public Network Access)',
+        encryption_at_rest: 'Customer-Managed Keys (Azure Key Vault HSM)',
+        ai_data_governance: 'EU Data Boundary + Abuse Monitoring Opt-Out (Zero Retention)',
+      },
+      kind: 'vnet',
+      depth: 2,
+      x: 359,
+      y: -40,
+      width: 2666,
+      height: 1906,
+      labelBBox: {
+        x: 6,
+        y: 0,
+        width: 302,
+        height: 15,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'azure_vnet.extraction_pipeline',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        'ftvgj',
+      ],
+      outEdges: [
+        '1fuzdeh',
+        '1ske28h',
+      ],
+      title: '1. Ingestion, Extraction & PII-Tokenization',
+      modelRef: 'azure_vnet.extraction_pipeline',
+      shape: 'rectangle',
+      color: 'sky',
+      icon: 'bootstrap:file-earmark-text',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Foundry Tools Pipeline: Content Understanding (2025-11-01 GA / Agentic Mode), Doc Intel v4.0, MAI-Transcribe-2, Text Analytics for Health & PII',
+      },
+      tags: [
+        'pii_protected',
+        'security',
+      ],
+      kind: 'pipeline',
+      navigateTo: 'view_extraction_pipeline',
+      x: 2637,
+      y: 20,
+      width: 346,
+      height: 182,
+      labelBBox: {
+        x: 46,
+        y: 18,
+        width: 284,
+        height: 143,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.rule_authoring_subsystem',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [],
+      outEdges: [
+        '1qsj2bg',
+        '104ghub',
+      ],
+      title: 'Policy Management & Rule Authoring',
+      modelRef: 'azure_vnet.rule_authoring_subsystem',
+      shape: 'rectangle',
+      color: 'sky',
+      icon: 'bootstrap:file-earmark-code',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Steuert & aktualisiert die Rules Engine (AVB-Generationen & interne Regeln im 4-Augen-Prozess)',
+      },
+      tags: [
+        'versioning',
+        'security',
+      ],
+      kind: 'pipeline',
+      navigateTo: 'view_rule_authoring',
+      x: 415,
+      y: 100,
+      width: 456,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 394,
+        height: 83,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.classification_pipeline',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        '1fuzdeh',
+      ],
+      outEdges: [
+        '136sptg',
+        'j5wsmu',
+        'n8o5aa',
+      ],
+      title: '2. Klassifikation & Deterministische Schadenanlage',
+      modelRef: 'azure_vnet.classification_pipeline',
+      shape: 'rectangle',
+      color: 'sky',
+      icon: 'bootstrap:check-circle',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Klassifiziert Schadensart & Schwere via Microsoft-Decision-1 (SystemOne API), bindet historische AVB & legt Schaden im PAS an',
+      },
+      tags: [],
+      kind: 'pipeline',
+      navigateTo: 'view_classification_pipeline',
+      x: 1937,
+      y: 345,
+      width: 435,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 26,
+        width: 374,
+        height: 125,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.multi_agent_system',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        '136sptg',
+        '65z0aw',
+        '3le5to',
+      ],
+      outEdges: [
+        'ublkni',
+        '109iyib',
+        '79rifc',
+        '1jzl0ny',
+        'lruv7g',
+        '2gsjpo',
+        'addwpj',
+      ],
+      title: '3. Multi-Agent Claim Processing System',
+      modelRef: 'azure_vnet.multi_agent_system',
+      shape: 'rectangle',
+      color: 'sky',
+      icon: 'bootstrap:robot',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Foundry Hosted Agents (Responses API v1, Model Router, Toolbox MCP & Foundry Guardrails/Prompt Shields)',
+      },
+      tags: [],
+      kind: 'pipeline',
+      navigateTo: 'view_multi_agent_system',
+      x: 1393,
+      y: 582,
+      width: 480,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 418,
+        height: 83,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.rules_engine',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        '109iyib',
+        '1qsj2bg',
+      ],
+      outEdges: [],
+      title: 'Deterministic Rules Runtime',
+      modelRef: 'azure_vnet.rules_engine',
+      shape: 'rectangle',
+      color: 'amber',
+      icon: 'bootstrap:gear-wide-connected',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Einheitliche, versionierte Rules Engine für historische AVB-Tarife & interne Unternehmensregeln',
+      },
+      tags: [
+        'deterministic',
+        'private_endpoint',
+        'versioning',
+      ],
+      kind: 'rules_engine',
+      navigateTo: 'view_rules_engine',
+      x: 1054,
+      y: 96,
+      width: 376,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 314,
+        height: 83,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.governance_svc',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        '69kjxy',
+        'j5wsmu',
+        '79rifc',
+      ],
+      outEdges: [
+        '15b9zqu',
+        '1egr5n0',
+        '65z0aw',
+        '8stxek',
+        '3vm4ce',
+        '1bhqz9c',
+      ],
+      title: '4. Circuit Breaker & HITL Escalation Platform',
+      modelRef: 'azure_vnet.governance_svc',
+      shape: 'rectangle',
+      color: 'red',
+      icon: 'bootstrap:shield-exclamation',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Deterministische Guardrail-Middleware, Dokumenten-Highlighting, HITL-Workbench & Direkt-Abwicklung',
+      },
+      tags: [
+        'hitl',
+        'security',
+      ],
+      kind: 'governance',
+      navigateTo: 'view_governance_hitl',
+      x: 1994,
+      y: 989,
+      width: 444,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 26,
+        width: 382,
+        height: 125,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.langfuse',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        '1jzl0ny',
+        '8stxek',
+      ],
+      outEdges: [
+        'xspo88',
+      ],
+      title: 'Langfuse Observability & Prompt Platform',
+      modelRef: 'azure_vnet.langfuse',
+      shape: 'rectangle',
+      color: 'muted',
+      icon: 'bootstrap:activity',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Self-Hosted im Azure VNet: Verwaltet Systemprompts/Skills & zeichnet PII-freie Traces auf',
+      },
+      tags: [
+        'observability',
+        'pii_protected',
+        'private_endpoint',
+      ],
+      kind: 'observability',
+      navigateTo: 'view_langfuse',
+      x: 401,
+      y: 1161,
+      width: 496,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 434,
+        height: 83,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.claims_outcomes',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [
+        'azure_vnet.claims_outcomes.outcome_stp',
+        'azure_vnet.claims_outcomes.outcome_comm',
+        'azure_vnet.claims_outcomes.outcome_hitl',
+      ],
+      inEdges: [
+        '2gsjpo',
+        'addwpj',
+        '1bhqz9c',
+      ],
+      outEdges: [],
+      title: 'Claims Processing Outcomes',
+      modelRef: 'azure_vnet.claims_outcomes',
+      shape: 'rectangle',
+      color: 'blue',
+      style: {
+        opacity: 20,
+        size: 'md',
+      },
+      description: {
+        txt: 'Die drei definierten End-Zustände der Schadenbearbeitung',
+      },
+      tags: [],
+      kind: 'subsystem',
+      depth: 1,
+      x: 837,
+      y: 1535,
+      width: 1634,
+      height: 289,
+      labelBBox: {
+        x: 6,
+        y: 0,
+        width: 189,
+        height: 15,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'azure_vnet.data_stores',
+      parent: 'azure_vnet',
+      level: 1,
+      children: [],
+      inEdges: [
+        '1ske28h',
+        'n8o5aa',
+        'lruv7g',
+        '104ghub',
+        '3vm4ce',
+        'xspo88',
+      ],
+      outEdges: [
+        '3le5to',
+      ],
+      title: 'Secured Azure Data, Knowledge & Databricks Platform (Private Link)',
+      modelRef: 'azure_vnet.data_stores',
+      shape: 'storage',
+      color: 'slate',
+      icon: 'bootstrap:database-fill-lock',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Konsolidierte Datenhaltung (Blobs, Cosmos DB, AI Search, PAS SQL & Azure Databricks Lakehouse) hinter Private Endpoints',
+      },
+      tags: [
+        'security',
+        'private_endpoint',
+        'pii_protected',
+      ],
+      metadata: {
+        network_isolation: '100% Azure Private Link (No Public Internet Endpoints)',
+        key_management: 'Azure Key Vault HSM (Customer-Managed Keys)',
+        gdpr_deletion: 'Automated TTL & Crypto-Shredding via pii_token_vault',
+      },
+      kind: 'store',
+      navigateTo: 'view_database_schemas',
+      x: 428,
+      y: 575,
+      width: 433,
+      height: 181,
+      labelBBox: {
+        x: 47,
+        y: 27,
+        width: 371,
+        height: 125,
+      },
+      links: null,
+    },
+    {
+      id: 'azure_vnet.claims_outcomes.outcome_stp',
+      parent: 'azure_vnet.claims_outcomes',
+      level: 2,
+      children: [],
+      inEdges: [
+        '2gsjpo',
+      ],
+      outEdges: [],
+      title: 'Komplette Dunkelverarbeitung (STP)',
+      modelRef: 'azure_vnet.claims_outcomes.outcome_stp',
+      shape: 'rectangle',
+      color: 'green',
+      icon: 'bootstrap:check2-circle',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Vollautomatische Regulierung, Auszahlung & EOB-Versand ohne menschlichen Eingriff',
+      },
+      tags: [],
+      kind: 'outcome',
+      x: 879,
+      y: 1595,
+      width: 450,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 47,
+        width: 388,
+        height: 83,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'azure_vnet.claims_outcomes.outcome_comm',
+      parent: 'azure_vnet.claims_outcomes',
+      level: 2,
+      children: [],
+      inEdges: [
+        'addwpj',
+      ],
+      outEdges: [],
+      title: 'Customer Communication Loop',
+      modelRef: 'azure_vnet.claims_outcomes.outcome_comm',
+      shape: 'rectangle',
+      color: 'green',
+      icon: 'bootstrap:chat-dots',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Schadensartspezifische Dokumenten-Nachforderung oder Zustellung des Abrechnungsschreibens',
+      },
+      tags: [],
+      kind: 'outcome',
+      x: 1424,
+      y: 1595,
+      width: 405,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 38,
+        width: 344,
+        height: 101,
+      },
+      navigateTo: null,
+      links: null,
+    },
+    {
+      id: 'azure_vnet.claims_outcomes.outcome_hitl',
+      parent: 'azure_vnet.claims_outcomes',
+      level: 2,
+      children: [],
+      inEdges: [
+        '1bhqz9c',
+      ],
+      outEdges: [],
+      title: 'HITL-Abschluss (Durch Spezialist entschieden)',
+      modelRef: 'azure_vnet.claims_outcomes.outcome_hitl',
+      shape: 'rectangle',
+      color: 'green',
+      icon: 'bootstrap:person-check-fill',
+      style: {
+        opacity: 15,
+        size: 'md',
+      },
+      description: {
+        txt: 'Abgeschlossene manuelle Freigabe, Kürzung oder geprüfte Ablehnung (ohne erneuten Agenten-Lauf)',
+      },
+      tags: [],
+      kind: 'outcome',
+      x: 2008,
+      y: 1602,
+      width: 421,
+      height: 180,
+      labelBBox: {
+        x: 46,
+        y: 35,
+        width: 360,
+        height: 107,
+      },
+      navigateTo: null,
+      links: null,
+    },
+  ],
+  edges: [
+    {
+      id: '135chvv',
+      parent: null,
+      source: 'claimant',
+      target: 'channels',
+      label: 'Meldet Schaden & Belege',
+      relations: [
+        '1d4bif7',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          3558,
+          721,
+        ],
+        [
+          3502,
+          721,
+        ],
+        [
+          3437,
+          720,
+        ],
+        [
+          3381,
+          720,
+        ],
+      ],
+      labelBBox: {
+        x: 3539,
+        y: 716,
+        width: 166,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 3470,
+          y: 721,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'ftvgj',
+      parent: null,
+      source: 'channels',
+      target: 'azure_vnet.extraction_pipeline',
+      label: 'HTTPS Payload + Auth',
+      relations: [
+        '13pt5dy',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          3208,
+          661,
+        ],
+        [
+          3125,
+          547,
+        ],
+        [
+          2938,
+          290,
+        ],
+        [
+          2852,
+          171,
+        ],
+      ],
+      labelBBox: {
+        x: 3252,
+        y: 381,
+        width: 149,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 3185,
+          y: 143,
+        },
+        {
+          x: 3024,
+          y: 144,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '1fuzdeh',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.extraction_pipeline',
+      target: 'azure_vnet.classification_pipeline',
+      label: 'Extrahierte Daten',
+      relations: [
+        'hot6ei',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2637,
+          197,
+        ],
+        [
+          2547,
+          242,
+        ],
+        [
+          2438,
+          295,
+        ],
+        [
+          2346,
+          341,
+        ],
+      ],
+      labelBBox: {
+        x: 2537,
+        y: 229,
+        width: 113,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2764,
+          y: 225,
+        },
+        {
+          x: 2423,
+          y: 434,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '136sptg',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.classification_pipeline',
+      target: 'azure_vnet.multi_agent_system',
+      label: 'Übergibt angelegten Schaden',
+      relations: [
+        'hf59hi',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2007,
+          500,
+        ],
+        [
+          1973,
+          515,
+        ],
+        [
+          1939,
+          530,
+        ],
+        [
+          1908,
+          544,
+        ],
+        [
+          1867,
+          562,
+        ],
+        [
+          1824,
+          582,
+        ],
+        [
+          1783,
+          600,
+        ],
+      ],
+      labelBBox: {
+        x: 1647,
+        y: 550,
+        width: 187,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1973,
+          y: 515,
+        },
+        {
+          x: 1846,
+          y: 572,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'ublkni',
+      parent: null,
+      source: 'azure_vnet.multi_agent_system',
+      target: 'channels',
+      label: 'Rückfrage / EOB an Kunden',
+      relations: [
+        '8un9tb',
+        '13cxdc2',
+        't27wx3',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1801,
+          712,
+        ],
+        [
+          1821,
+          715,
+        ],
+        [
+          1840,
+          719,
+        ],
+        [
+          1860,
+          719,
+        ],
+        [
+          2171,
+          738,
+        ],
+        [
+          2259,
+          668,
+        ],
+        [
+          2574,
+          661,
+        ],
+        [
+          2743,
+          658,
+        ],
+        [
+          2785,
+          664,
+        ],
+        [
+          2952,
+          681,
+        ],
+        [
+          3001,
+          683,
+        ],
+        [
+          3055,
+          691,
+        ],
+        [
+          3104,
+          696,
+        ],
+      ],
+      labelBBox: {
+        x: 2732,
+        y: 678,
+        width: 181,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2345,
+          y: 693,
+        },
+        {
+          x: 2583,
+          y: 700,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '109iyib',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.multi_agent_system',
+      target: 'azure_vnet.rules_engine',
+      label: 'Berechnet Tarif & SB',
+      relations: [
+        '1eqkyrz',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1529,
+          557,
+        ],
+        [
+          1497,
+          518,
+        ],
+        [
+          1462,
+          478,
+        ],
+        [
+          1430,
+          437,
+        ],
+        [
+          1403,
+          404,
+        ],
+        [
+          1373,
+          365,
+        ],
+        [
+          1346,
+          328,
+        ],
+      ],
+      labelBBox: {
+        x: 1630,
+        y: 410,
+        width: 136,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1590,
+          y: 236,
+        },
+        {
+          x: 1553,
+          y: 236,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '1qsj2bg',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.rule_authoring_subsystem',
+      target: 'azure_vnet.rules_engine',
+      label: 'Deployt geprüfte Regeln',
+      relations: [
+        'a6ntv9',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          808,
+          188,
+        ],
+        [
+          887,
+          186,
+        ],
+        [
+          979,
+          186,
+        ],
+        [
+          1059,
+          186,
+        ],
+      ],
+      labelBBox: {
+        x: 893,
+        y: 164,
+        width: 155,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 934,
+          y: 186,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '69kjxy',
+      parent: null,
+      source: 'adjuster',
+      target: 'azure_vnet.governance_svc',
+      label: 'Prüft Highlights & entscheidet',
+      relations: [
+        '1man7zw',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          3521,
+          1038,
+        ],
+        [
+          3511,
+          999,
+        ],
+        [
+          3495,
+          959,
+        ],
+        [
+          3467,
+          940,
+        ],
+        [
+          3372,
+          877,
+        ],
+        [
+          2552,
+          1106,
+        ],
+        [
+          2440,
+          1107,
+        ],
+        [
+          2423,
+          1109,
+        ],
+        [
+          2402,
+          1107,
+        ],
+        [
+          2386,
+          1106,
+        ],
+      ],
+      labelBBox: {
+        x: 2975,
+        y: 1105,
+        width: 188,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2797,
+          y: 1130,
+        },
+        {
+          x: 2797,
+          y: 1130,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'j5wsmu',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.classification_pipeline',
+      target: 'azure_vnet.governance_svc',
+      label: 'OCR < 0.80 (HITL)',
+      relations: [
+        'kb4ue5',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2214,
+          523,
+        ],
+        [
+          2300,
+          651,
+        ],
+        [
+          2442,
+          870,
+        ],
+        [
+          2451,
+          930,
+        ],
+        [
+          2467,
+          1034,
+        ],
+        [
+          2378,
+          957,
+        ],
+        [
+          2326,
+          989,
+        ],
+        [
+          2316,
+          995,
+        ],
+        [
+          2306,
+          1001,
+        ],
+        [
+          2298,
+          1008,
+        ],
+      ],
+      labelBBox: {
+        x: 2158,
+        y: 610,
+        width: 122,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2153,
+          y: 719,
+        },
+        {
+          x: 2153,
+          y: 857,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '79rifc',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.multi_agent_system',
+      target: 'azure_vnet.governance_svc',
+      label: 'Prüft Guardrails / Eskalation',
+      relations: [
+        '1bxwe4a',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1791,
+          783,
+        ],
+        [
+          1868,
+          835,
+        ],
+        [
+          1956,
+          897,
+        ],
+        [
+          2033,
+          951,
+        ],
+      ],
+      labelBBox: {
+        x: 1839,
+        y: 932,
+        width: 178,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1835,
+          y: 858,
+        },
+        {
+          x: 1938,
+          y: 1023,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '15b9zqu',
+      parent: null,
+      source: 'azure_vnet.governance_svc',
+      target: 'adjuster',
+      label: 'Benachrichtigt Spezialist',
+      relations: [
+        '39837b',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2377,
+          1105,
+        ],
+        [
+          2397,
+          1106,
+        ],
+        [
+          2420,
+          1107,
+        ],
+        [
+          2440,
+          1107,
+        ],
+        [
+          2786,
+          1108,
+        ],
+        [
+          2887,
+          952,
+        ],
+        [
+          3226,
+          993,
+        ],
+        [
+          3293,
+          1001,
+        ],
+        [
+          3364,
+          1027,
+        ],
+        [
+          3417,
+          1053,
+        ],
+      ],
+      labelBBox: {
+        x: 2584,
+        y: 1056,
+        width: 157,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2887,
+          y: 1071,
+        },
+        {
+          x: 3085,
+          y: 1071,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '1egr5n0',
+      parent: null,
+      source: 'azure_vnet.governance_svc',
+      target: 'channels',
+      label: 'Sendet Entscheidungsbrief',
+      relations: [
+        '827q0n',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2303,
+          975,
+        ],
+        [
+          2314,
+          963,
+        ],
+        [
+          2325,
+          952,
+        ],
+        [
+          2337,
+          941,
+        ],
+        [
+          2399,
+          883,
+        ],
+        [
+          2416,
+          869,
+        ],
+        [
+          2482,
+          832,
+        ],
+        [
+          2560,
+          791,
+        ],
+        [
+          2860,
+          698,
+        ],
+        [
+          3060,
+          690,
+        ],
+        [
+          3092,
+          688,
+        ],
+        [
+          3124,
+          692,
+        ],
+        [
+          3155,
+          697,
+        ],
+      ],
+      labelBBox: {
+        x: 2670,
+        y: 743,
+        width: 171,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2215,
+          y: 886,
+        },
+        {
+          x: 2448,
+          y: 765,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '65z0aw',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.governance_svc',
+      target: 'azure_vnet.multi_agent_system',
+      label: 'Pfad 1 (OCR-Korrektur): Fortsetzen',
+      relations: [
+        '1x0f7ip',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1979,
+          1004,
+        ],
+        [
+          1922,
+          981,
+        ],
+        [
+          1864,
+          950,
+        ],
+        [
+          1811,
+          910,
+        ],
+        [
+          1756,
+          870,
+        ],
+        [
+          1716,
+          834,
+        ],
+        [
+          1687,
+          804,
+        ],
+      ],
+      labelBBox: {
+        x: 1893,
+        y: 696,
+        width: 225,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2030,
+          y: 934,
+        },
+        {
+          x: 2027,
+          y: 891,
+        },
+        {
+          x: 2027,
+          y: 731,
+        },
+        {
+          x: 1955,
+          y: 718,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '1jzl0ny',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.multi_agent_system',
+      target: 'azure_vnet.langfuse',
+      label: '[...]',
+      relations: [
+        '14cjibq',
+        '1ti2d7n',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1404,
+          715,
+        ],
+        [
+          1324,
+          733,
+        ],
+        [
+          1235,
+          759,
+        ],
+        [
+          1159,
+          794,
+        ],
+        [
+          968,
+          883,
+        ],
+        [
+          801,
+          1058,
+        ],
+        [
+          713,
+          1164,
+        ],
+      ],
+      labelBBox: {
+        x: 959,
+        y: 900,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1436,
+          y: 831,
+        },
+        {
+          x: 1209,
+          y: 922,
+        },
+        {
+          x: 733,
+          y: 1000,
+        },
+        {
+          x: 733,
+          y: 1085,
+        },
+        {
+          x: 733,
+          y: 1125,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '8stxek',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.governance_svc',
+      target: 'azure_vnet.langfuse',
+      label: '[...]',
+      relations: [
+        '1qv294p',
+        '52jkbz',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1822,
+          1102,
+        ],
+        [
+          1598,
+          1117,
+        ],
+        [
+          1338,
+          1136,
+        ],
+        [
+          1227,
+          1149,
+        ],
+        [
+          1136,
+          1162,
+        ],
+        [
+          1036,
+          1178,
+        ],
+        [
+          947,
+          1193,
+        ],
+      ],
+      labelBBox: {
+        x: 1575,
+        y: 1153,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1836,
+          y: 1175,
+        },
+        {
+          x: 1338,
+          y: 1175,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '1ske28h',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.extraction_pipeline',
+      target: 'azure_vnet.data_stores',
+      label: '[...]',
+      relations: [
+        '2i70dp',
+        'p5oe6d',
+        'cuqd3x',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2873,
+          196,
+        ],
+        [
+          2910,
+          254,
+        ],
+        [
+          2949,
+          330,
+        ],
+        [
+          2938,
+          388,
+        ],
+        [
+          2938,
+          388,
+        ],
+        [
+          2938,
+          388,
+        ],
+        [
+          2862,
+          847,
+        ],
+        [
+          2849,
+          922,
+        ],
+        [
+          2816,
+          1128,
+        ],
+        [
+          2729,
+          1165,
+        ],
+        [
+          2690,
+          1180,
+        ],
+        [
+          2665,
+          1167,
+        ],
+        [
+          2610,
+          1160,
+        ],
+        [
+          2289,
+          1112,
+        ],
+        [
+          1370,
+          864,
+        ],
+        [
+          910,
+          737,
+        ],
+      ],
+      labelBBox: {
+        x: 1107,
+        y: 386,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1821,
+          y: 150,
+        },
+        {
+          x: 1821,
+          y: 351,
+        },
+        {
+          x: 1570,
+          y: 408,
+        },
+        {
+          x: 668,
+          y: 487,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'n8o5aa',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.classification_pipeline',
+      target: 'azure_vnet.data_stores',
+      label: '[...]',
+      relations: [
+        '14jt8im',
+        '1wvibq7',
+        'xhnh8h',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1879,
+          345,
+        ],
+        [
+          1299,
+          163,
+        ],
+        [
+          -22,
+          -256,
+        ],
+        [
+          -266,
+          -92,
+        ],
+        [
+          -419,
+          105,
+        ],
+        [
+          -467,
+          252,
+        ],
+        [
+          -335,
+          472,
+        ],
+        [
+          -259,
+          599,
+        ],
+        [
+          153,
+          642,
+        ],
+        [
+          417,
+          657,
+        ],
+      ],
+      labelBBox: {
+        x: 1309,
+        y: 412,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 700,
+          y: 499,
+        },
+        {
+          x: 700,
+          y: 508,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'lruv7g',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.multi_agent_system',
+      target: 'azure_vnet.data_stores',
+      label: '[...]',
+      relations: [
+        'mtlw5',
+        '1kh9y7h',
+        'pre4tr',
+        'uz57zq',
+        '1ewomyz',
+        'jwlvls',
+        'yff1ug',
+        'p6m6jo',
+        '1mp06f1',
+        'l076s9',
+        '1iet04u',
+        '1yqhohq',
+        '1lsugd9',
+        '16ff9dw',
+        '1b8de05',
+        'tz4yty',
+        '109nao6',
+        'yg0foz',
+        '17bgsrf',
+        '6sweg2',
+        'x7ihhi',
+        '3x355k',
+        '1btvajg',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1329,
+          539,
+        ],
+        [
+          918,
+          363,
+        ],
+        [
+          210,
+          42,
+        ],
+        [
+          -22,
+          -19,
+        ],
+        [
+          -185,
+          13,
+        ],
+        [
+          -176,
+          73,
+        ],
+        [
+          -207,
+          188,
+        ],
+        [
+          -220,
+          235,
+        ],
+        [
+          -387,
+          318,
+        ],
+        [
+          -181,
+          554,
+        ],
+        [
+          -102,
+          646,
+        ],
+        [
+          208,
+          665,
+        ],
+        [
+          425,
+          667,
+        ],
+      ],
+      labelBBox: {
+        x: 1281,
+        y: 649,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1188,
+          y: 690,
+        },
+        {
+          x: 1052,
+          y: 690,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '104ghub',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.rule_authoring_subsystem',
+      target: 'azure_vnet.data_stores',
+      label: '[...]',
+      relations: [
+        '1cxkmo9',
+        '5wc9ow',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          678,
+          211,
+        ],
+        [
+          738,
+          256,
+        ],
+        [
+          837,
+          352,
+        ],
+        [
+          858,
+          439,
+        ],
+        [
+          868,
+          484,
+        ],
+        [
+          737,
+          590,
+        ],
+        [
+          674,
+          638,
+        ],
+      ],
+      labelBBox: {
+        x: 609,
+        y: 512,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 643,
+          y: 394,
+        },
+        {
+          x: 643,
+          y: 460,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '3vm4ce',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.governance_svc',
+      target: 'azure_vnet.data_stores',
+      label: '[...]',
+      relations: [
+        '19o4eyp',
+        '1tea9n',
+        'cnw1o3',
+        'nbxc6w',
+        '158q13l',
+        's5i2x9',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1583,
+          804,
+        ],
+        [
+          1381,
+          719,
+        ],
+        [
+          1182,
+          639,
+        ],
+        [
+          1107,
+          618,
+        ],
+        [
+          814,
+          534,
+        ],
+        [
+          707,
+          577,
+        ],
+        [
+          664,
+          615,
+        ],
+      ],
+      labelBBox: {
+        x: 1007,
+        y: 820,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1541,
+          y: 902,
+        },
+        {
+          x: 1315,
+          y: 842,
+        },
+        {
+          x: 724,
+          y: 797,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'xspo88',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.langfuse',
+      target: 'azure_vnet.data_stores',
+      label: '[...]',
+      relations: [
+        'jk0m8q',
+        '1c13r4z',
+        '13nlzma',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          645,
+          1088,
+        ],
+        [
+          644,
+          1010,
+        ],
+        [
+          643,
+          919,
+        ],
+        [
+          644,
+          839,
+        ],
+      ],
+      labelBBox: {
+        x: 659,
+        y: 965,
+        width: 25,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 649,
+          y: 780,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '3le5to',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.data_stores',
+      target: 'azure_vnet.multi_agent_system',
+      label: 'Reranked Clauses & Captions',
+      relations: [
+        'h6b948',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          435,
+          650,
+        ],
+        [
+          238,
+          631,
+        ],
+        [
+          -34,
+          592,
+        ],
+        [
+          -103,
+          504,
+        ],
+        [
+          -186,
+          397,
+        ],
+        [
+          -175,
+          310,
+        ],
+        [
+          -113,
+          219,
+        ],
+        [
+          194,
+          75,
+        ],
+        [
+          902,
+          367,
+        ],
+        [
+          1312,
+          535,
+        ],
+      ],
+      labelBBox: {
+        x: 999,
+        y: 616,
+        width: 192,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 934,
+          y: 654,
+        },
+        {
+          x: 1256,
+          y: 638,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '2gsjpo',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.multi_agent_system',
+      target: 'azure_vnet.claims_outcomes.outcome_stp',
+      label: 'STP-Abschluss',
+      relations: [
+        'rr68rv',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1561,
+          799,
+        ],
+        [
+          1545,
+          827,
+        ],
+        [
+          1529,
+          855,
+        ],
+        [
+          1513,
+          883,
+        ],
+        [
+          1420,
+          1044,
+        ],
+        [
+          1370,
+          1111,
+        ],
+        [
+          1300,
+          1249,
+        ],
+        [
+          1252,
+          1342,
+        ],
+        [
+          1269,
+          1331,
+        ],
+        [
+          1235,
+          1409,
+        ],
+        [
+          1218,
+          1448,
+        ],
+        [
+          1197,
+          1493,
+        ],
+        [
+          1177,
+          1534,
+        ],
+      ],
+      labelBBox: {
+        x: 1522,
+        y: 1084,
+        width: 100,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1408,
+          y: 1429,
+        },
+        {
+          x: 1103,
+          y: 1447,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: 'addwpj',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.multi_agent_system',
+      target: 'azure_vnet.claims_outcomes.outcome_comm',
+      label: 'Kunden-Dialog',
+      relations: [
+        'hkq7ks',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          1432,
+          773,
+        ],
+        [
+          1347,
+          839,
+        ],
+        [
+          1261,
+          939,
+        ],
+        [
+          1237,
+          1094,
+        ],
+        [
+          1221,
+          1200,
+        ],
+        [
+          1240,
+          1253,
+        ],
+        [
+          1290,
+          1353,
+        ],
+        [
+          1305,
+          1382,
+        ],
+        [
+          1408,
+          1483,
+        ],
+        [
+          1496,
+          1565,
+        ],
+      ],
+      labelBBox: {
+        x: 1642,
+        y: 920,
+        width: 97,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 1630,
+          y: 1095,
+        },
+        {
+          x: 1630,
+          y: 1262,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+    {
+      id: '1bhqz9c',
+      parent: 'azure_vnet',
+      source: 'azure_vnet.governance_svc',
+      target: 'azure_vnet.claims_outcomes.outcome_hitl',
+      label: 'HITL-Abschluss',
+      relations: [
+        '1r19lrp',
+      ],
+      color: 'gray',
+      line: 'dashed',
+      head: 'normal',
+      points: [
+        [
+          2214,
+          1232,
+        ],
+        [
+          2214,
+          1322,
+        ],
+        [
+          2215,
+          1432,
+        ],
+        [
+          2214,
+          1523,
+        ],
+      ],
+      labelBBox: {
+        x: 2218,
+        y: 1470,
+        width: 103,
+        height: 18,
+      },
+      isLabelCustomized: false,
+      controlPoints: [
+        {
+          x: 2214,
+          y: 1350,
+        },
+      ],
+      navigateTo: null,
+      tags: null,
+    },
+  ],
+  routing: 'ortho',
+  _layout: 'manual',
+}

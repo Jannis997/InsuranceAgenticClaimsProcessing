@@ -1016,7 +1016,7 @@ model {
 
         mosaic_fraud_ml = ai_service '3. GraphFrames & Mosaic AI Fraud Serving' {
           summary 'Echtzeit-Inferenz für Betrugsring-Graphen (Werkstatt/Gutachter-Cluster) & tabellarisches XGBoost Anomaly-Scoring'
-          icon bootstrap:Share
+          icon bootstrap:share
           metadata {
             graph_analytics 'Spark GraphFrames (Connected Components, PageRank, Triangle Count)'
             serving_endpoint 'Databricks Mosaic AI Model Serving (Low-Latency Private Link REST)'
