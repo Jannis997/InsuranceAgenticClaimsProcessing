@@ -1,12 +1,656 @@
+likec4.config.json
+<<<<<<< SEARCH
+{
+  "$schema": "https://likec4.dev/schemas/config.json",
+  "name": "enterprise-agentic-claims-azure",
+  "title": "Enterprise Agentic Claims Architecture Blueprint (Microsoft Foundry & Azure)"
+}
+=======
+{
+  "$schema": "https://likec4.dev/schemas/config.json",
+  "name": "enterprise-agentic-claims-azure",
+  "title": "Enterprise Agentic Claims Architecture Blueprint (Microsoft Foundry & Azure)",
+  "styles": {
+    "defaults": {
+      "relationship": {
+        "line": "dashed"
+      }
+    }
+  }
+}
+>>>>>>> REPLACE
+
 likec4.txt
 <<<<<<< SEARCH
-        mosaic_fraud_ml = ai_service '3. GraphFrames & Mosaic AI Fraud Serving' {
-          summary 'Echtzeit-Inferenz für Betrugsring-Graphen (Werkstatt/Gutachter-Cluster) & tabellarisches XGBoost Anomaly-Scoring'
-          icon bootstrap:Share
-          metadata {
+      azure_vnet.claims_outcomes,
+      azure_vnet.claims_outcomes.*,
+
+      // Explizite Beschriftungen statt automatischem [...] Merge:
+      azure_vnet.extraction_pipeline -> azure_vnet.data_stores with {
+        title 'Speichert WORM Raw, State & PII Vault'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.data_stores with {
+        title 'MCP-Zugriffe (RAG, State, Databricks ML)'
+      },
+      azure_vnet.rule_authoring_subsystem -> azure_vnet.data_stores with {
+        title 'AVB-Indexierung & Databricks Backtest'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.governance_svc with {
+        title 'Guardrail-Prüfung & Eskalation'
+      },
+      azure_vnet.governance_svc -> azure_vnet.data_stores with {
+        title 'Lädt Belege & persistiert Dossier'
+      },
+      azure_vnet.governance_svc -> azure_vnet.multi_agent_system with {
+        title 'Pfad 1: Fortsetzen nach OCR-Korrektur'
+      }
+
+    autoLayout TopBottom
 =======
-        mosaic_fraud_ml = ai_service '3. GraphFrames & Mosaic AI Fraud Serving' {
-          summary 'Echtzeit-Inferenz für Betrugsring-Graphen (Werkstatt/Gutachter-Cluster) & tabellarisches XGBoost Anomaly-Scoring'
-          icon bootstrap:share
-          metadata {
+      azure_vnet.claims_outcomes,
+      azure_vnet.claims_outcomes.*,
+
+      // Explizite Beschriftungen für ALLE zusammengefassten Kanten auf Level 1 (verhindert jegliches [...]):
+      azure_vnet.extraction_pipeline -> azure_vnet.data_stores with {
+        title 'Speichert WORM Raw, State & PII Vault'
+      },
+      azure_vnet.classification_pipeline -> azure_vnet.data_stores with {
+        title 'Liest Vertrag (AvbVersionId) & legt Schaden an'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.data_stores with {
+        title 'MCP-Zugriffe (RAG, Dossier, PII-Vault & Fraud-ML)'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.langfuse with {
+        title 'OTel-Traces (PII-frei)'
+      },
+      azure_vnet.langfuse -> azure_vnet.multi_agent_system with {
+        title 'Lädt Prompts & Checklisten'
+      },
+      azure_vnet.langfuse -> azure_vnet.data_stores with {
+        title 'RAG-Evaluation & Golden Dataset Sync'
+      },
+      azure_vnet.rule_authoring_subsystem -> azure_vnet.data_stores with {
+        title 'AVB-Indexierung & Databricks Mass-Backtest'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.governance_svc with {
+        title 'Guardrail-Prüfung & Eskalation'
+      },
+      azure_vnet.governance_svc -> azure_vnet.data_stores with {
+        title 'Lädt Belege & persistiert HITL-Dossier'
+      },
+      azure_vnet.governance_svc -> azure_vnet.langfuse with {
+        title 'Loggt Abbruchgrund & HITL-Overrides'
+      },
+      azure_vnet.governance_svc -> azure_vnet.multi_agent_system with {
+        title 'Pfad 1: Fortsetzen nach OCR-Korrektur'
+      },
+      azure_vnet.multi_agent_system -> channels with {
+        title 'Rückfrage / EOB an Kunden'
+      }
+
+    autoLayout TopBottom
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_extraction_pipeline of azure_vnet.extraction_pipeline {
+    title 'Level 2A: Workflow Ingestion (WAF/Event Hub), Textextraktion & PII-Tokenization'
+=======
+  view view_extraction_pipeline of azure_vnet.extraction_pipeline {
+    title 'Level 2A: Workflow Ingestion (WAF/Event Hub), Textextraktion & PII-Tokenization'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_classification_pipeline of azure_vnet.classification_pipeline {
+    title 'Level 2B: Workflow Klassifikation, Historische AVB-Bindung & Schadenanlage'
+=======
+  view view_classification_pipeline of azure_vnet.classification_pipeline {
+    title 'Level 2B: Workflow Klassifikation, Historische AVB-Bindung & Schadenanlage'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_rule_authoring of azure_vnet.rule_authoring_subsystem {
+    title 'Level 2C: Workflow Policy Management – Rollen, Z3-Konfliktanalyse & 4-Augen-Prinzip'
+=======
+  view view_rule_authoring of azure_vnet.rule_authoring_subsystem {
+    title 'Level 2C: Workflow Policy Management – Rollen, Z3-Konfliktanalyse & 4-Augen-Prinzip'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_multi_agent_system of azure_vnet.multi_agent_system {
+    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 6 Data/ML Stores'
+    description '''
+      **Detailansicht des Multi-Agent-Systems (hier mit allen 6 aufgeschlüsselten Daten-/ML-Plattformen & ERP):**
+      - `claims_event_bus` puffert die eingehenden Fälle.
+      - `playbook_loader` lädt für die jeweilige Schadensart die Systemprompts, Agenten-Skills und Dokumenten-Checklisten aus `langfuse.prompt_registry`.
+      - Klicke auf einen beliebigen der 5 Agenten, um in seine internen MCP-Tools, Critics und Datenbank-Tabellen hineinzuzoomen (Level 3A–3E)!
+    '''
+
+    include
+      azure_vnet.classification_pipeline.pas_claim_creator,
+      azure_vnet.multi_agent_system.claims_event_bus,
+      azure_vnet.multi_agent_system.playbook_loader,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.customer_agent,
+      azure_vnet.multi_agent_system.coverage_agent,
+      azure_vnet.multi_agent_system.fraud_agent,
+      azure_vnet.multi_agent_system.adjudication_agent,
+      azure_vnet.multi_agent_system.financial_agent,
+      azure_vnet.rules_engine,
+      azure_vnet.governance_svc.circuit_breaker,
+      azure_vnet.langfuse.prompt_registry,
+      azure_vnet.langfuse.otel_pii_gateway,
+      azure_vnet.claims_outcomes.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.sql_pas,
+      azure_vnet.data_stores.databricks_lakehouse,
+      erp_finance
+
+    autoLayout TopBottom
+  }
+=======
+  view view_multi_agent_system of azure_vnet.multi_agent_system {
+    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 6 Data/ML Stores'
+    routing ortho
+    description '''
+      **Detailansicht des Multi-Agent-Systems (hier mit allen 6 aufgeschlüsselten Daten-/ML-Plattformen & ERP):**
+      - `claims_event_bus` puffert die eingehenden Fälle.
+      - `playbook_loader` lädt für die jeweilige Schadensart die Systemprompts, Agenten-Skills und Dokumenten-Checklisten aus `langfuse.prompt_registry`.
+      - Klicke auf einen beliebigen der 5 Agenten, um in seine internen MCP-Tools, Critics und Datenbank-Tabellen hineinzuzoomen (Level 3A–3E)!
+    '''
+
+    include
+      azure_vnet.classification_pipeline.pas_claim_creator,
+      azure_vnet.multi_agent_system.claims_event_bus,
+      azure_vnet.multi_agent_system.playbook_loader,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.customer_agent,
+      azure_vnet.multi_agent_system.coverage_agent,
+      azure_vnet.multi_agent_system.fraud_agent,
+      azure_vnet.multi_agent_system.adjudication_agent,
+      azure_vnet.multi_agent_system.financial_agent,
+      azure_vnet.rules_engine,
+      azure_vnet.governance_svc.circuit_breaker,
+      azure_vnet.langfuse.prompt_registry,
+      azure_vnet.langfuse.otel_pii_gateway,
+      azure_vnet.claims_outcomes.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.sql_pas,
+      azure_vnet.data_stores.databricks_lakehouse,
+      erp_finance,
+
+      // Explizite Beschriftungen für gebündelte Agenten-Kanten (verhindert [...]):
+      azure_vnet.multi_agent_system.customer_agent -> azure_vnet.data_stores.cosmos_claims with {
+        title 'Liest Checkliste/Dossier & de-tokenisiert PII'
+      },
+      azure_vnet.multi_agent_system.coverage_agent -> azure_vnet.data_stores.sql_pas with {
+        title 'Liest Vertrag (AvbVersionId) & Deckungslimits'
+      },
+      azure_vnet.multi_agent_system.fraud_agent -> azure_vnet.data_stores.sql_pas with {
+        title 'Liest Vorschäden & Risikoklasse'
+      },
+      azure_vnet.data_stores.cosmos_claims -> azure_vnet.data_stores.databricks_lakehouse with {
+        title 'Zero-ETL CDF (Pseudonymisierte Akten)'
+      },
+      azure_vnet.data_stores.sql_pas -> azure_vnet.data_stores.databricks_lakehouse with {
+        title 'CDC Mirroring (Bestand & Reserven)'
+      }
+
+    autoLayout TopBottom
+  }
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_governance_hitl of azure_vnet.governance_svc {
+    title 'Level 2E: Workflow Circuit Breaker, Highlighting & Die 2 HITL-Auflösungswege'
+=======
+  view view_governance_hitl of azure_vnet.governance_svc {
+    title 'Level 2E: Workflow Circuit Breaker, Highlighting & Die 2 HITL-Auflösungswege'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_langfuse of azure_vnet.langfuse {
+    title 'Level 2F: Detailansicht Langfuse – OTel PII Guard, Prompt Registry & Klassische RAG-Metriken (Relevance, Groundedness)'
+=======
+  view view_langfuse of azure_vnet.langfuse {
+    title 'Level 2F: Detailansicht Langfuse – OTel PII Guard, Prompt Registry & Klassische RAG-Metriken (Relevance, Groundedness)'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_rules_engine of azure_vnet.rules_engine {
+    title 'Level 2G: Deterministic Rules Runtime – Einheitliches Repository & I/O-Struktur'
+=======
+  view view_rules_engine of azure_vnet.rules_engine {
+    title 'Level 2G: Deterministic Rules Runtime – Einheitliches Repository & I/O-Struktur'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_customer_agent of azure_vnet.multi_agent_system.customer_agent {
+    title 'Level 3A: Deep-Dive Customer Agent – Critic Pattern, AVB-Zitate & PII De-Tokenizing'
+=======
+  view view_customer_agent of azure_vnet.multi_agent_system.customer_agent {
+    title 'Level 3A: Deep-Dive Customer Agent – Critic Pattern, AVB-Zitate & PII De-Tokenizing'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_coverage_agent of azure_vnet.multi_agent_system.coverage_agent {
+    title 'Level 3B: Deep-Dive Coverage Agent – Historischer AVB-Abgleich mit Hybrid Search & Semantic Reranker'
+=======
+  view view_coverage_agent of azure_vnet.multi_agent_system.coverage_agent {
+    title 'Level 3B: Deep-Dive Coverage Agent – Historischer AVB-Abgleich mit Hybrid Search & Semantic Reranker'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_fraud_agent of azure_vnet.multi_agent_system.fraud_agent {
+    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik, Vorschäden & Databricks Betrugsring-ML'
+=======
+  view view_fraud_agent of azure_vnet.multi_agent_system.fraud_agent {
+    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik, Vorschäden & Databricks Betrugsring-ML'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_adjudication_agent of azure_vnet.multi_agent_system.adjudication_agent {
+    title 'Level 3D: Deep-Dive Adjudication Agent – Tarif-Mapping, Coding Critic & Rules Call'
+=======
+  view view_adjudication_agent of azure_vnet.multi_agent_system.adjudication_agent {
+    title 'Level 3D: Deep-Dive Adjudication Agent – Tarif-Mapping, Coding Critic & Rules Call'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_financial_agent of azure_vnet.multi_agent_system.financial_agent {
+    title 'Level 3E: Deep-Dive Financial Agent – PII-De-Tokenizing, ERP-Payout & Reserve-Sync'
+=======
+  view view_financial_agent of azure_vnet.multi_agent_system.financial_agent {
+    title 'Level 3E: Deep-Dive Financial Agent – PII-De-Tokenizing, ERP-Payout & Reserve-Sync'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_database_schemas of azure_vnet.data_stores {
+    title 'Level 3F: Detailansicht der 6 Enterprise Data & Analytics Stores (inkl. Databricks), Private Link & Schemata'
+=======
+  view view_database_schemas of azure_vnet.data_stores {
+    title 'Level 3F: Detailansicht der 6 Enterprise Data & Analytics Stores (inkl. Databricks), Private Link & Schemata'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_ai_search_pipeline of azure_vnet.data_stores.vector_search {
+    title 'Level 3G: Deep-Dive Azure AI Search & Foundry IQ – Indexer Skillset, Hybrid RRF & L2 Semantic Reranker'
+=======
+  view view_ai_search_pipeline of azure_vnet.data_stores.vector_search {
+    title 'Level 3G: Deep-Dive Azure AI Search & Foundry IQ – Indexer Skillset, Hybrid RRF & L2 Semantic Reranker'
+    routing ortho
+>>>>>>> REPLACE
+
+likec4.txt
+<<<<<<< SEARCH
+  view view_databricks_lakehouse of azure_vnet.data_stores.databricks_lakehouse {
+    title 'Level 3H: Deep-Dive Azure Databricks Lakehouse – Mass-Backtesting, Fraud-Graph & Solvency II'
+=======
+  view view_databricks_lakehouse of azure_vnet.data_stores.databricks_lakehouse {
+    title 'Level 3H: Deep-Dive Azure Databricks Lakehouse – Mass-Backtesting, Fraud-Graph & Solvency II'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view index {
+    title 'Level 1: Gesamtsystem – Clean Architecture Overview'
+    description '''
+      **Aufgeräumte End-to-End Übersicht (ohne Detail-Überladung):**
+      - **Kernfluss (1 &rarr; 2 &rarr; 3 &rarr; 4):** Von `1. Ingestion, Extraction & PII-Tokenization` über `2. Klassifikation & Schadenanlage` in das `3. Multi-Agent Claim Processing System` und bei Bedarf in `4. Circuit Breaker & HITL`.
+      - **Kompakte Blöcke mit Drill-Down (Lupe anklicken!):**
+        - `Policy Management & Rule Authoring` kapselt die 3 Rollen (Business Analyst, Aktuariat, Risk Manager) und den 4-Augen-Freigabeprozess (Level 2C).
+        - `Secured Azure Data, Knowledge & Databricks Platform` fasst alle 6 Private-Link-Speicher & Analyse-Systeme zusammen (inkl. vollständiger **Security- & Data-Privacy-Matrix** beim Anklicken!).
+        - `Event Hubs`, `Front Door / APIM` und `Core ERP` liegen sauber in den jeweiligen Subsystemen (Level 2).
+    '''
+
+    include
+      claimant,
+      adjuster,
+      channels,
+      azure_vnet,
+      azure_vnet.extraction_pipeline,
+      azure_vnet.classification_pipeline,
+      azure_vnet.multi_agent_system,
+      azure_vnet.rules_engine,
+      azure_vnet.rule_authoring_subsystem,
+      azure_vnet.governance_svc,
+      azure_vnet.langfuse,
+      azure_vnet.data_stores,
+      azure_vnet.claims_outcomes,
+      azure_vnet.claims_outcomes.*
+
+    autoLayout TopBottom
+  }
+=======
+  view index {
+    title 'Level 1: Gesamtsystem – Clean Architecture Overview'
+    routing ortho
+    description '''
+      **Aufgeräumte End-to-End Übersicht (ohne Detail-Überladung):**
+      - **Kernfluss (1 &rarr; 2 &rarr; 3 &rarr; 4):** Von `1. Ingestion, Extraction & PII-Tokenization` über `2. Klassifikation & Schadenanlage` in das `3. Multi-Agent Claim Processing System` und bei Bedarf in `4. Circuit Breaker & HITL`.
+      - **Kompakte Blöcke mit Drill-Down (Lupe anklicken!):**
+        - `Policy Management & Rule Authoring` kapselt die 3 Rollen (Business Analyst, Aktuariat, Risk Manager) und den 4-Augen-Freigabeprozess (Level 2C).
+        - `Secured Azure Data, Knowledge & Databricks Platform` fasst alle 6 Private-Link-Speicher & Analyse-Systeme zusammen (inkl. vollständiger **Security- & Data-Privacy-Matrix** beim Anklicken!).
+        - `Event Hubs`, `Front Door / APIM` und `Core ERP` liegen sauber in den jeweiligen Subsystemen (Level 2).
+    '''
+
+    include
+      claimant,
+      adjuster,
+      channels,
+      azure_vnet,
+      azure_vnet.extraction_pipeline,
+      azure_vnet.classification_pipeline,
+      azure_vnet.multi_agent_system,
+      azure_vnet.rules_engine,
+      azure_vnet.rule_authoring_subsystem,
+      azure_vnet.governance_svc,
+      azure_vnet.langfuse,
+      azure_vnet.data_stores,
+      azure_vnet.claims_outcomes,
+      azure_vnet.claims_outcomes.*,
+
+      // Explizite Beschriftungen für ALLE zusammengefassten Kanten auf Level 1 (verhindert jegliches [...]):
+      azure_vnet.extraction_pipeline -> azure_vnet.data_stores with {
+        title 'Speichert WORM Raw, State & PII Vault'
+      },
+      azure_vnet.classification_pipeline -> azure_vnet.data_stores with {
+        title 'Liest Vertrag (AvbVersionId) & legt Schaden an'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.data_stores with {
+        title 'MCP-Zugriffe (RAG, Dossier, PII-Vault & Fraud-ML)'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.langfuse with {
+        title 'OTel-Traces (PII-frei)'
+      },
+      azure_vnet.langfuse -> azure_vnet.multi_agent_system with {
+        title 'Lädt Prompts & Checklisten'
+      },
+      azure_vnet.langfuse -> azure_vnet.data_stores with {
+        title 'RAG-Evaluation & Golden Dataset Sync'
+      },
+      azure_vnet.rule_authoring_subsystem -> azure_vnet.data_stores with {
+        title 'AVB-Indexierung & Databricks Mass-Backtest'
+      },
+      azure_vnet.multi_agent_system -> azure_vnet.governance_svc with {
+        title 'Guardrail-Prüfung & Eskalation'
+      },
+      azure_vnet.governance_svc -> azure_vnet.data_stores with {
+        title 'Lädt Belege & persistiert HITL-Dossier'
+      },
+      azure_vnet.governance_svc -> azure_vnet.langfuse with {
+        title 'Loggt Abbruchgrund & HITL-Overrides'
+      },
+      azure_vnet.governance_svc -> azure_vnet.multi_agent_system with {
+        title 'Pfad 1: Fortsetzen nach OCR-Korrektur'
+      },
+      azure_vnet.multi_agent_system -> channels with {
+        title 'Rückfrage / EOB an Kunden'
+      }
+
+    autoLayout TopBottom
+  }
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_extraction_pipeline of azure_vnet.extraction_pipeline {
+    title 'Level 2A: Workflow Ingestion (WAF/Event Hub), Textextraktion & PII-Tokenization'
+=======
+  view view_extraction_pipeline of azure_vnet.extraction_pipeline {
+    title 'Level 2A: Workflow Ingestion (WAF/Event Hub), Textextraktion & PII-Tokenization'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_classification_pipeline of azure_vnet.classification_pipeline {
+    title 'Level 2B: Workflow Klassifikation, Historische AVB-Bindung & Schadenanlage'
+=======
+  view view_classification_pipeline of azure_vnet.classification_pipeline {
+    title 'Level 2B: Workflow Klassifikation, Historische AVB-Bindung & Schadenanlage'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_rule_authoring of azure_vnet.rule_authoring_subsystem {
+    title 'Level 2C: Workflow Policy Management – Rollen, Z3-Konfliktanalyse & 4-Augen-Prinzip'
+=======
+  view view_rule_authoring of azure_vnet.rule_authoring_subsystem {
+    title 'Level 2C: Workflow Policy Management – Rollen, Z3-Konfliktanalyse & 4-Augen-Prinzip'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_multi_agent_system of azure_vnet.multi_agent_system {
+    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 6 Data/ML Stores'
+    description '''
+      **Detailansicht des Multi-Agent-Systems (hier mit allen 6 aufgeschlüsselten Daten-/ML-Plattformen & ERP):**
+      - `claims_event_bus` puffert die eingehenden Fälle.
+      - `playbook_loader` lädt für die jeweilige Schadensart die Systemprompts, Agenten-Skills und Dokumenten-Checklisten aus `langfuse.prompt_registry`.
+      - Klicke auf einen beliebigen der 5 Agenten, um in seine internen MCP-Tools, Critics und Datenbank-Tabellen hineinzuzoomen (Level 3A–3E)!
+    '''
+
+    include
+      azure_vnet.classification_pipeline.pas_claim_creator,
+      azure_vnet.multi_agent_system.claims_event_bus,
+      azure_vnet.multi_agent_system.playbook_loader,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.customer_agent,
+      azure_vnet.multi_agent_system.coverage_agent,
+      azure_vnet.multi_agent_system.fraud_agent,
+      azure_vnet.multi_agent_system.adjudication_agent,
+      azure_vnet.multi_agent_system.financial_agent,
+      azure_vnet.rules_engine,
+      azure_vnet.governance_svc.circuit_breaker,
+      azure_vnet.langfuse.prompt_registry,
+      azure_vnet.langfuse.otel_pii_gateway,
+      azure_vnet.claims_outcomes.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.sql_pas,
+      azure_vnet.data_stores.databricks_lakehouse,
+      erp_finance
+
+    autoLayout TopBottom
+  }
+=======
+  view view_multi_agent_system of azure_vnet.multi_agent_system {
+    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 6 Data/ML Stores'
+    routing ortho
+    description '''
+      **Detailansicht des Multi-Agent-Systems (hier mit allen 6 aufgeschlüsselten Daten-/ML-Plattformen & ERP):**
+      - `claims_event_bus` puffert die eingehenden Fälle.
+      - `playbook_loader` lädt für die jeweilige Schadensart die Systemprompts, Agenten-Skills und Dokumenten-Checklisten aus `langfuse.prompt_registry`.
+      - Klicke auf einen beliebigen der 5 Agenten, um in seine internen MCP-Tools, Critics und Datenbank-Tabellen hineinzuzoomen (Level 3A–3E)!
+    '''
+
+    include
+      azure_vnet.classification_pipeline.pas_claim_creator,
+      azure_vnet.multi_agent_system.claims_event_bus,
+      azure_vnet.multi_agent_system.playbook_loader,
+      azure_vnet.multi_agent_system.orchestrator,
+      azure_vnet.multi_agent_system.customer_agent,
+      azure_vnet.multi_agent_system.coverage_agent,
+      azure_vnet.multi_agent_system.fraud_agent,
+      azure_vnet.multi_agent_system.adjudication_agent,
+      azure_vnet.multi_agent_system.financial_agent,
+      azure_vnet.rules_engine,
+      azure_vnet.governance_svc.circuit_breaker,
+      azure_vnet.langfuse.prompt_registry,
+      azure_vnet.langfuse.otel_pii_gateway,
+      azure_vnet.claims_outcomes.*,
+      azure_vnet.data_stores.blob_raw,
+      azure_vnet.data_stores.blob_state,
+      azure_vnet.data_stores.cosmos_claims,
+      azure_vnet.data_stores.vector_search,
+      azure_vnet.data_stores.sql_pas,
+      azure_vnet.data_stores.databricks_lakehouse,
+      erp_finance,
+
+      // Explizite Beschriftungen für gebündelte Agenten-Kanten (verhindert [...]):
+      azure_vnet.multi_agent_system.customer_agent -> azure_vnet.data_stores.cosmos_claims with {
+        title 'Liest Checkliste/Dossier & de-tokenisiert PII'
+      },
+      azure_vnet.multi_agent_system.coverage_agent -> azure_vnet.data_stores.sql_pas with {
+        title 'Liest Vertrag (AvbVersionId) & Deckungslimits'
+      },
+      azure_vnet.multi_agent_system.fraud_agent -> azure_vnet.data_stores.sql_pas with {
+        title 'Liest Vorschäden & Risikoklasse'
+      },
+      azure_vnet.data_stores.cosmos_claims -> azure_vnet.data_stores.databricks_lakehouse with {
+        title 'Zero-ETL CDF (Pseudonymisierte Akten)'
+      },
+      azure_vnet.data_stores.sql_pas -> azure_vnet.data_stores.databricks_lakehouse with {
+        title 'CDC Mirroring (Bestand & Reserven)'
+      }
+
+    autoLayout TopBottom
+  }
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_governance_hitl of azure_vnet.governance_svc {
+    title 'Level 2E: Workflow Circuit Breaker, Highlighting & Die 2 HITL-Auflösungswege'
+=======
+  view view_governance_hitl of azure_vnet.governance_svc {
+    title 'Level 2E: Workflow Circuit Breaker, Highlighting & Die 2 HITL-Auflösungswege'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_langfuse of azure_vnet.langfuse {
+    title 'Level 2F: Detailansicht Langfuse – OTel PII Guard, Prompt Registry & Klassische RAG-Metriken (Relevance, Groundedness)'
+=======
+  view view_langfuse of azure_vnet.langfuse {
+    title 'Level 2F: Detailansicht Langfuse – OTel PII Guard, Prompt Registry & Klassische RAG-Metriken (Relevance, Groundedness)'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_rules_engine of azure_vnet.rules_engine {
+    title 'Level 2G: Deterministic Rules Runtime – Einheitliches Repository & I/O-Struktur'
+=======
+  view view_rules_engine of azure_vnet.rules_engine {
+    title 'Level 2G: Deterministic Rules Runtime – Einheitliches Repository & I/O-Struktur'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_customer_agent of azure_vnet.multi_agent_system.customer_agent {
+    title 'Level 3A: Deep-Dive Customer Agent – Critic Pattern, AVB-Zitate & PII De-Tokenizing'
+=======
+  view view_customer_agent of azure_vnet.multi_agent_system.customer_agent {
+    title 'Level 3A: Deep-Dive Customer Agent – Critic Pattern, AVB-Zitate & PII De-Tokenizing'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_coverage_agent of azure_vnet.multi_agent_system.coverage_agent {
+    title 'Level 3B: Deep-Dive Coverage Agent – Historischer AVB-Abgleich mit Hybrid Search & Semantic Reranker'
+=======
+  view view_coverage_agent of azure_vnet.multi_agent_system.coverage_agent {
+    title 'Level 3B: Deep-Dive Coverage Agent – Historischer AVB-Abgleich mit Hybrid Search & Semantic Reranker'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_fraud_agent of azure_vnet.multi_agent_system.fraud_agent {
+    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik, Vorschäden & Databricks Betrugsring-ML'
+=======
+  view view_fraud_agent of azure_vnet.multi_agent_system.fraud_agent {
+    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik, Vorschäden & Databricks Betrugsring-ML'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_adjudication_agent of azure_vnet.multi_agent_system.adjudication_agent {
+    title 'Level 3D: Deep-Dive Adjudication Agent – Tarif-Mapping, Coding Critic & Rules Call'
+=======
+  view view_adjudication_agent of azure_vnet.multi_agent_system.adjudication_agent {
+    title 'Level 3D: Deep-Dive Adjudication Agent – Tarif-Mapping, Coding Critic & Rules Call'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_financial_agent of azure_vnet.multi_agent_system.financial_agent {
+    title 'Level 3E: Deep-Dive Financial Agent – PII-De-Tokenizing, ERP-Payout & Reserve-Sync'
+=======
+  view view_financial_agent of azure_vnet.multi_agent_system.financial_agent {
+    title 'Level 3E: Deep-Dive Financial Agent – PII-De-Tokenizing, ERP-Payout & Reserve-Sync'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_database_schemas of azure_vnet.data_stores {
+    title 'Level 3F: Detailansicht der 6 Enterprise Data & Analytics Stores (inkl. Databricks), Private Link & Schemata'
+=======
+  view view_database_schemas of azure_vnet.data_stores {
+    title 'Level 3F: Detailansicht der 6 Enterprise Data & Analytics Stores (inkl. Databricks), Private Link & Schemata'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_ai_search_pipeline of azure_vnet.data_stores.vector_search {
+    title 'Level 3G: Deep-Dive Azure AI Search & Foundry IQ – Indexer Skillset, Hybrid RRF & L2 Semantic Reranker'
+=======
+  view view_ai_search_pipeline of azure_vnet.data_stores.vector_search {
+    title 'Level 3G: Deep-Dive Azure AI Search & Foundry IQ – Indexer Skillset, Hybrid RRF & L2 Semantic Reranker'
+    routing ortho
+>>>>>>> REPLACE
+
+architecture.c4
+<<<<<<< SEARCH
+  view view_databricks_lakehouse of azure_vnet.data_stores.databricks_lakehouse {
+    title 'Level 3H: Deep-Dive Azure Databricks Lakehouse – Mass-Backtesting, Fraud-Graph & Solvency II'
+=======
+  view view_databricks_lakehouse of azure_vnet.data_stores.databricks_lakehouse {
+    title 'Level 3H: Deep-Dive Azure Databricks Lakehouse – Mass-Backtesting, Fraud-Graph & Solvency II'
+    routing ortho
 >>>>>>> REPLACE

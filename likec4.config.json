@@ -1,5 +1,12 @@
 {
   "$schema": "https://likec4.dev/schemas/config.json",
   "name": "enterprise-agentic-claims-azure",
-  "title": "Enterprise Agentic Claims Architecture Blueprint (Microsoft Foundry & Azure)"
+  "title": "Enterprise Agentic Claims Architecture Blueprint (Microsoft Foundry & Azure)",
+  "styles": {
+    "defaults": {
+      "relationship": {
+        "line": "dashed"
+      }
+    }
+  }
 }

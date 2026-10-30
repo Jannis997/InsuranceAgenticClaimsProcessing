@@ -12,12 +12,12 @@
   autoLayout: {
     direction: 'TB',
   },
-  hash: 'yd27A3e0yz-8xUwfaGTE7l8Kz2QJtnEpF2rjX5bGpVM',
+  hash: 'xGlME7QpBXnBgUHfKWEf2CBF-ezxtbWMcVVxH0uOAlE',
   bounds: {
     x: 339,
-    y: -60,
-    width: 3586,
-    height: 1946,
+    y: -51,
+    width: 3458,
+    height: 1947,
   },
   nodes: [
     {
@@ -43,8 +43,8 @@
       },
       tags: [],
       kind: 'actor',
-      x: 3488,
-      y: 633,
+      x: 3360,
+      y: 637,
       width: 417,
       height: 180,
       labelBBox: {
@@ -75,7 +75,6 @@
       style: {
         opacity: 15,
         size: 'md',
-        border: 'none',
       },
       description: {
         txt: 'Prüft eskalierte Fälle in der HITL-App (mit Highlighting & KI-Vorarbeit)',
@@ -84,8 +83,8 @@
         'hitl',
       ],
       kind: 'actor',
-      x: 3341,
-      y: 1038,
+      x: 2809,
+      y: 1001,
       width: 394,
       height: 180,
       labelBBox: {
@@ -124,8 +123,8 @@
       },
       tags: [],
       kind: 'channel',
-      x: 3056,
-      y: 631,
+      x: 2772,
+      y: 637,
       width: 385,
       height: 180,
       labelBBox: {
@@ -186,9 +185,9 @@
       kind: 'vnet',
       depth: 2,
       x: 359,
-      y: -40,
-      width: 2666,
-      height: 1906,
+      y: -31,
+      width: 2338,
+      height: 1907,
       labelBBox: {
         x: 6,
         y: 0,
@@ -228,8 +227,8 @@
       ],
       kind: 'pipeline',
       navigateTo: 'view_extraction_pipeline',
-      x: 2637,
-      y: 20,
+      x: 2309,
+      y: 29,
       width: 346,
       height: 182,
       labelBBox: {
@@ -269,7 +268,7 @@
       kind: 'pipeline',
       navigateTo: 'view_rule_authoring',
       x: 415,
-      y: 100,
+      y: 109,
       width: 456,
       height: 180,
       labelBBox: {
@@ -309,7 +308,7 @@
       kind: 'pipeline',
       navigateTo: 'view_classification_pipeline',
       x: 1937,
-      y: 345,
+      y: 354,
       width: 435,
       height: 180,
       labelBBox: {
@@ -355,7 +354,7 @@
       kind: 'pipeline',
       navigateTo: 'view_multi_agent_system',
       x: 1393,
-      y: 582,
+      y: 591,
       width: 480,
       height: 180,
       labelBBox: {
@@ -396,7 +395,7 @@
       kind: 'rules_engine',
       navigateTo: 'view_rules_engine',
       x: 1054,
-      y: 96,
+      y: 105,
       width: 376,
       height: 180,
       labelBBox: {
@@ -444,7 +443,7 @@
       kind: 'governance',
       navigateTo: 'view_governance_hitl',
       x: 1994,
-      y: 989,
+      y: 998,
       width: 444,
       height: 180,
       labelBBox: {
@@ -487,7 +486,7 @@
       kind: 'observability',
       navigateTo: 'view_langfuse',
       x: 401,
-      y: 1161,
+      y: 1170,
       width: 496,
       height: 180,
       labelBBox: {
@@ -527,10 +526,10 @@
       tags: [],
       kind: 'subsystem',
       depth: 1,
-      x: 837,
-      y: 1535,
-      width: 1634,
-      height: 289,
+      x: 800,
+      y: 1544,
+      width: 1671,
+      height: 290,
       labelBBox: {
         x: 6,
         y: 0,
@@ -581,7 +580,7 @@
       kind: 'store',
       navigateTo: 'view_database_schemas',
       x: 428,
-      y: 575,
+      y: 584,
       width: 433,
       height: 181,
       labelBBox: {
@@ -615,8 +614,8 @@
       },
       tags: [],
       kind: 'outcome',
-      x: 879,
-      y: 1595,
+      x: 842,
+      y: 1612,
       width: 450,
       height: 180,
       labelBBox: {
@@ -652,7 +651,7 @@
       tags: [],
       kind: 'outcome',
       x: 1424,
-      y: 1595,
+      y: 1604,
       width: 405,
       height: 180,
       labelBBox: {
@@ -688,7 +687,7 @@
       tags: [],
       kind: 'outcome',
       x: 2008,
-      y: 1602,
+      y: 1611,
       width: 421,
       height: 180,
       labelBBox: {
@@ -716,33 +715,33 @@
       head: 'normal',
       points: [
         [
-          3558,
-          721,
-        ],
-        [
-          3502,
-          721,
-        ],
-        [
-          3437,
-          720,
-        ],
-        [
           3381,
-          720,
+          724,
+        ],
+        [
+          3305,
+          725,
+        ],
+        [
+          3218,
+          724,
+        ],
+        [
+          3142,
+          725,
         ],
       ],
       labelBBox: {
-        x: 3539,
-        y: 716,
+        x: 3163,
+        y: 703,
         width: 166,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 3470,
-          y: 721,
+          x: 3262,
+          y: 725,
         },
       ],
       navigateTo: null,
@@ -762,37 +761,37 @@
       head: 'normal',
       points: [
         [
-          3208,
-          661,
+          2919,
+          666,
         ],
         [
-          3125,
-          547,
+          2827,
+          553,
         ],
         [
-          2938,
-          290,
+          2622,
+          297,
         ],
         [
-          2852,
-          171,
+          2527,
+          179,
         ],
       ],
       labelBBox: {
-        x: 3252,
-        y: 381,
+        x: 2968,
+        y: 388,
         width: 149,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 3185,
-          y: 143,
+          x: 2848,
+          y: 151,
         },
         {
-          x: 3024,
-          y: 144,
+          x: 2692,
+          y: 152,
         },
       ],
       navigateTo: null,
@@ -812,37 +811,37 @@
       head: 'normal',
       points: [
         [
-          2637,
-          197,
+          2395,
+          206,
         ],
         [
-          2547,
-          242,
+          2350,
+          251,
         ],
         [
-          2438,
-          295,
+          2296,
+          304,
         ],
         [
-          2346,
-          341,
+          2250,
+          350,
         ],
       ],
       labelBBox: {
-        x: 2537,
-        y: 229,
+        x: 2486,
+        y: 316,
         width: 113,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 2764,
-          y: 225,
+          x: 2497,
+          y: 443,
         },
         {
-          x: 2423,
-          y: 434,
+          x: 2314,
+          y: 443,
         },
       ],
       navigateTo: null,
@@ -863,48 +862,48 @@
       points: [
         [
           2007,
-          500,
+          509,
         ],
         [
           1973,
-          515,
+          524,
         ],
         [
           1939,
-          530,
+          539,
         ],
         [
           1908,
-          544,
+          553,
         ],
         [
           1867,
-          562,
+          571,
         ],
         [
           1824,
-          582,
+          591,
         ],
         [
           1783,
-          600,
+          609,
         ],
       ],
       labelBBox: {
-        x: 1647,
-        y: 550,
+        x: 1694,
+        y: 487,
         width: 187,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
-          x: 1973,
-          y: 515,
+          x: 1950,
+          y: 507,
         },
         {
-          x: 1846,
-          y: 572,
+          x: 1818,
+          y: 524,
         },
       ],
       navigateTo: null,
@@ -926,73 +925,73 @@
       head: 'normal',
       points: [
         [
-          1801,
-          712,
+          1771,
+          720,
         ],
         [
-          1821,
-          715,
+          1787,
+          722,
         ],
         [
-          1840,
-          719,
+          1803,
+          726,
         ],
         [
-          1860,
-          719,
+          1819,
+          726,
         ],
         [
-          2171,
-          738,
+          2076,
+          745,
         ],
         [
-          2259,
-          668,
+          2149,
+          675,
         ],
         [
-          2574,
-          661,
+          2408,
+          667,
         ],
         [
-          2743,
-          658,
-        ],
-        [
-          2785,
+          2548,
           664,
         ],
         [
-          2952,
-          681,
+          2582,
+          670,
         ],
         [
-          3001,
-          683,
+          2720,
+          686,
         ],
         [
-          3055,
-          691,
+          2760,
+          689,
         ],
         [
-          3104,
-          696,
+          2805,
+          697,
+        ],
+        [
+          2845,
+          701,
         ],
       ],
       labelBBox: {
-        x: 2732,
-        y: 678,
+        x: 2232,
+        y: 658,
         width: 181,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 2345,
-          y: 693,
+          x: 2824,
+          y: 685,
         },
         {
-          x: 2583,
-          y: 700,
+          x: 2824,
+          y: 672,
         },
       ],
       navigateTo: null,
@@ -1013,48 +1012,48 @@
       points: [
         [
           1529,
-          557,
+          566,
         ],
         [
           1497,
-          518,
+          527,
         ],
         [
           1462,
-          478,
+          487,
         ],
         [
           1430,
-          437,
+          446,
         ],
         [
           1403,
-          404,
+          413,
         ],
         [
           1373,
-          365,
+          374,
         ],
         [
           1346,
-          328,
+          337,
         ],
       ],
       labelBBox: {
         x: 1630,
-        y: 410,
+        y: 387,
         width: 136,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 1590,
-          y: 236,
+          x: 1587,
+          y: 194,
         },
         {
-          x: 1553,
-          y: 236,
+          x: 1547,
+          y: 194,
         },
       ],
       navigateTo: null,
@@ -1075,24 +1074,24 @@
       points: [
         [
           808,
-          188,
+          197,
         ],
         [
           887,
-          186,
+          195,
         ],
         [
           979,
-          186,
+          195,
         ],
         [
           1059,
-          186,
+          195,
         ],
       ],
       labelBBox: {
         x: 893,
-        y: 164,
+        y: 173,
         width: 155,
         height: 18,
       },
@@ -1100,7 +1099,7 @@
       controlPoints: [
         {
           x: 934,
-          y: 186,
+          y: 195,
         },
       ],
       navigateTo: null,
@@ -1120,61 +1119,65 @@
       head: 'normal',
       points: [
         [
-          3521,
-          1038,
+          2995,
+          1001,
         ],
         [
-          3511,
-          999,
+          2989,
+          962,
         ],
         [
-          3495,
-          959,
+          2980,
+          923,
         ],
         [
-          3467,
-          940,
+          2963,
+          905,
         ],
         [
-          3372,
-          877,
+          2906,
+          845,
         ],
         [
-          2552,
-          1106,
+          2416,
+          1102,
         ],
         [
-          2440,
+          2349,
           1107,
         ],
         [
-          2423,
-          1109,
+          2339,
+          1110,
         ],
         [
-          2402,
-          1107,
+          2326,
+          1108,
         ],
         [
-          2386,
-          1106,
+          2317,
+          1108,
         ],
       ],
       labelBBox: {
-        x: 2975,
-        y: 1105,
+        x: 2595,
+        y: 1096,
         width: 188,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 2797,
-          y: 1130,
+          x: 2896,
+          y: 1095,
         },
         {
-          x: 2797,
-          y: 1130,
+          x: 2562,
+          y: 1118,
+        },
+        {
+          x: 2562,
+          y: 1118,
         },
       ],
       navigateTo: null,
@@ -1195,48 +1198,48 @@
       points: [
         [
           2214,
-          523,
+          532,
         ],
         [
           2300,
-          651,
+          660,
         ],
         [
           2442,
-          870,
+          879,
         ],
         [
           2451,
-          930,
+          939,
         ],
         [
           2467,
-          1034,
+          1043,
         ],
         [
           2378,
-          957,
+          966,
         ],
         [
           2326,
-          989,
+          998,
         ],
         [
           2316,
-          995,
+          1004,
         ],
         [
           2306,
-          1001,
+          1010,
         ],
         [
           2298,
-          1008,
+          1017,
         ],
       ],
       labelBBox: {
         x: 2158,
-        y: 610,
+        y: 619,
         width: 122,
         height: 18,
       },
@@ -1244,11 +1247,11 @@
       controlPoints: [
         {
           x: 2153,
-          y: 719,
+          y: 728,
         },
         {
           x: 2153,
-          y: 857,
+          y: 866,
         },
       ],
       navigateTo: null,
@@ -1259,7 +1262,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.multi_agent_system',
       target: 'azure_vnet.governance_svc',
-      label: 'Prüft Guardrails / Eskalation',
+      label: 'Guardrail-Prüfung & Eskalation',
       relations: [
         '1bxwe4a',
       ],
@@ -1269,24 +1272,24 @@
       points: [
         [
           1791,
-          783,
+          792,
         ],
         [
           1868,
-          835,
+          844,
         ],
         [
           1956,
-          897,
+          906,
         ],
         [
           2033,
-          951,
+          960,
         ],
       ],
       labelBBox: {
         x: 1839,
-        y: 932,
+        y: 941,
         width: 178,
         height: 18,
       },
@@ -1294,11 +1297,11 @@
       controlPoints: [
         {
           x: 1835,
-          y: 858,
+          y: 867,
         },
         {
           x: 1938,
-          y: 1023,
+          y: 1032,
         },
       ],
       navigateTo: null,
@@ -1318,61 +1321,61 @@
       head: 'normal',
       points: [
         [
-          2377,
-          1105,
-        ],
-        [
-          2397,
-          1106,
-        ],
-        [
-          2420,
+          2311,
           1107,
         ],
         [
-          2440,
+          2323,
           1107,
         ],
         [
-          2786,
+          2337,
           1108,
         ],
         [
-          2887,
-          952,
+          2349,
+          1107,
         ],
         [
-          3226,
-          993,
+          2556,
+          1097,
         ],
         [
-          3293,
-          1001,
+          2616,
+          937,
         ],
         [
-          3364,
-          1027,
+          2819,
+          966,
         ],
         [
-          3417,
-          1053,
+          2859,
+          971,
+        ],
+        [
+          2902,
+          995,
+        ],
+        [
+          2933,
+          1019,
         ],
       ],
       labelBBox: {
-        x: 2584,
-        y: 1056,
+        x: 2505,
+        y: 1027,
         width: 157,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 2887,
-          y: 1071,
+          x: 2340,
+          y: 1068,
         },
         {
-          x: 3085,
-          y: 1071,
+          x: 2735,
+          y: 1049,
         },
       ],
       navigateTo: null,
@@ -1392,61 +1395,61 @@
       head: 'normal',
       points: [
         [
-          2303,
-          975,
+          2272,
+          983,
         ],
         [
-          2314,
-          963,
+          2279,
+          970,
         ],
         [
-          2325,
-          952,
+          2287,
+          959,
+        ],
+        [
+          2295,
+          948,
         ],
         [
           2337,
-          941,
+          891,
         ],
         [
-          2399,
-          883,
+          2348,
+          876,
         ],
         [
-          2416,
-          869,
+          2395,
+          839,
         ],
         [
-          2482,
-          832,
+          2450,
+          798,
         ],
         [
-          2560,
-          791,
+          2669,
+          704,
         ],
         [
-          2860,
-          698,
+          2819,
+          696,
         ],
         [
-          3060,
-          690,
+          2843,
+          694,
         ],
         [
-          3092,
-          688,
-        ],
-        [
-          3124,
-          692,
-        ],
-        [
-          3155,
+          2867,
           697,
+        ],
+        [
+          2891,
+          702,
         ],
       ],
       labelBBox: {
-        x: 2670,
-        y: 743,
+        x: 2485,
+        y: 750,
         width: 171,
         height: 18,
       },
@@ -1454,11 +1457,11 @@
       controlPoints: [
         {
           x: 2215,
-          y: 886,
+          y: 993,
         },
         {
-          x: 2448,
-          y: 765,
+          x: 2363,
+          y: 772,
         },
       ],
       navigateTo: null,
@@ -1469,7 +1472,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.governance_svc',
       target: 'azure_vnet.multi_agent_system',
-      label: 'Pfad 1 (OCR-Korrektur): Fortsetzen',
+      label: 'Pfad 1: Fortsetzen nach OCR-Korrektur',
       relations: [
         '1x0f7ip',
       ],
@@ -1479,56 +1482,56 @@
       points: [
         [
           1979,
-          1004,
+          1013,
         ],
         [
           1922,
-          981,
+          990,
         ],
         [
           1864,
-          950,
+          959,
         ],
         [
           1811,
-          910,
+          919,
         ],
         [
           1756,
-          870,
+          879,
         ],
         [
           1716,
-          834,
+          843,
         ],
         [
           1687,
-          804,
+          813,
         ],
       ],
       labelBBox: {
-        x: 1893,
-        y: 696,
+        x: 1888,
+        y: 788,
         width: 225,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
-          x: 2030,
-          y: 934,
+          x: 2027,
+          y: 1010,
         },
         {
           x: 2027,
-          y: 891,
+          y: 900,
         },
         {
           x: 2027,
-          y: 731,
+          y: 740,
         },
         {
           x: 1955,
-          y: 718,
+          y: 727,
         },
       ],
       navigateTo: null,
@@ -1539,7 +1542,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.multi_agent_system',
       target: 'azure_vnet.langfuse',
-      label: '[...]',
+      label: 'OTel-Traces (PII-frei)',
       relations: [
         '14cjibq',
         '1ti2d7n',
@@ -1550,60 +1553,60 @@
       points: [
         [
           1404,
-          715,
+          724,
         ],
         [
           1324,
-          733,
+          742,
         ],
         [
           1235,
-          759,
+          768,
         ],
         [
           1159,
-          794,
+          803,
         ],
         [
           968,
-          883,
+          892,
         ],
         [
           801,
-          1058,
+          1067,
         ],
         [
           713,
-          1164,
+          1173,
         ],
       ],
       labelBBox: {
-        x: 959,
-        y: 900,
-        width: 25,
+        x: 1296,
+        y: 1022,
+        width: 136,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
           x: 1436,
-          y: 831,
+          y: 840,
         },
         {
-          x: 1209,
-          y: 922,
+          x: 1330,
+          y: 1222,
         },
         {
-          x: 733,
-          y: 1000,
+          x: 1090,
+          y: 1222,
         },
         {
-          x: 733,
-          y: 1085,
+          x: 887,
+          y: 1217,
         },
         {
-          x: 733,
-          y: 1125,
+          x: 843,
+          y: 1217,
         },
       ],
       navigateTo: null,
@@ -1614,7 +1617,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.governance_svc',
       target: 'azure_vnet.langfuse',
-      label: '[...]',
+      label: 'Loggt Abbruchgrund & HITL-Overrides',
       relations: [
         '1qv294p',
         '52jkbz',
@@ -1625,48 +1628,48 @@
       points: [
         [
           1822,
-          1102,
+          1111,
         ],
         [
           1598,
-          1117,
+          1126,
         ],
         [
           1338,
-          1136,
+          1145,
         ],
         [
           1227,
-          1149,
+          1158,
         ],
         [
           1136,
-          1162,
+          1171,
         ],
         [
           1036,
-          1178,
+          1187,
         ],
         [
           947,
-          1193,
+          1202,
         ],
       ],
       labelBBox: {
-        x: 1575,
-        y: 1153,
-        width: 25,
+        x: 1269,
+        y: 1232,
+        width: 244,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
-          x: 1836,
-          y: 1175,
+          x: 2017,
+          y: 1133,
         },
         {
-          x: 1338,
-          y: 1175,
+          x: 1337,
+          y: 1259,
         },
       ],
       navigateTo: null,
@@ -1677,7 +1680,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.extraction_pipeline',
       target: 'azure_vnet.data_stores',
-      label: '[...]',
+      label: 'Speichert WORM Raw, State & PII Vault',
       relations: [
         '2i70dp',
         'p5oe6d',
@@ -1688,93 +1691,93 @@
       head: 'normal',
       points: [
         [
-          2873,
-          196,
+          2545,
+          205,
         ],
         [
-          2910,
-          254,
+          2582,
+          263,
         ],
         [
-          2949,
-          330,
-        ],
-        [
-          2938,
-          388,
-        ],
-        [
-          2938,
-          388,
-        ],
-        [
-          2938,
-          388,
-        ],
-        [
-          2862,
-          847,
-        ],
-        [
-          2849,
-          922,
-        ],
-        [
-          2816,
-          1128,
-        ],
-        [
-          2729,
-          1165,
-        ],
-        [
-          2690,
-          1180,
-        ],
-        [
-          2665,
-          1167,
+          2621,
+          339,
         ],
         [
           2610,
-          1160,
+          397,
         ],
         [
-          2289,
-          1112,
+          2610,
+          397,
         ],
         [
-          1370,
-          864,
+          2610,
+          397,
         ],
         [
-          910,
-          737,
+          2553,
+          856,
+        ],
+        [
+          2544,
+          931,
+        ],
+        [
+          2524,
+          1137,
+        ],
+        [
+          2450,
+          1174,
+        ],
+        [
+          2417,
+          1189,
+        ],
+        [
+          2396,
+          1176,
+        ],
+        [
+          2348,
+          1169,
+        ],
+        [
+          2071,
+          1121,
+        ],
+        [
+          1274,
+          873,
+        ],
+        [
+          874,
+          746,
         ],
       ],
       labelBBox: {
-        x: 1107,
-        y: 386,
-        width: 25,
+        x: 1797,
+        y: 98,
+        width: 255,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 1821,
-          y: 150,
+          x: 1534,
+          y: 163,
         },
         {
-          x: 1821,
-          y: 351,
+          x: 1534,
+          y: 362,
         },
         {
-          x: 1570,
-          y: 408,
+          x: 1429,
+          y: 417,
         },
         {
-          x: 668,
-          y: 487,
+          x: 658,
+          y: 496,
         },
       ],
       navigateTo: null,
@@ -1785,7 +1788,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.classification_pipeline',
       target: 'azure_vnet.data_stores',
-      label: '[...]',
+      label: 'Liest Vertrag (AvbVersionId) & legt \nSchaden an',
       relations: [
         '14jt8im',
         '1wvibq7',
@@ -1797,60 +1800,60 @@
       points: [
         [
           1879,
-          345,
+          354,
         ],
         [
           1299,
-          163,
+          172,
         ],
         [
           -22,
-          -256,
+          -247,
         ],
         [
           -266,
-          -92,
+          -83,
         ],
         [
           -419,
-          105,
+          114,
         ],
         [
           -467,
-          252,
+          261,
         ],
         [
           -335,
-          472,
+          481,
         ],
         [
           -259,
-          599,
+          608,
         ],
         [
           153,
-          642,
+          651,
         ],
         [
           417,
-          657,
+          666,
         ],
       ],
       labelBBox: {
-        x: 1309,
-        y: 412,
-        width: 25,
-        height: 18,
+        x: 1212,
+        y: 447,
+        width: 220,
+        height: 35,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
           x: 700,
-          y: 499,
+          y: 508,
         },
         {
           x: 700,
-          y: 508,
+          y: 517,
         },
       ],
       navigateTo: null,
@@ -1861,7 +1864,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.multi_agent_system',
       target: 'azure_vnet.data_stores',
-      label: '[...]',
+      label: 'MCP-Zugriffe (RAG, Dossier, PII-Vault & \nFraud-ML)',
       relations: [
         'mtlw5',
         '1kh9y7h',
@@ -1893,72 +1896,72 @@
       points: [
         [
           1329,
-          539,
+          548,
         ],
         [
           918,
-          363,
+          372,
         ],
         [
           210,
-          42,
+          51,
         ],
         [
           -22,
-          -19,
+          -10,
         ],
         [
           -185,
-          13,
+          22,
         ],
         [
           -176,
-          73,
+          82,
         ],
         [
           -207,
-          188,
+          197,
         ],
         [
           -220,
-          235,
+          244,
         ],
         [
           -387,
-          318,
+          327,
         ],
         [
           -181,
-          554,
+          563,
         ],
         [
           -102,
-          646,
+          655,
         ],
         [
           208,
-          665,
+          674,
         ],
         [
           425,
-          667,
+          676,
         ],
       ],
       labelBBox: {
-        x: 1281,
-        y: 649,
-        width: 25,
-        height: 18,
+        x: 982,
+        y: 713,
+        width: 256,
+        height: 35,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
-          x: 1188,
-          y: 690,
+          x: 1407,
+          y: 699,
         },
         {
           x: 1052,
-          y: 690,
+          y: 699,
         },
       ],
       navigateTo: null,
@@ -1969,7 +1972,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.rule_authoring_subsystem',
       target: 'azure_vnet.data_stores',
-      label: '[...]',
+      label: 'AVB-Indexierung & Databricks \nMass-Backtest',
       relations: [
         '1cxkmo9',
         '5wc9ow',
@@ -1980,48 +1983,48 @@
       points: [
         [
           678,
-          211,
+          220,
         ],
         [
           738,
-          256,
+          265,
         ],
         [
           837,
-          352,
+          361,
         ],
         [
           858,
-          439,
+          448,
         ],
         [
           868,
-          484,
+          493,
         ],
         [
           737,
-          590,
+          599,
         ],
         [
           674,
-          638,
+          647,
         ],
       ],
       labelBBox: {
-        x: 609,
+        x: 447,
         y: 512,
-        width: 25,
-        height: 18,
+        width: 193,
+        height: 35,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
           x: 643,
-          y: 394,
+          y: 403,
         },
         {
           x: 643,
-          y: 460,
+          y: 469,
         },
       ],
       navigateTo: null,
@@ -2032,7 +2035,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.governance_svc',
       target: 'azure_vnet.data_stores',
-      label: '[...]',
+      label: 'Lädt Belege & persistiert HITL-Dossier',
       relations: [
         '19o4eyp',
         '1tea9n',
@@ -2047,52 +2050,52 @@
       points: [
         [
           1583,
-          804,
+          813,
         ],
         [
           1381,
-          719,
+          728,
         ],
         [
           1182,
-          639,
+          648,
         ],
         [
           1107,
-          618,
+          627,
         ],
         [
           814,
-          534,
+          543,
         ],
         [
           707,
-          577,
+          586,
         ],
         [
           664,
-          615,
+          624,
         ],
       ],
       labelBBox: {
-        x: 1007,
-        y: 820,
-        width: 25,
+        x: 878,
+        y: 829,
+        width: 243,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
           x: 1541,
-          y: 902,
+          y: 911,
         },
         {
           x: 1315,
-          y: 842,
+          y: 851,
         },
         {
-          x: 724,
-          y: 797,
+          x: 683,
+          y: 811,
         },
       ],
       navigateTo: null,
@@ -2103,7 +2106,7 @@
       parent: 'azure_vnet',
       source: 'azure_vnet.langfuse',
       target: 'azure_vnet.data_stores',
-      label: '[...]',
+      label: 'RAG-Evaluation & Golden Dataset Sync',
       relations: [
         'jk0m8q',
         '1c13r4z',
@@ -2115,32 +2118,32 @@
       points: [
         [
           645,
-          1088,
+          1097,
         ],
         [
           644,
-          1010,
+          1019,
         ],
         [
           643,
-          919,
+          928,
         ],
         [
           644,
-          839,
+          848,
         ],
       ],
       labelBBox: {
-        x: 659,
-        y: 965,
-        width: 25,
+        x: 391,
+        y: 974,
+        width: 254,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
           x: 649,
-          y: 780,
+          y: 789,
         },
       ],
       navigateTo: null,
@@ -2161,60 +2164,60 @@
       points: [
         [
           435,
-          650,
+          659,
         ],
         [
           238,
-          631,
+          640,
         ],
         [
           -34,
-          592,
+          601,
         ],
         [
           -103,
-          504,
+          513,
         ],
         [
           -186,
-          397,
+          406,
         ],
         [
           -175,
-          310,
+          319,
         ],
         [
           -113,
-          219,
+          228,
         ],
         [
           194,
-          75,
+          84,
         ],
         [
           902,
-          367,
+          376,
         ],
         [
           1312,
-          535,
+          544,
         ],
       ],
       labelBBox: {
-        x: 999,
-        y: 616,
+        x: 960,
+        y: 625,
         width: 192,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 934,
-          y: 654,
+          x: 851,
+          y: 647,
         },
         {
           x: 1256,
-          y: 638,
+          y: 647,
         },
       ],
       navigateTo: null,
@@ -2234,73 +2237,73 @@
       head: 'normal',
       points: [
         [
-          1561,
-          799,
+          1556,
+          809,
         ],
         [
-          1545,
-          827,
+          1539,
+          837,
         ],
         [
-          1529,
-          855,
+          1522,
+          865,
         ],
         [
-          1513,
-          883,
+          1505,
+          893,
         ],
         [
-          1420,
-          1044,
+          1406,
+          1055,
         ],
         [
-          1370,
-          1111,
+          1353,
+          1123,
         ],
         [
-          1300,
-          1249,
+          1278,
+          1262,
         ],
         [
-          1252,
-          1342,
+          1227,
+          1356,
         ],
         [
-          1269,
-          1331,
+          1244,
+          1345,
         ],
         [
-          1235,
-          1409,
+          1207,
+          1423,
         ],
         [
-          1218,
-          1448,
+          1189,
+          1463,
         ],
         [
-          1197,
-          1493,
+          1166,
+          1508,
         ],
         [
-          1177,
-          1534,
+          1145,
+          1549,
         ],
       ],
       labelBBox: {
         x: 1522,
-        y: 1084,
+        y: 1095,
         width: 100,
         height: 18,
       },
       isLabelCustomized: false,
       controlPoints: [
         {
-          x: 1408,
-          y: 1429,
+          x: 1382,
+          y: 1443,
         },
         {
-          x: 1103,
-          y: 1447,
+          x: 1072,
+          y: 1462,
         },
       ],
       navigateTo: null,
@@ -2321,48 +2324,48 @@
       points: [
         [
           1432,
-          773,
+          782,
         ],
         [
           1347,
-          839,
+          848,
         ],
         [
           1261,
-          939,
+          948,
         ],
         [
           1237,
-          1094,
+          1103,
         ],
         [
           1221,
-          1200,
+          1209,
         ],
         [
           1240,
-          1253,
+          1262,
         ],
         [
           1290,
-          1353,
+          1362,
         ],
         [
           1305,
-          1382,
+          1391,
         ],
         [
           1408,
-          1483,
+          1492,
         ],
         [
           1496,
-          1565,
+          1574,
         ],
       ],
       labelBBox: {
         x: 1642,
-        y: 920,
+        y: 929,
         width: 97,
         height: 18,
       },
@@ -2370,11 +2373,11 @@
       controlPoints: [
         {
           x: 1630,
-          y: 1095,
+          y: 1104,
         },
         {
           x: 1630,
-          y: 1262,
+          y: 1271,
         },
       ],
       navigateTo: null,
@@ -2395,24 +2398,24 @@
       points: [
         [
           2214,
-          1232,
+          1241,
         ],
         [
           2214,
-          1322,
+          1331,
         ],
         [
           2215,
-          1432,
+          1441,
         ],
         [
           2214,
-          1523,
+          1532,
         ],
       ],
       labelBBox: {
         x: 2218,
-        y: 1470,
+        y: 1479,
         width: 103,
         height: 18,
       },
@@ -2420,7 +2423,7 @@
       controlPoints: [
         {
           x: 2214,
-          y: 1350,
+          y: 1359,
         },
       ],
       navigateTo: null,
