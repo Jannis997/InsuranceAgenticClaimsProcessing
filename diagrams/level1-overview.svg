@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 330" width="100%" height="100%" font-family="Inter, Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="a-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#475569"/>
+    </marker>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#0284c7"/>
+    </marker>
+  </defs>
+
+  <rect width="1120" height="330" rx="6" fill="#ffffff"/>
+
+  <!-- Left External Column -->
+  <rect x="12" y="22" width="142" height="48" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <text x="83" y="42" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a">Versicherungsnehmer</text>
+  <text x="83" y="57" text-anchor="middle" font-size="8.2" fill="#475569">Schadenmeldung &amp; Belege</text>
+
+  <rect x="12" y="90" width="142" height="52" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <text x="83" y="110" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a">Eingangskanäle</text>
+  <text x="83" y="124" text-anchor="middle" font-size="8.2" fill="#475569">Portal, App, E-Mail, Telefon</text>
+
+  <rect x="12" y="246" width="142" height="62" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <text x="83" y="268" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a">Spezial-Sachbearbeiter</text>
+  <text x="83" y="283" text-anchor="middle" font-size="8.1" fill="#475569">Prüft eskalierte Fälle</text>
+  <text x="83" y="295" text-anchor="middle" font-size="8.1" fill="#475569">mit Beleg-Markierung</text>
+
+  <!-- Isolated Azure VNet Perimeter -->
+  <rect x="174" y="8" width="934" height="314" rx="8" fill="#f8fafc" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="6,4"/>
+  <text x="190" y="25" font-size="10" font-weight="700" fill="#0369a1">Abgesicherte Azure Cloud-Umgebung (Kein öffentlicher Internetzugang / 100% Private Netzwerkanbindung)</text>
+
+  <!-- ROW 1: CORE WORKFLOW STAGES (y=36..124, h=88) -->
+  <rect x="190" y="36" width="202" height="88" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="190" y="36" width="202" height="19" rx="4" fill="#0369a1"/>
+  <text x="291" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">1. Ingestion &amp; Datenschutz</text>
+  <text x="198" y="66" font-size="8.1" fill="#334155">• Annahme aller Dokument- &amp; Sprachkanäle</text>
+  <text x="198" y="80" font-size="8.1" fill="#334155">• Strukturierte KI-Belegauswertung</text>
+  <text x="198" y="94" font-size="8.1" fill="#334155">• Original-Archivierung (Revisionssicher)</text>
+  <text x="198" y="108" font-size="8.1" font-weight="700" fill="#0369a1">• Frühe Anonymisierung persönlicher Daten</text>
+
+  <rect x="414" y="36" width="202" height="88" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="414" y="36" width="202" height="19" rx="4" fill="#0369a1"/>
+  <text x="515" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">2. Klassifikation &amp; Schadenanlage</text>
+  <text x="422" y="66" font-size="8.1" fill="#334155">• Qualitätsprüfung der Beleglesbarkeit</text>
+  <text x="422" y="80" font-size="8.1" fill="#334155">• Einordnung nach Schadensart &amp; Schwere</text>
+  <text x="422" y="94" font-size="8.1" font-weight="700" fill="#0369a1">• Bindung historischer Vertragsbedingungen</text>
+  <text x="422" y="108" font-size="8.1" fill="#334155">• Verbindliche Anlage im Bestandssystem</text>
+
+  <rect x="642" y="36" width="252" height="88" rx="5" fill="#ffffff" stroke="#1e293b" stroke-width="1.6"/>
+  <rect x="642" y="36" width="252" height="19" rx="4" fill="#1e293b"/>
+  <text x="768" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">3. Multi-Agenten-Schadenprüfung</text>
+  <text x="650" y="66" font-size="8.1" font-weight="700" fill="#0f172a">• Zentraler Orchestrator steuert Bearbeitung</text>
+  <text x="650" y="80" font-size="8.1" fill="#334155">• 5 Spezial-Agenten (Kunde, Deckung,</text>
+  <text x="650" y="94" font-size="8.1" fill="#334155">  Betrugsprüfung, Tarif &amp; Auszahlung)</text>
+  <text x="650" y="108" font-size="8.1" fill="#334155">• Interne Prüf-Agenten &amp; KI-Leitplanken</text>
+
+  <rect x="920" y="36" width="174" height="88" rx="5" fill="#ffffff" stroke="#475569" stroke-width="1.4"/>
+  <rect x="920" y="36" width="174" height="19" rx="4" fill="#475569"/>
+  <text x="1007" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">KI-Überwachung (Langfuse)</text>
+  <text x="928" y="66" font-size="8.1" fill="#334155">• Datenschutzkonformes Logging</text>
+  <text x="928" y="80" font-size="8.1" fill="#334155">• Zentrale Vorlagen-Verwaltung</text>
+  <text x="928" y="94" font-size="8.1" fill="#334155">• Laufende Qualitätsmessung</text>
+  <text x="928" y="108" font-size="8.1" fill="#334155">• Lernen aus Fachkorrekturen</text>
+
+  <!-- ROW 2: DATA PLATFORM & RULES ENGINE (y=152..220, h=68) -->
+  <rect x="190" y="152" width="426" height="68" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+  <rect x="190" y="152" width="426" height="18" rx="4" fill="#334155"/>
+  <text x="403" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Zentrale Daten-, Wissens- &amp; Analyseplattform (Azure &amp; Databricks)</text>
+  <text x="403" y="181" text-anchor="middle" font-size="8" fill="#1e293b">• Revisionssicheres Original-Archiv, operative Schadenakte &amp; streng isolierter Datenschutz-Tresor</text>
+  <text x="403" y="195" text-anchor="middle" font-size="8" fill="#1e293b">• Vertrags-Bestandssystem (SQL) &amp; historische Bedingungs-Wissensbasis (Azure AI Search)</text>
+  <text x="403" y="209" text-anchor="middle" font-size="8" font-weight="700" fill="#0369a1">• Azure Databricks: Übergreifende Betrugsnetzwerk-Erkennung, Regelsimulation &amp; Aktuariat</text>
+
+  <rect x="642" y="152" width="252" height="68" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
+  <rect x="642" y="152" width="252" height="18" rx="4" fill="#334155"/>
+  <text x="768" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Deterministische Rechen-Engine</text>
+  <text x="650" y="182" font-size="8.1" fill="#334155">• Einheitliches, versioniertes Regelwerk</text>
+  <text x="650" y="196" font-size="8.1" fill="#334155">• Verbindliche Tarif- &amp; Abzugsberechnung</text>
+  <text x="650" y="210" font-size="8.1" font-weight="700" fill="#0f172a">• Keine KI-Schätzung bei Geldbeträgen</text>
+
+  <rect x="920" y="152" width="174" height="68" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
+  <rect x="920" y="152" width="174" height="18" rx="4" fill="#475569"/>
+  <text x="1007" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Policy Management</text>
+  <text x="928" y="182" font-size="8" fill="#334155">• Regelpflege durch Fachbereich</text>
+  <text x="928" y="196" font-size="8" fill="#334155">• Konfliktprüfung &amp; Simulation</text>
+  <text x="928" y="210" font-size="8" font-weight="700" fill="#0f172a">• Verbindliche 4-Augen-Freigabe</text>
+
+  <!-- ROW 3: HITL & OUTCOMES (y=246..310, h=64) -->
+  <rect x="190" y="246" width="265" height="64" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+  <rect x="190" y="246" width="265" height="18" rx="4" fill="#1e293b"/>
+  <text x="322" y="258" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">4. Sicherheits-Schranken &amp; Fachprüfung (HITL)</text>
+  <text x="198" y="275" font-size="8" font-weight="700" fill="#0f172a">• Keine automatische Ablehnung (DSGVO Art. 22)</text>
+  <text x="198" y="288" font-size="8" fill="#334155">• Pfad 1 (Beleg-Bestätigung): KI-Prozess läuft weiter</text>
+  <text x="198" y="301" font-size="8" fill="#334155">• Pfad 2 (Sachentscheid): Direkte Abwicklung</text>
+
+  <rect x="482" y="246" width="612" height="64" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <rect x="482" y="246" width="612" height="18" rx="4" fill="#0369a1"/>
+  <text x="788" y="258" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Definierte Ergebnisse der Schadenbearbeitung</text>
+
+  <rect x="494" y="269" width="188" height="35" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+  <text x="588" y="284" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0f172a">1. Dunkelverarbeitung (STP)</text>
+  <text x="588" y="297" text-anchor="middle" font-size="7.6" fill="#475569">Direkte Auszahlung &amp; Abrechnung</text>
+
+  <rect x="694" y="269" width="188" height="35" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+  <text x="788" y="284" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0f172a">2. Kunden-Dialogschleife</text>
+  <text x="788" y="297" text-anchor="middle" font-size="7.6" fill="#475569">Gezielte Nachforderung von Belegen</text>
+
+  <rect x="894" y="269" width="188" height="35" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+  <text x="988" y="284" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0f172a">3. HITL-Fachabschluss</text>
+  <text x="988" y="297" text-anchor="middle" font-size="7.6" fill="#475569">Entschieden durch Sachbearbeiter</text>
+
+  <!-- ORTHOGONAL CONNECTORS (ZERO CROSSINGS) -->
+  <path d="M 83 70 V 90" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 154 106 H 190" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <path d="M 392 80 H 414" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <path d="M 616 80 H 642" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <path d="M 894 80 H 920" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+
+  <path d="M 291 124 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 515 124 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 672 124 V 138 H 585 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+
+  <path d="M 768 124 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 920 186 H 894" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+
+  <path d="M 652 124 V 138 H 629 V 233 H 322 V 246" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 875 124 V 138 H 907 V 246" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+
+  <path d="M 190 278 H 154" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 455 278 H 482" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+</svg>

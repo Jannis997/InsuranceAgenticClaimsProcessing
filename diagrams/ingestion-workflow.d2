@@ -1,0 +1,72 @@
+# Document Ingestion & Privacy Workflow (Paste into https://play.d2lang.com)
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 1
+  }
+}
+
+classes: {
+  box: {
+    style: {
+      fill: "#ffffff"
+      stroke: "#334155"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  ai: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#0284c7"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  store: {
+    style: {
+      fill: "#f1f5f9"
+      stroke: "#1e293b"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+}
+
+input: "1. Eingang & Sicherheitsprüfung\n• Webportal, App, E-Mail, Telefon\n• Lastpufferung bei Unwetterspitzen\n• Unveränderliche Original-Archivierung" { class: box }
+
+ai_services: "2. Spezialisierte KI-Aufbereitung (Azure AI Services)" {
+  style.fill: "#f8fafc"
+  style.stroke: "#cbd5e1"
+  docs: "Dokumenten- & Rechnungsanalyse\n• Trennt Sammel-PDFs automatisch\n• Liest Tabellen & markiert Fundstellen" { class: ai }
+  speech: "Sprach- & Telefonanalyse\n• Echtzeit-Transkription im Service-Gespräch\n• Strukturierte Erfassung von Unfallmeldungen" { class: ai }
+  vision: "Foto- & Bildprüfung\n• Schadensbild-Erkennung\n• Verpixelung Unbeteiligter (DSGVO)" { class: ai }
+  lang: "Text-, Medizin- & Übersetzungs-KI\n• Strukturierung von Arztberichten\n• Übersetzung ausländischer Belege" { class: ai }
+}
+
+privacy: "3. Datenschutz-Filter (Anonymisierung)\n• Ersetzt Namen, Adressen & Kontodaten\n  durch neutrale Platzhalter\n• Schützt Kundendaten vor KI-Einsicht" { class: ai }
+
+outputs: "4. Revisionssichere Ablage & Übergabe" {
+  style.fill: "#f8fafc"
+  style.stroke: "#cbd5e1"
+  vault: "Isolierter Datenschutz-Tresor\n• Verwahrt Klartext-Kundendaten\n• Für KI-Agenten strikt gesperrt" { class: store }
+  state: "Anonymisierte Schadenakte\n• Strukturierte Daten & Beleg-Koordinaten\n• Übergabe an Klassifikation & Agenten" { class: store }
+}
+
+input -> ai_services.docs
+input -> ai_services.speech
+input -> ai_services.vision
+input -> ai_services.lang
+
+ai_services.docs -> privacy
+ai_services.speech -> privacy
+ai_services.vision -> privacy
+ai_services.lang -> privacy
+
+privacy -> outputs.vault: "Vertrauliche Klartext-Zuordnung"
+privacy -> outputs.state: "Anonymisierte Sachdaten"

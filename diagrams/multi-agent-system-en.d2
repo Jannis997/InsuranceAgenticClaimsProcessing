@@ -1,0 +1,102 @@
+# D2 Diagram 2 (English): Multi-Agent System Deep-Dive (Paste into https://play.d2lang.com)
+direction: down
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 1
+  }
+}
+
+control_plane: "Orchestration, Prompt Management & Guardrail Control Plane" {
+  style.fill: "#f8fafc"
+  style.stroke: "#cbd5e1"
+
+  queue: "0. Azure Service Bus Queue\nclaims-processing-queue\nSession: claimId (FIFO)" {
+    shape: queue
+    style.fill: "#fffbeb"
+    style.stroke: "#b45309"
+  }
+  loader: "1. Playbook & Skill Loader\nLoads Claim-Type Checklist &\nSystem Prompts from Langfuse" {
+    style.fill: "#f1f5f9"
+    style.stroke: "#0369a1"
+  }
+  orchestrator: "2. Magentic Claims Orchestrator (Foundry Hosted Agent)\n• Model Router: router-frontier (gpt-6-sol / claude-sonnet-5) + PTU Spillover\n• 4-Point Foundry Guardrails: Prompt Shields, XPIA Spotlighting & Groundedness\n• Durable Checkpointing in Cosmos DB (Stateful Pause/Resume across days)" {
+    style.fill: "#f0fdfa"
+    style.stroke: "#0f766e"
+    style.bold: true
+  }
+  circuit_breaker: "Deterministic Circuit Breaker & HITL\n• GDPR Art. 22: Auto-Reject Strictly Blocked!\n• Path 1 (OCR Fix): Resume Orchestrator\n• Path 2 (Final Decision): Direct Executor" {
+    style.fill: "#fff1f2"
+    style.stroke: "#be123c"
+  }
+
+  queue -> loader -> orchestrator
+  orchestrator <-> circuit_breaker: "Invariant Check / Path 1 Resume"
+}
+
+agents: "5 Specialized Foundry Hosted Sub-Agents (Isolated Micro-VMs + Dedicated Entra Agent Identities)" {
+  style.fill: "#ffffff"
+  style.stroke: "#0f766e"
+
+  customer: "A1. Customer Comm Agent\nSole External Contact Agent\n[Compliance & Groundedness Critic]\n• MCP: request_checklist_docs\n• MCP: send_customer_notification\n• MCP: generate_eob_letter" {
+    style.fill: "#f0fdfa"
+    style.stroke: "#0f766e"
+  }
+  coverage: "A2. Coverage & Benefits Agent\nHistorical Policy & Clause Verification\n[Strict AvbVersionId Binding]\n• MCP: get_policy_at_loss_date\n• MCP: search_historical_avb\n• MCP: record_coverage_decision" {
+    style.fill: "#f0fdfa"
+    style.stroke: "#0f766e"
+  }
+  fraud: "A3. Fraud & Risk Agent\nForensics & Collusion Network ML\n[Databricks GraphFrames + XGBoost]\n• MCP: check_image_duplicates\n• MCP: score_claim_anomaly" {
+    style.fill: "#f0fdfa"
+    style.stroke: "#0f766e"
+  }
+  adjudication: "A4. Adjudication & Pricing\nTariff Mapping & Rules Execution\n[Internal Coding & Tariff Critic]\n• MCP: map_invoice_to_tariff\n• MCP: evaluate_payout_rules" {
+    style.fill: "#f0fdfa"
+    style.stroke: "#0f766e"
+  }
+  financial: "A5. Financial & Settlement\nReserving & STP Disbursement\n[Isolated PII De-Tokenization]\n• MCP: post_erp_disbursement\n• MCP: update_claim_reserve" {
+    style.fill: "#f0fdfa"
+    style.stroke: "#0f766e"
+  }
+}
+
+backends: "Deterministic Execution Backends, Enterprise Knowledge Base & Azure Databricks ML" {
+  style.fill: "#f8fafc"
+  style.stroke: "#334155"
+
+  cosmos_pii: "Cosmos DB & PII Token Vault\n• claim_dossiers (Agent State)\n• pii_token_vault (CMK Encrypted)\n• Zero-ETL CDF -> Databricks" {
+    shape: cylinder
+    style.fill: "#f1f5f9"
+    style.stroke: "#334155"
+  }
+  ai_search: "Azure AI Search (Foundry IQ)\n• OData Pre-Filter: avbVersionId\n• Hybrid BM25 + HNSW (SQ8)\n• L2 Cross-Encoder Reranker" {
+    shape: cylinder
+    style.fill: "#f1f5f9"
+    style.stroke: "#0369a1"
+  }
+  databricks_ml: "Azure Databricks & Mosaic AI\n• Unity Catalog (Bronze/Silver/Gold)\n• GraphFrames Fraud Ring Model\n• Spark Backtest (500k+ Claims)" {
+    style.fill: "#fffbeb"
+    style.stroke: "#b45309"
+  }
+  rules_runtime: "Deterministic Rules Runtime\n• Versioned AVB & Corporate Rules\n• Calculates Caps & Deductibles\n• 100% Auditable JSON Output" {
+    style.fill: "#fffbeb"
+    style.stroke: "#b45309"
+  }
+  pas_erp: "Azure SQL (PAS) & Core ERP\n• PAS: Policies, Limits, Prior Claims\n• SAP/ERP: SEPA Payout (AP/GL)\n• Solvency II Reserve Sync" {
+    style.fill: "#f1f5f9"
+    style.stroke: "#334155"
+  }
+}
+
+control_plane.orchestrator -> agents.customer
+control_plane.orchestrator -> agents.coverage
+control_plane.orchestrator -> agents.fraud
+control_plane.orchestrator -> agents.adjudication
+control_plane.orchestrator -> agents.financial
+
+agents.customer -> backends.cosmos_pii: "De-tokenizes <PII:NAME_1>"
+agents.coverage -> backends.ai_search: "Filter: AvbVersionId"
+agents.fraud -> backends.databricks_ml: "Graph & Anomaly Score"
+agents.adjudication -> backends.rules_runtime: "RulesEvaluationRequest"
+agents.financial -> backends.pas_erp: "SEPA Disbursement"

@@ -1,0 +1,144 @@
+# D2 Diagram 1 (English): Level 1 Clean Architecture Overview (Paste into https://play.d2lang.com)
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 1
+  }
+}
+
+classes: {
+  actor_box: {
+    shape: person
+    style: {
+      fill: "#f1f5f9"
+      stroke: "#334155"
+      stroke-width: 2
+      font-color: "#0f172a"
+    }
+  }
+  core_stage: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#0369a1"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  agent_stage: {
+    style: {
+      fill: "#f0fdfa"
+      stroke: "#0f766e"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  rules_stage: {
+    style: {
+      fill: "#fffbeb"
+      stroke: "#b45309"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  gov_stage: {
+    style: {
+      fill: "#fff1f2"
+      stroke: "#be123c"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  data_spine: {
+    shape: cylinder
+    style: {
+      fill: "#f1f5f9"
+      stroke: "#1e293b"
+      stroke-width: 2
+      font-color: "#0f172a"
+    }
+  }
+}
+
+entry: "External Channels & Actors" {
+  style.fill: "#ffffff"
+  style.stroke: "#cbd5e1"
+
+  claimant: "Policyholder\n(Claimant)" {
+    class: actor_box
+  }
+  channels: "Omnichannel & IVR\n(Web, App, Email, Voice Live)" {
+    class: core_stage
+  }
+  adjuster: "Specialist Adjuster\n(HITL Workbench)" {
+    class: actor_box
+  }
+  claimant -> channels: "Submits Claim & Docs"
+}
+
+azure_vnet: "Azure Virtual Network (Isolated Spoke 10.42.0.0/16 — Zero Public Access / 100% Private Link & CMK)" {
+  style.stroke-dash: 5
+  style.stroke: "#0284c7"
+  style.fill: "#ffffff"
+
+  pipeline_row: "Core Processing Pipeline" {
+    style.stroke: transparent
+    style.fill: transparent
+
+    extraction: "1. Ingestion & PII-Tokenization\n• Front Door WAF, APIM & Event Hub\n• Content Understanding & Doc Intel v4\n• Speech MAI-Transcribe-2 & Face Blur\n• PII Tokenizer (<PII:IBAN_1>)" {
+      class: core_stage
+    }
+    classification: "2. Classification & Claim Setup\n• OCR Confidence Gate (>= 0.80)\n• Microsoft-Decision-1 Classifier\n• Historical AvbVersionId Binding\n• Deterministic PAS Claim Creation" {
+      class: core_stage
+    }
+    multi_agent: "3. Multi-Agent Claim Processing\n• Service Bus Queue (session: claimId)\n• Magentic Claims Orchestrator\n• 5 Hosted Agents + Generator-Critics\n• Prompt Shields & Model Router" {
+      class: agent_stage
+    }
+    langfuse: "Langfuse LLMOps & Eval\n• Self-Hosted OTel PII Guard\n• Prompt & Skill Registry\n• RAG Triad & Agent Evaluation" {
+      class: core_stage
+    }
+
+    extraction -> classification: "Sanitized JSON (<PII:..._1>)"
+    classification -> multi_agent: "Queued Claim Event"
+    multi_agent <-> langfuse: "Prompts & OTel Spans"
+  }
+
+  platform_row: "Data Spine, Rules & Governance" {
+    style.stroke: transparent
+    style.fill: transparent
+
+    data_stores: "Secured Azure Data, Knowledge & Databricks Platform (Private Link)\n1. Blob raw-artifacts (WORM) | 2. Blob extracted-state (JSON + BBoxes)\n3. Cosmos DB (Dossiers & Isolated PII Vault) | 4. Azure AI Search (Hybrid RRF + L2)\n5. Azure SQL (PAS Core) | 6. Azure Databricks Lakehouse (Unity Catalog, 500k Backtest, GraphFrames Fraud)" {
+      class: data_spine
+    }
+    rules_engine: "Deterministic Rules Runtime\n• Unified Versioned Rule Repo\n• Exact Tariff, Cap & Deductible Math" {
+      class: rules_stage
+    }
+    rule_authoring: "Policy Management (4-Eyes)\n• NL-to-DSL & Z3 Conflict Solver\n• Databricks 500k Claims Backtest" {
+      class: rules_stage
+    }
+    governance: "4. Circuit Breaker & HITL Platform\n• Asymmetrical: No Auto-Reject (GDPR Art. 22)\n• Path 1 (OCR Fix): Resume Orchestrator\n• Path 2 (Final Decision): Direct Executor" {
+      class: gov_stage
+    }
+    outcomes: "Claims Processing Outcomes\n1. STP Dark Processing | 2. Customer Comm Loop | 3. HITL Resolution" {
+      class: agent_stage
+    }
+
+    rule_authoring -> rules_engine: "4-Eyes Sign-Off"
+    governance -> outcomes: "Path 2: Direct Settlement"
+  }
+
+  pipeline_row.extraction -> platform_row.data_stores: "WORM Raw & PII Vault"
+  pipeline_row.classification -> platform_row.data_stores: "Reads Policy & AvbVersionId"
+  pipeline_row.multi_agent <-> platform_row.data_stores: "MCP Tools (RAG, Dossier, Fraud ML)"
+  pipeline_row.multi_agent <-> platform_row.rules_engine: "Evaluates Payout Rules"
+  pipeline_row.multi_agent -> platform_row.governance: "Guardrail Escalation"
+  pipeline_row.multi_agent -> platform_row.outcomes: "STP / Customer Loop"
+}
+
+entry.channels -> azure_vnet.pipeline_row.extraction: "HTTPS + Entra Auth"
+azure_vnet.platform_row.governance <-> entry.adjuster: "BBox Dossier & Decision"

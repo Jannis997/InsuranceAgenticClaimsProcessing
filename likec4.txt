@@ -444,7 +444,7 @@ model {
 
         tool_score_anomaly = mcp_tool 'MCP: score_claim_anomaly' {
           #mcp
-          summary 'Prüft Vorschadenhistorie in PAS SQL, Kundenrisiko & extrahierte Rechnungsdaten auf Ausreißer'
+          summary 'Prüft Vorschäden in PAS SQL & ruft Databricks Mosaic AI (GraphFrames Betrugsring- & XGBoost-Scoring) auf'
         }
       }
 
@@ -585,7 +585,7 @@ model {
 
       conflict_simulator = compute '3. SMT Conflict Solver & Historical Backtester' {
         #deterministic
-        summary 'Prüft Logik-Konflikte per Z3-Solver & simuliert finanziellen Impact auf 10.000 historische Claims'
+        summary 'Prüft Logik-Konflikte per Z3-Solver & triggert Spark-Backtesting auf 500.000+ Delta-Lake-Claims in Databricks'
         icon bootstrap:intersect
       }
 
@@ -712,15 +712,15 @@ model {
     }
 
     // -----------------------------------------------------------------------
-    // H. PERSISTENTE AZURE DATA STORES (AUF LEVEL 1 ALS EINE KOMPAKTE BOX)
+    // H. PERSISTENTE AZURE DATA STORES & DATABRICKS LAKEHOUSE (AUF LEVEL 1 KOMPAKT)
     // -----------------------------------------------------------------------
-    data_stores = store 'Secured Azure Data & Knowledge Platform (Private Link)' {
+    data_stores = store 'Secured Azure Data, Knowledge & Databricks Platform (Private Link)' {
       #security #private_endpoint #pii_protected
-      summary 'Konsolidierte Datenhaltung (Blobs, Cosmos DB, AI Search, PAS SQL) – komplett hinter Private Endpoints'
+      summary 'Konsolidierte Datenhaltung (Blobs, Cosmos DB, AI Search, PAS SQL & Azure Databricks Lakehouse) hinter Private Endpoints'
       icon bootstrap:database-fill-lock
       description '''
-        ### Datenschutz-, Privacy- & Security-Matrix der 5 Speicher (Klicke auf Lupe für Tabellen-Drill-Down)
-        Alle Speicher sind ausschließlich über **Azure Private Endpoints (`privatelink.*`)** im isolierten VNet erreichbar und mit **Customer-Managed Keys (CMK)** im Azure Key Vault verschlüsselt.
+        ### Datenschutz-, Privacy- & Security-Matrix der 6 Enterprise Data & Analytics Stores (Klicke auf Lupe für Drill-Down)
+        Alle Speicher und das **Azure Databricks Lakehouse** sind ausschließlich über **Azure Private Endpoints (`privatelink.*`)** im isolierten VNet erreichbar und mit **Customer-Managed Keys (CMK)** im Azure Key Vault verschlüsselt.
 
         | Azure Ressource | Gespeicherte Daten | PII / Datenschutz-Status | Zugriff durch KI-Agenten (LLMs) |
         | :--- | :--- | :--- | :--- |
@@ -730,6 +730,7 @@ model {
         | **3b. Cosmos DB (`pii_token_vault`)** | Mapping `<PII:IBAN_1>` &rarr; echte IBAN / Name | **Streng vertraulich (Klartext-PII Vault)** | **NEIN (Strikt gesperrt für LLMs!)** Nur für deterministische Ausgangs-Adapter & HITL-UI |
         | **4. Azure AI Search (`policy-knowledge`)** | Historische & aktuelle AVB-Generationen, Tarife | **Keine PII** (reine Produkt- & Rechtsdokumente) | **Ja** (Read-Only RAG mit `AvbVersionId`-Filter) |
         | **5. Azure SQL (`pas-core`)** | Verträge, Deckungslimits, `AvbVersionId`, Claims | **Pseudonymisierter Lesezugriff** über `PolicyNumber` | **Nur über eingeschränkte MCP-Views** (ohne Klartext-Kontodaten) |
+        | **6. Azure Databricks (`unity-catalog`)** | 500k+ historische Delta-Claims, Betrugs-Graphen, Solvency-II-Reserven | **Pseudonymisiert** (Zero-ETL CDF ohne `pii_token_vault`) | **Nur über Mosaic AI Fraud Endpoint & Backtester** (kein Rohdaten-LLM-Zugriff) |
       '''
       metadata {
         network_isolation '100% Azure Private Link (No Public Internet Endpoints)'
@@ -974,6 +975,54 @@ model {
           '''
         }
       }
+
+      // 6. Analytical Lakehouse & Enterprise ML Platform (Azure Databricks)
+      databricks_lakehouse = store 'Azure Databricks Lakehouse & Mosaic AI' {
+        #private_endpoint #pii_protected #versioning
+        summary 'Analytical & ML Plane: Unity Catalog (Delta Lake), Spark Mass-Backtesting (500k+ Claims), GraphFrames Fraud Detection & Solvency II'
+        icon bootstrap:boxes
+        description '''
+          ### Azure Databricks Lakehouse & Mosaic AI (Serverless Private Link / No Public IP)
+          Entkoppelt rechenintensive analytische, aktuarische und Graph-ML-Workloads vollständig von den operativen Echtzeit-Datenbanken (`cosmos_claims` und `sql_pas`):
+          1. **Zero-ETL Mirroring / Change Data Feed (`unity_catalog_delta`):**
+             - Synchronisiert pseudonymisierte Schadenakten aus Cosmos DB und Bestandsdaten aus Azure SQL kontinuierlich in eine **Medallion-Architektur (Bronze &rarr; Silver &rarr; Gold)** unter **Unity Catalog Governance** (Row-/Column-Level Security & Lineage).
+          2. **Massives Regel-Backtesting (`spark_photon_backtester`):**
+             - Wenn im Policy Management (Level 2C) eine neue AVB-Generation oder Unternehmensregel getestet wird, simuliert die **Photon Engine** das neue Regelwerk in Sekunden gegen **500.000+ historische Schadenakten**, ohne eine einzige RU/s der operativen Cosmos DB zu verbrauchen.
+          3. **Organisierte Betrugsring-Erkennung (`mosaic_fraud_ml`):**
+             - Erkennt über **Spark GraphFrames** kollusive Netzwerke (z. B. wiederkehrende Kombinationen aus Werkstatt, Gutachter, Anwalt und Unfallgegner) und stellt dem `fraud_agent` über **Mosaic AI Model Serving** einen Sub-50ms-Inferenz-Endpunkt (XGBoost / Graph-Embedding) bereit.
+          4. **Aktuariat, Solvency II & Golden Datasets:**
+             - Berechnet IBNR-Schadenrückstellungen (Chain-Ladder) für BaFin/Solvency-II-Meldungen und kuratiert aus Langfuse-HITL-Overrides versionierte Golden Datasets für Modell-Fine-Tuning.
+        '''
+
+        unity_catalog_delta = schema_entity '1. Unity Catalog: Delta Lake (Bronze / Silver / Gold)' {
+          #schema_def #pii_protected #versioning
+          summary 'Versionierte Delta-Tabellen (500k+ historische Claims, Fraud-Feature-Store, Solvency-II-Dreiecke & Golden Datasets)'
+          description '''
+            ### Unity Catalog Schema: `claims_prod.gold.*` (Delta Lake Time-Travel)
+            | Delta Table | Typ / Layer | Beschreibung |
+            | :--- | :--- | :--- |
+            | **gold.historical_claims_backtest** | `Delta [Time-Travel]` | 500.000+ pseudonymisierte Altschäden für deterministische Regel-Simulationen |
+            | **gold.entity_fraud_graph_features** | `Feature Table` | PageRank-, Degree- & Community-Scores über Werkstätten, Gutachter & VN-Tokens |
+            | **gold.solvency_ii_loss_triangles** | `Actuarial Gold` | Revisionssichere Schadenentwicklungsdreiecke (IBNR / RBNS) für BaFin-Reporting |
+            | **gold.langfuse_hitl_golden_set** | `Evaluation Table` | Kuratierte HITL-Overrides für LLM-Evaluation & Fine-Tuning |
+          '''
+        }
+
+        spark_photon_backtester = compute '2. Spark & Photon Mass-Backtesting Engine' {
+          #deterministic #versioning
+          summary 'Simuliert neue YAML-DSL-Regeln verteilt gegen 500.000+ Delta-Lake-Altschäden (Impact- & Verteilungs-Delta)'
+          icon bootstrap:lightning-charge-fill
+        }
+
+        mosaic_fraud_ml = ai_service '3. GraphFrames & Mosaic AI Fraud Serving' {
+          summary 'Echtzeit-Inferenz für Betrugsring-Graphen (Werkstatt/Gutachter-Cluster) & tabellarisches XGBoost Anomaly-Scoring'
+          icon bootstrap:Share
+          metadata {
+            graph_analytics 'Spark GraphFrames (Connected Components, PageRank, Triangle Count)'
+            serving_endpoint 'Databricks Mosaic AI Model Serving (Low-Latency Private Link REST)'
+          }
+        }
+      }
     }
   }
 
@@ -1062,6 +1111,8 @@ model {
   azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.sql_pas.table_pas_claims 'Liest Vorschäden'
   azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.sql_pas.table_customers 'Liest Risikoklasse'
   azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.blob_state 'Liest Rechnungs-Features'
+  azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly -> azure_vnet.data_stores.databricks_lakehouse.mosaic_fraud_ml 'Betrugsring-Graph & XGBoost-Score'
+  azure_vnet.data_stores.databricks_lakehouse.mosaic_fraud_ml -> azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta 'Liest Graph-Features'
 
   // 4. Adjudication Agent
   azure_vnet.multi_agent_system.adjudication_agent.tool_map_items -> azure_vnet.data_stores.blob_state 'Liest Rechnungspositionen'
@@ -1089,8 +1140,13 @@ model {
   azure_vnet.rule_authoring_subsystem.internal_rule_intake -> azure_vnet.rule_authoring_subsystem.authoring_agent 'Natürlichsprachige Regel'
 
   azure_vnet.rule_authoring_subsystem.authoring_agent -> azure_vnet.rule_authoring_subsystem.conflict_simulator '2. Typisiertes DSL & Tests'
-  azure_vnet.rule_authoring_subsystem.conflict_simulator -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier '3. Backtest (10.000 Claims)'
+  azure_vnet.rule_authoring_subsystem.conflict_simulator -> azure_vnet.data_stores.databricks_lakehouse.spark_photon_backtester '3. Mass-Backtest (500k+ Claims)'
+  azure_vnet.data_stores.databricks_lakehouse.spark_photon_backtester -> azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta 'Simuliert auf Delta-Historie'
   azure_vnet.rule_authoring_subsystem.conflict_simulator -> azure_vnet.rule_authoring_subsystem.impact_approval_portal '4. Konfliktbericht & Impact'
+
+  // --- Zero-ETL Change Data Feed (Operative Stores -> Databricks Lakehouse) ---
+  azure_vnet.data_stores.cosmos_claims.table_claim_dossier -> azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta 'Zero-ETL CDF (Pseudonymisiert)'
+  azure_vnet.data_stores.sql_pas.table_pas_claims -> azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta 'CDC Mirroring (Bestand & Reserven)'
 
   risk_compliance_manager -> azure_vnet.rule_authoring_subsystem.impact_approval_portal '5. Prüft Impact & gibt frei'
   azure_vnet.rule_authoring_subsystem.impact_approval_portal -> azure_vnet.rule_authoring_subsystem.rule_deployer '6. Sign-Off (4-Augen)'
@@ -1129,6 +1185,7 @@ model {
   azure_vnet.langfuse.eval_engine -> azure_vnet.data_stores.vector_search.table_vector_index '2. Prüft Context Relevance & NDCG@3'
   azure_vnet.langfuse.eval_engine -> azure_vnet.data_stores.cosmos_claims.table_claim_dossier '3. Prüft Groundedness & Answer Relevance'
   azure_vnet.langfuse.eval_engine -> azure_vnet.langfuse.prompt_registry '4. Eval-Scores für Prompt/Skill-Tuning'
+  azure_vnet.langfuse.eval_engine -> azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta '5. Synchronisiert Golden Dataset'
 
   // --- Outcomes ---
   azure_vnet.multi_agent_system.financial_agent -> azure_vnet.claims_outcomes.outcome_stp 'STP-Abschluss'
@@ -1248,7 +1305,8 @@ views {
       azure_vnet.rules_engine,
       azure_vnet.rules_engine.*,
       azure_vnet.data_stores.vector_search.table_vector_index,
-      azure_vnet.data_stores.cosmos_claims.table_claim_dossier
+      azure_vnet.data_stores.databricks_lakehouse.spark_photon_backtester,
+      azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta
 
     autoLayout LeftRight
   }
@@ -1285,6 +1343,7 @@ views {
       azure_vnet.data_stores.cosmos_claims,
       azure_vnet.data_stores.vector_search,
       azure_vnet.data_stores.sql_pas,
+      azure_vnet.data_stores.databricks_lakehouse,
       erp_finance
 
     autoLayout TopBottom
@@ -1436,7 +1495,9 @@ views {
       azure_vnet.data_stores.blob_state,
       azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
       azure_vnet.data_stores.sql_pas.table_pas_claims,
-      azure_vnet.data_stores.sql_pas.table_customers
+      azure_vnet.data_stores.sql_pas.table_customers,
+      azure_vnet.data_stores.databricks_lakehouse.mosaic_fraud_ml,
+      azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta
 
     autoLayout LeftRight
   }
@@ -1510,7 +1571,9 @@ views {
       azure_vnet.data_stores.vector_search,
       azure_vnet.data_stores.vector_search.*,
       azure_vnet.data_stores.sql_pas,
-      azure_vnet.data_stores.sql_pas.*
+      azure_vnet.data_stores.sql_pas.*,
+      azure_vnet.data_stores.databricks_lakehouse,
+      azure_vnet.data_stores.databricks_lakehouse.*
 
     autoLayout TopBottom
   }
@@ -1536,6 +1599,31 @@ views {
       azure_vnet.multi_agent_system.adjudication_agent.tool_map_items,
       azure_vnet.multi_agent_system.customer_agent.tool_gen_eob,
       azure_vnet.langfuse.eval_engine
+
+    autoLayout LeftRight
+  }
+
+  // -------------------------------------------------------------------------
+  // LEVEL 3H: DEEP-DIVE AZURE DATABRICKS LAKEHOUSE & MOSAIC AI
+  // -------------------------------------------------------------------------
+  view view_databricks_lakehouse of azure_vnet.data_stores.databricks_lakehouse {
+    title 'Level 3H: Deep-Dive Azure Databricks Lakehouse – Mass-Backtesting, Fraud-Graph & Solvency II'
+    description '''
+      **Warum Azure Databricks die operative Echtzeit-Architektur ergänzt (Analytical & ML Plane):**
+      1. **Zero-ETL Change Data Feed (`unity_catalog_delta`):** Synchronisiert pseudonymisierte Schadenakten aus Cosmos DB und Bestandsdaten aus Azure SQL ohne Last auf den operativen Systemen.
+      2. **Spark & Photon Mass-Backtesting (`spark_photon_backtester`):** Simuliert neue Regeln aus dem `conflict_simulator` (Level 2C) gegen 500.000+ historische Claims in Sekunden.
+      3. **GraphFrames & Mosaic AI (`mosaic_fraud_ml`):** Erkennt organisierte Betrugsringe über Werkstätten, Gutachter und Anspruchsteller hinweg und liefert Echtzeit-Scores an `tool_score_anomaly` (Level 3C).
+      4. **Golden Datasets & Solvency II:** Empfängt kuratierte HITL-Overrides aus der `eval_engine` (Level 2F) und berechnet aktuarische Schadenentwicklungsdreiecke (IBNR).
+    '''
+
+    include
+      azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.data_stores.sql_pas.table_pas_claims,
+      azure_vnet.rule_authoring_subsystem.conflict_simulator,
+      azure_vnet.multi_agent_system.fraud_agent.tool_score_anomaly,
+      azure_vnet.langfuse.eval_engine,
+      azure_vnet.data_stores.databricks_lakehouse,
+      azure_vnet.data_stores.databricks_lakehouse.*
 
     autoLayout LeftRight
   }

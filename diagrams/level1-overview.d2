@@ -1,0 +1,87 @@
+# Executive Architecture Overview (Paste into https://play.d2lang.com)
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 1
+  }
+}
+
+classes: {
+  card: {
+    style: {
+      fill: "#ffffff"
+      stroke: "#334155"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  accent: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#0284c7"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  platform: {
+    style: {
+      fill: "#f1f5f9"
+      stroke: "#1e293b"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+}
+
+entry: "Kunden- & Fachzugang" {
+  style.fill: "#f8fafc"
+  style.stroke: "#cbd5e1"
+  claimant: "Versicherungsnehmer\n(Schadenmeldung & Belege)" { class: card }
+  channels: "Eingangskanäle\n(Portal, App, E-Mail, Telefon)" { class: card }
+  adjuster: "Spezial-Sachbearbeiter\n(Fachprüfung bei Eskalation)" { class: card }
+  claimant -> channels
+}
+
+vnet: "Abgesicherte Azure Cloud-Umgebung (Kein öffentlicher Internetzugang / Private Netzwerkanbindung)" {
+  style.fill: "#ffffff"
+  style.stroke: "#0284c7"
+  style.stroke-dash: 5
+
+  flow: "Operative Schaden-Prozesskette" {
+    style.stroke: transparent
+    style.fill: transparent
+    step1: "1. Dokumenten-Ingestion & Datenschutz\n• KI-Aufbereitung (Text, Sprache, Bild)\n• Frühe Anonymisierung persönlicher Daten" { class: accent }
+    step2: "2. Klassifikation & Schadenanlage\n• Automatische Einordnung der Schadensart\n• Bindung der historischen Vertragsbedingungen" { class: accent }
+    step3: "3. Multi-Agenten-Schadenprüfung\n• Zentrale Koordination durch Orchestrator\n• Spezial-Agenten für Deckung, Betrug & Tarif" { class: accent }
+    monitoring: "Qualitäts- & KI-Überwachung\n• Revisionssichere Protokollierung\n• Laufende Qualitätskontrolle" { class: card }
+    step1 -> step2 -> step3
+    step3 <-> monitoring
+  }
+
+  foundation: "Datenplattform, Regelwerk & Eskalation" {
+    style.stroke: transparent
+    style.fill: transparent
+    data: "Zentrale Daten- & Analyseplattform (Azure & Databricks)\n• Revisionssicheres Dokumentenarchiv & separater Datenschutz-Tresor\n• Vertragsdatenbank, Bedingungssuche & Databricks Betrugs-/Simulationsanalyse" { class: platform }
+    rules: "Deterministische Rechen-Engine\n• Verbindliche Tarif- & Selbstbehaltsberechnung" { class: card }
+    policy: "Regelwerk-Steuerung (4-Augen)\n• Fachpflege, Simulation & Freigabe" { class: card }
+    hitl: "4. Sicherheits-Schranken & Fachprüfung (HITL)\n• Keine automatische Ablehnung ohne Mensch\n• Direkte Umsetzung nach Sachentscheidung" { class: card }
+    outcomes: "Ergebnisse der Schadenbearbeitung\n1. Dunkelverarbeitung (STP) | 2. Kunden-Rückfrage | 3. Fachentscheid (HITL)" { class: platform }
+    policy -> rules
+    hitl -> outcomes
+  }
+
+  flow.step1 -> foundation.data
+  flow.step2 -> foundation.data
+  flow.step3 <-> foundation.data
+  flow.step3 <-> foundation.rules
+  flow.step3 -> foundation.hitl
+  flow.step3 -> foundation.outcomes
+}
+
+entry.channels -> vnet.flow.step1
+vnet.foundation.hitl <-> entry.adjuster

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 230" width="100%" height="100%" font-family="Inter, Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="i-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#475569"/>
+    </marker>
+    <marker id="i-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#0284c7"/>
+    </marker>
+  </defs>
+
+  <rect width="1120" height="230" rx="6" fill="#ffffff"/>
+
+  <!-- Step 1: Channels & Gateway -->
+  <rect x="12" y="18" width="205" height="194" rx="6" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <rect x="12" y="18" width="205" height="20" rx="5" fill="#1e293b"/>
+  <text x="114" y="32" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">1. Eingang &amp; Original-Archiv</text>
+  <text x="22" y="54" font-size="8.2" font-weight="700" fill="#0f172a">Eingangskanäle:</text>
+  <text x="22" y="68" font-size="8" fill="#334155">• Webportal, App, E-Mail &amp; Telefon</text>
+  <text x="22" y="88" font-size="8.2" font-weight="700" fill="#0f172a">Sicherheits-Gateway &amp; Puffer:</text>
+  <text x="22" y="102" font-size="8" fill="#334155">• Abwehr von Cyberangriffen (WAF)</text>
+  <text x="22" y="116" font-size="8" fill="#334155">• Asynchrone Warteschlange fängt</text>
+  <text x="22" y="128" font-size="8" fill="#334155">  Lastspitzen (z. B. Unwetter) ab</text>
+  <rect x="22" y="144" width="185" height="56" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+  <text x="114" y="161" text-anchor="middle" font-size="8.2" font-weight="700" fill="#0f172a">Revisionssicheres Roh-Archiv</text>
+  <text x="114" y="175" text-anchor="middle" font-size="7.7" fill="#475569">Unveränderbare Speicherung aller</text>
+  <text x="114" y="187" text-anchor="middle" font-size="7.7" fill="#475569">Originalbelege (BaFin-konform)</text>
+
+  <!-- Step 2: Specialized Azure AI Services -->
+  <rect x="245" y="18" width="365" height="194" rx="6" fill="#f8fafc" stroke="#0284c7" stroke-width="1.5"/>
+  <rect x="245" y="18" width="365" height="20" rx="5" fill="#0369a1"/>
+  <text x="427" y="32" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">2. Spezialisierte KI-Aufbereitung (Azure AI Services)</text>
+
+  <rect x="257" y="46" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="339" y="61" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Dokumente &amp; Rechnungen</text>
+  <text x="264" y="75" font-size="7.7" fill="#334155">• Trennt Sammel-PDFs</text>
+  <text x="264" y="88" font-size="7.7" fill="#334155">• Liest Tabellen &amp; Beträge</text>
+  <text x="264" y="101" font-size="7.7" fill="#334155">• Speichert Beleg-Fundstellen</text>
+
+  <rect x="434" y="46" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="516" y="61" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Sprache &amp; Telefonie</text>
+  <text x="441" y="75" font-size="7.7" fill="#334155">• Echtzeit-Verschriftlichung</text>
+  <text x="441" y="88" font-size="7.7" fill="#334155">• Trennung der Sprecher</text>
+  <text x="441" y="101" font-size="7.7" fill="#334155">• Erkennung von Fachbegriffen</text>
+
+  <rect x="257" y="128" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="339" y="143" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Schadensfotos &amp; Bildschutz</text>
+  <text x="264" y="157" font-size="7.7" fill="#334155">• Analyse von Unfallfotos</text>
+  <text x="264" y="170" font-size="7.7" fill="#334155">• Automatische Verpixelung</text>
+  <text x="264" y="183" font-size="7.7" fill="#334155">  unbeteiligter Dritter (DSGVO)</text>
+
+  <rect x="434" y="128" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="516" y="143" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Medizin &amp; Übersetzung</text>
+  <text x="441" y="157" font-size="7.7" fill="#334155">• Strukturierung v. Arztbriefen</text>
+  <text x="441" y="170" font-size="7.7" fill="#334155">• Layouttreue Übersetzung</text>
+  <text x="441" y="183" font-size="7.7" fill="#334155">  ausländischer Belege</text>
+
+  <!-- Step 3: Privacy Anonymizer -->
+  <rect x="638" y="18" width="210" height="194" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+  <rect x="638" y="18" width="210" height="20" rx="5" fill="#0369a1"/>
+  <text x="743" y="32" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">3. Datenschutz-Anonymisierung</text>
+  <text x="648" y="56" font-size="8.1" font-weight="700" fill="#0f172a">Schutz vor KI-Einsicht:</text>
+  <text x="648" y="71" font-size="8" fill="#334155">• Erkennt Namen, Adressen,</text>
+  <text x="648" y="84" font-size="8" fill="#334155">  Bankverbindungen &amp; Kennzeichen</text>
+  <text x="648" y="102" font-size="8" fill="#334155">• Ersetzt alle sensiblen Angaben</text>
+  <text x="648" y="115" font-size="8" fill="#334155">  durch neutrale Platzhalter</text>
+  <rect x="648" y="132" width="190" height="68" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="743" y="150" text-anchor="middle" font-size="8.1" font-weight="700" fill="#0369a1">Compliance-Effekt (DSGVO):</text>
+  <text x="743" y="165" text-anchor="middle" font-size="7.7" fill="#334155">Nachgelagerte KI-Modelle sehen</text>
+  <text x="743" y="178" text-anchor="middle" font-size="7.7" fill="#334155">niemals echte Personendaten</text>
+  <text x="743" y="191" text-anchor="middle" font-size="7.7" fill="#334155">oder Kontonummern.</text>
+
+  <!-- Step 4: Dual Output Stores -->
+  <rect x="876" y="18" width="232" height="88" rx="6" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/>
+  <rect x="876" y="18" width="232" height="19" rx="5" fill="#1e293b"/>
+  <text x="992" y="31" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">4a. Isolierter Datenschutz-Tresor</text>
+  <text x="886" y="51" font-size="7.9" fill="#334155">• Verwahrt die Klartext-Zuordnung</text>
+  <text x="886" y="65" font-size="7.9" font-weight="700" fill="#0f172a">• Für KI-Agenten strikt gesperrt</text>
+  <text x="886" y="79" font-size="7.9" fill="#334155">• Zugriff nur für Bankauszahlung,</text>
+  <text x="886" y="92" font-size="7.9" fill="#334155">  Briefversand &amp; Sachbearbeiter</text>
+
+  <rect x="876" y="124" width="232" height="88" rx="6" fill="#f8fafc" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="876" y="124" width="232" height="19" rx="5" fill="#0369a1"/>
+  <text x="992" y="137" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">4b. Anonymisierte Schadenakte</text>
+  <text x="886" y="157" font-size="7.9" fill="#334155">• Strukturierte Sach- &amp; Belegdaten</text>
+  <text x="886" y="171" font-size="7.9" fill="#334155">• Enthält Koordinaten für spätere</text>
+  <text x="886" y="184" font-size="7.9" fill="#334155">  Hervorhebungen im Originaldokument</text>
+  <text x="886" y="198" font-size="7.9" font-weight="700" fill="#0369a1">• Startet Schadenanlage &amp; KI-Agenten</text>
+
+  <!-- Orthogonal Connectors -->
+  <path d="M 217 115 H 245" fill="none" stroke="#0284c7" stroke-width="1.6" marker-end="url(#i-blue)"/>
+  <path d="M 610 115 H 638" fill="none" stroke="#0284c7" stroke-width="1.6" marker-end="url(#i-blue)"/>
+  <path d="M 848 62 H 876" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#i-slate)"/>
+  <path d="M 848 168 H 876" fill="none" stroke="#0284c7" stroke-width="1.6" marker-end="url(#i-blue)"/>
+</svg>

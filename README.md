@@ -52,10 +52,10 @@ Während theoretische Konzepte (vgl. *More & Zhang, 2026: "AI Agent-Driven Insur
 | [`docs/02-multi-agent-orchestration.md`](docs/02-multi-agent-orchestration.md) | **Teilbereich 2:** Event-Ingestion, LangGraph Checkpointing (Pause/Resume), Agenten-Rollen (Coverage, Fraud, Adjudication, Communications), Azure Foundry Shields & Langfuse. |
 | [`docs/03-data-compliance-and-hitl-ux.md`](docs/03-data-compliance-and-hitl-ux.md) | **Teilbereich 3:** Azure-Datenbanklandschaft, Datenflüsse, Edge-Case-Behandlung, DSGVO Art. 22 Asymmetrie und die Adjuster Workbench mit Bounding-Box-Grounding. |
 | [`docs/04-ide-visualization-guide.md`](docs/04-ide-visualization-guide.md) | **Anleitung:** Wie du das Typst-PDF und die IcePanel-/Eraser-/Mermaid-Diagramme direkt in **VS Code / Cursor** und im Browser live visualisierst. |
-| [`blueprint/executive-blueprint.typ`](blueprint/executive-blueprint.typ) | **Typst-Code:** Kompakter, druckfertiger 2-Seiten „Executive Architecture Blueprint“ (PDF-Generator-Code). |
-| [`diagrams/icepanel-landscape.yaml`](diagrams/icepanel-landscape.yaml) | **IcePanel Model-as-Code:** Vollständiges C4-Architekturmodell inkl. ADRs (Architecture Decision Records) und Datenflüssen zum Import in IcePanel. |
-| [`diagrams/eraser-architecture.dsl`](diagrams/eraser-architecture.dsl) | **Eraser.io Diagram-as-Code:** Cloud-Infrastruktur-Diagramm mit Azure-Icons und Datenflüssen. |
-| [`schemas/domain_models.py`](schemas/domain_models.py) | **Python / Pydantic v2 Schemas:** Referenz-Implementierung der Datenverträge, Bounding-Box-Koordinaten, Gatekeeper-Logik und Rules-Engine-Schnittstellen. |
+| [`blueprint/executive-blueprint.typ`](blueprint/executive-blueprint.typ) | **Typst-Code:** Kompakter, druckfertiger 2-Seiten „Executive Architecture Blueprint“ inkl. eingebetteter D2-Diagramme, Multi-Agent-Deep-Dive, Databricks-Integration & EU-AI-Act/DORA/DSGVO-Compliance. |
+| [`diagrams/level1-overview.d2`](diagrams/level1-overview.d2) | **D2-Diagramm 1 (`play.d2lang.com`):** End-to-End Level 1 Architektur-Übersicht (inkl. vorgerendertem [`diagrams/level1-overview.svg`](diagrams/level1-overview.svg) für Typst). |
+| [`diagrams/multi-agent-system.d2`](diagrams/multi-agent-system.d2) | **D2-Diagramm 2 (`play.d2lang.com`):** Deep-Dive in das Multi-Agenten-System, Critics, MCP-Tools, Databricks Mosaic AI & Circuit Breaker (inkl. [`diagrams/multi-agent-system.svg`](diagrams/multi-agent-system.svg)). |
+| [`docs/05-architecture-levels-and-databricks.md`](docs/05-architecture-levels-and-databricks.md) | **Architektur-Erklärung:** Ausführliche Erläuterung aller Ebenen (Level 1 bis 3H) sowie der Azure Databricks Integration. |
 
 ---
 
