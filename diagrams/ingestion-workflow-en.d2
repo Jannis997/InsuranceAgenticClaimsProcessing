@@ -1,0 +1,67 @@
+# Document Ingestion & Privacy Workflow - English (Paste into https://play.d2lang.com)
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 1
+  }
+}
+
+classes: {
+  box: {
+    style: {
+      fill: "#ffffff"
+      stroke: "#334155"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  ai: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#0284c7"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+  store: {
+    style: {
+      fill: "#f1f5f9"
+      stroke: "#1e293b"
+      stroke-width: 2
+      border-radius: 6
+      font-color: "#0f172a"
+    }
+  }
+}
+
+input: "1. Intake & Original Archive\n• Portal, App, Email & Phone\n• Peak Load Buffering (e.g., Storms)\n• Immutable Original Archiving" { class: box }
+
+ai_services: "2. Specialized AI Extraction (Azure AI Services)" {
+  style.fill: "#f8fafc"
+  style.stroke: "#cbd5e1"
+  docs: "Documents & Invoices\n• Auto-Splits Bundled PDFs\n• Extracts Tables & Source Coordinates" { class: ai }
+  speech: "Speech & Telephony\n• Automated Speech-to-Text\n• Speaker Separation & Domain Terms" { class: ai }
+  vision: "Damage Photo Analysis\n• Identifies Damaged Components\n• Estimates Damage Severity" { class: ai }
+  lang: "Medical & Translation AI\n• Structures Medical Reports\n• Layout-Preserving Doc Translation" { class: ai }
+}
+
+privacy: "3. Privacy Filter (Anonymization)\n• Replaces Names, Addresses & Bank Data\n  with Neutral Placeholders\n• Shields Customer Data from AI Models" { class: ai }
+
+outputs: "4. Audit-Proof Storage & Handover" {
+  style.fill: "#f8fafc"
+  style.stroke: "#cbd5e1"
+  vault: "Isolated Privacy Vault\n• Stores Cleartext Identity Mapping\n• Strictly Blocked for AI Agents" { class: store }
+  state: "Anonymized Claim File\n• Structured Facts & Source Coordinates\n• Triggers Claim Setup & AI Agents" { class: store }
+}
+
+input -> ai_services.docs -> privacy
+input -> ai_services.speech -> privacy
+input -> ai_services.vision -> privacy
+input -> ai_services.lang -> privacy
+
+privacy -> outputs.vault: "Confidential Mapping"
+privacy -> outputs.state: "Anonymized Claim Data"

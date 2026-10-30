@@ -55,9 +55,9 @@ vnet: "Abgesicherte Azure Cloud-Umgebung (Kein öffentlicher Internetzugang / Pr
   flow: "Operative Schaden-Prozesskette" {
     style.stroke: transparent
     style.fill: transparent
-    step1: "1. Dokumenten-Ingestion & Datenschutz\n• KI-Aufbereitung (Text, Sprache, Bild)\n• Frühe Anonymisierung persönlicher Daten" { class: accent }
-    step2: "2. Klassifikation & Schadenanlage\n• Automatische Einordnung der Schadensart\n• Bindung der historischen Vertragsbedingungen" { class: accent }
-    step3: "3. Multi-Agenten-Schadenprüfung\n• Zentrale Koordination durch Orchestrator\n• Spezial-Agenten für Deckung, Betrug & Tarif" { class: accent }
+    step1: "1. Ingestion & Datenschutz\n• Strukturierte KI-Informationsextraktion\n• Original-Archivierung & Lesbarkeitsprüfung\n• Frühe Anonymisierung persönlicher Daten" { class: accent }
+    step2: "2. Klassifikation & Schadenanlage\n• Einordnung nach Schadensart & Schwere\n• Abgleich mit Kunden- & Vertragsstamm\n• Verbindliche Anlage im Bestandssystem" { class: accent }
+    step3: "3. Multi-Agenten-Schadenprüfung\n• Zentrale Koordination durch Orchestrator\n• Spezial-Agenten für Deckung, Betrug & Rechnung" { class: accent }
     monitoring: "Qualitäts- & KI-Überwachung\n• Revisionssichere Protokollierung\n• Laufende Qualitätskontrolle" { class: card }
     step1 -> step2 -> step3
     step3 <-> monitoring
@@ -69,7 +69,7 @@ vnet: "Abgesicherte Azure Cloud-Umgebung (Kein öffentlicher Internetzugang / Pr
     data: "Zentrale Daten- & Analyseplattform (Azure & Databricks)\n• Revisionssicheres Dokumentenarchiv & separater Datenschutz-Tresor\n• Vertragsdatenbank, Bedingungssuche & Databricks Betrugs-/Simulationsanalyse" { class: platform }
     rules: "Deterministische Rechen-Engine\n• Verbindliche Tarif- & Selbstbehaltsberechnung" { class: card }
     policy: "Regelwerk-Steuerung (4-Augen)\n• Fachpflege, Simulation & Freigabe" { class: card }
-    hitl: "4. Sicherheits-Schranken & Fachprüfung (HITL)\n• Keine automatische Ablehnung ohne Mensch\n• Direkte Umsetzung nach Sachentscheidung" { class: card }
+    hitl: "4. Sicherheits-Schranken & Fachprüfung (HITL)\n• Keine automatische Ablehnung ohne Mensch\n• Aufbereitete Akte mit Beleg-Markierungen" { class: card }
     outcomes: "Ergebnisse der Schadenbearbeitung\n1. Dunkelverarbeitung (STP) | 2. Kunden-Rückfrage | 3. Fachentscheid (HITL)" { class: platform }
     policy -> rules
     hitl -> outcomes

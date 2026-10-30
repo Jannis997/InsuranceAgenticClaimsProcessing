@@ -1,165 +1,129 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 356" width="100%" height="100%" font-family="Inter, Segoe UI, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 330" width="100%" height="100%" font-family="Inter, Segoe UI, Arial, sans-serif">
   <defs>
-    <marker id="arr-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+    <marker id="a-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
       <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#475569"/>
     </marker>
-    <marker id="arr-teal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#0f766e"/>
-    </marker>
-    <marker id="arr-rose" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#be123c"/>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#0284c7"/>
     </marker>
   </defs>
 
-  <!-- Clean White Canvas -->
-  <rect width="1120" height="356" rx="6" fill="#ffffff"/>
+  <rect width="1120" height="330" rx="6" fill="#ffffff"/>
 
-  <!-- Left Column: External Actors & Omnichannel -->
-  <rect x="12" y="24" width="142" height="50" rx="6" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
-  <rect x="12" y="24" width="5" height="50" rx="2" fill="#334155"/>
-  <text x="85" y="45" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">Policyholder (Claimant)</text>
-  <text x="85" y="60" text-anchor="middle" font-size="8.5" fill="#475569">Submits Claim &amp; Docs</text>
+  <!-- Left External Column -->
+  <rect x="12" y="22" width="142" height="48" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <text x="83" y="42" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a">Policyholder</text>
+  <text x="83" y="57" text-anchor="middle" font-size="8.2" fill="#475569">Submits Claim &amp; Docs</text>
 
-  <rect x="12" y="96" width="142" height="56" rx="6" fill="#f8fafc" stroke="#0369a1" stroke-width="1.5"/>
-  <rect x="12" y="96" width="5" height="56" rx="2" fill="#0369a1"/>
-  <text x="85" y="116" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">Omnichannel &amp; IVR</text>
-  <text x="85" y="130" text-anchor="middle" font-size="8.3" fill="#475569">Web, App, Email, Chat,</text>
-  <text x="85" y="142" text-anchor="middle" font-size="8.3" fill="#475569">Voice Live Telephony</text>
+  <rect x="12" y="90" width="142" height="52" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <text x="83" y="110" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a">Input Channels</text>
+  <text x="83" y="124" text-anchor="middle" font-size="8.2" fill="#475569">Portal, App, Email, Phone</text>
 
-  <rect x="12" y="264" width="142" height="68" rx="6" fill="#fff1f2" stroke="#be123c" stroke-width="1.5"/>
-  <rect x="12" y="264" width="5" height="68" rx="2" fill="#be123c"/>
-  <text x="85" y="286" text-anchor="middle" font-size="10" font-weight="700" fill="#881337">Specialist Adjuster</text>
-  <text x="85" y="301" text-anchor="middle" font-size="8.3" fill="#9f1239">Reviews HITL Cases with</text>
-  <text x="85" y="314" text-anchor="middle" font-size="8.3" fill="#9f1239">BBox Source Grounding</text>
+  <rect x="12" y="246" width="142" height="62" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <text x="83" y="268" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a">Specialist Adjuster</text>
+  <text x="83" y="283" text-anchor="middle" font-size="8.1" fill="#475569">Reviews Escalated Cases</text>
+  <text x="83" y="295" text-anchor="middle" font-size="8.1" fill="#475569">with Source Highlights</text>
 
-  <!-- Isolated Azure Spoke VNet Container -->
-  <rect x="174" y="8" width="936" height="340" rx="8" fill="#f8fafc" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="6,4"/>
-  <text x="190" y="26" font-size="10.5" font-weight="700" fill="#0369a1">Azure Virtual Network (Isolated Spoke 10.42.0.0/16 — Zero Public Access / 100% Azure Private Link &amp; CMK)</text>
+  <!-- Isolated Azure VNet Perimeter -->
+  <rect x="174" y="8" width="934" height="314" rx="8" fill="#f8fafc" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="6,4"/>
+  <text x="190" y="25" font-size="10" font-weight="700" fill="#0369a1">Secured Azure Cloud Environment (Zero Public Internet Access / 100% Private Network Connectivity)</text>
 
-  <!-- ROW 1: CORE PROCESSING PIPELINE (y=38..136, h=98) -->
-  <!-- Stage 1 -->
-  <rect x="190" y="38" width="202" height="98" rx="6" fill="#ffffff" stroke="#0369a1" stroke-width="1.5"/>
-  <rect x="190" y="38" width="202" height="20" rx="5" fill="#0369a1"/>
-  <text x="291" y="52" text-anchor="middle" font-size="9.3" font-weight="700" fill="#ffffff">1. Ingestion &amp; PII-Tokenization</text>
-  <text x="198" y="69" font-size="8.2" fill="#334155">• Front Door WAF, APIM &amp; Event Hub</text>
-  <text x="198" y="82" font-size="8.2" fill="#334155">• Content Understanding &amp; Doc Intel v4</text>
-  <text x="198" y="95" font-size="8.2" fill="#334155">• Speech MAI-Transcribe-2 &amp; Face Blur</text>
-  <text x="198" y="108" font-size="8.2" fill="#334155">• Language PII &amp; Health FHIR Bundles</text>
-  <text x="198" y="122" font-size="8.2" font-weight="700" fill="#0369a1">• Early PII Tokenizer (&lt;PII:IBAN_1&gt;)</text>
+  <!-- ROW 1: CORE WORKFLOW STAGES (y=36..124, h=88) -->
+  <rect x="190" y="36" width="202" height="88" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="190" y="36" width="202" height="19" rx="4" fill="#0369a1"/>
+  <text x="291" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">1. Ingestion &amp; Data Privacy</text>
+  <text x="198" y="66" font-size="8.1" fill="#334155">• Intake Across All Document &amp; Voice Channels</text>
+  <text x="198" y="80" font-size="8.1" fill="#334155">• Structured AI Information Extraction</text>
+  <text x="198" y="94" font-size="8.1" fill="#334155">• Original Archive &amp; Readability Check</text>
+  <text x="198" y="108" font-size="8.1" font-weight="700" fill="#0369a1">• Early Anonymization of Personal Data</text>
 
-  <!-- Stage 2 -->
-  <rect x="414" y="38" width="202" height="98" rx="6" fill="#ffffff" stroke="#0369a1" stroke-width="1.5"/>
-  <rect x="414" y="38" width="202" height="20" rx="5" fill="#0369a1"/>
-  <text x="515" y="52" text-anchor="middle" font-size="9.3" font-weight="700" fill="#ffffff">2. Classification &amp; Claim Setup</text>
-  <text x="422" y="69" font-size="8.2" fill="#334155">• OCR Confidence Gate (&gt;= 0.80)</text>
-  <text x="422" y="82" font-size="8.2" fill="#334155">• Microsoft-Decision-1 (SystemOne)</text>
-  <text x="422" y="95" font-size="8.2" fill="#334155">  (choice, score, bodilyInjury noul)</text>
-  <text x="422" y="108" font-size="8.2" font-weight="700" fill="#0369a1">• Historical AvbVersionId Binding</text>
-  <text x="422" y="122" font-size="8.2" fill="#334155">• Deterministic PAS Claim Creation</text>
+  <rect x="414" y="36" width="202" height="88" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="414" y="36" width="202" height="19" rx="4" fill="#0369a1"/>
+  <text x="515" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">2. Classification &amp; Claim Setup</text>
+  <text x="422" y="66" font-size="8.1" fill="#334155">• Categorization by Claim Type &amp; Severity</text>
+  <text x="422" y="80" font-size="8.1" fill="#334155">• Customer &amp; Policy Master Data Match</text>
+  <text x="422" y="94" font-size="8.1" font-weight="700" fill="#0369a1">• Binding Applicable Policy Terms</text>
+  <text x="422" y="108" font-size="8.1" fill="#334155">• Binding Claim Creation in Core System</text>
 
-  <!-- Stage 3 -->
-  <rect x="642" y="38" width="252" height="98" rx="6" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
-  <rect x="642" y="38" width="252" height="20" rx="5" fill="#0f766e"/>
-  <text x="768" y="52" text-anchor="middle" font-size="9.3" font-weight="700" fill="#ffffff">3. Multi-Agent Claim Processing</text>
-  <text x="650" y="69" font-size="8.2" fill="#334155">• Service Bus Queue (session: claimId)</text>
-  <text x="650" y="82" font-size="8.2" font-weight="700" fill="#0f766e">• Magentic Claims Orchestrator</text>
-  <text x="650" y="95" font-size="8.2" fill="#334155">• 5 Hosted Agents (Customer, Coverage,</text>
-  <text x="650" y="108" font-size="8.2" fill="#334155">  Fraud, Adjudication, Financial)</text>
-  <text x="650" y="122" font-size="8.2" fill="#334155">• Critics, Prompt Shields &amp; PTU Spillover</text>
+  <rect x="642" y="36" width="252" height="88" rx="5" fill="#ffffff" stroke="#1e293b" stroke-width="1.6"/>
+  <rect x="642" y="36" width="252" height="19" rx="4" fill="#1e293b"/>
+  <text x="768" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">3. Multi-Agent Claim Review</text>
+  <text x="650" y="66" font-size="8.1" font-weight="700" fill="#0f172a">• Central Orchestrator Drives Processing</text>
+  <text x="650" y="80" font-size="8.1" fill="#334155">• 5 Specialized Agents (Customer, Coverage,</text>
+  <text x="650" y="94" font-size="8.1" fill="#334155">  Fraud Review, Invoice &amp; Payout)</text>
+  <text x="650" y="108" font-size="8.1" fill="#334155">• Internal Review Agents &amp; AI Guardrails</text>
 
-  <!-- Langfuse -->
-  <rect x="920" y="38" width="174" height="98" rx="6" fill="#ffffff" stroke="#475569" stroke-width="1.5"/>
-  <rect x="920" y="38" width="174" height="20" rx="5" fill="#334155"/>
-  <text x="1007" y="52" text-anchor="middle" font-size="9.3" font-weight="700" fill="#ffffff">Langfuse LLMOps &amp; Eval</text>
-  <text x="928" y="69" font-size="8.2" fill="#334155">• OTel Collector &amp; PII Guard</text>
-  <text x="928" y="82" font-size="8.2" fill="#334155">• Prompt &amp; Playbook Registry</text>
-  <text x="928" y="95" font-size="8.2" fill="#334155">• RAG Triad (Groundedness,</text>
-  <text x="928" y="108" font-size="8.2" fill="#334155">  Relevance, NDCG@3)</text>
-  <text x="928" y="122" font-size="8.2" fill="#334155">• Golden Dataset Sync</text>
+  <rect x="920" y="36" width="174" height="88" rx="5" fill="#ffffff" stroke="#475569" stroke-width="1.4"/>
+  <rect x="920" y="36" width="174" height="19" rx="4" fill="#475569"/>
+  <text x="1007" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">AI Monitoring (Langfuse)</text>
+  <text x="928" y="66" font-size="8.1" fill="#334155">• Privacy-Compliant Audit Logging</text>
+  <text x="928" y="80" font-size="8.1" fill="#334155">• Central Prompt &amp; Playbook Mgmt</text>
+  <text x="928" y="94" font-size="8.1" fill="#334155">• Continuous Quality Evaluation</text>
+  <text x="928" y="108" font-size="8.1" fill="#334155">• Learning from Adjuster Feedback</text>
 
-  <!-- ROW 2: DATA SPINE, RULES ENGINE & POLICY MANAGEMENT (y=164..238, h=74) -->
-  <!-- Consolidated Data Spine -->
-  <rect x="190" y="164" width="426" height="74" rx="6" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.6"/>
-  <rect x="190" y="164" width="426" height="19" rx="5" fill="#1e293b"/>
-  <text x="403" y="177" text-anchor="middle" font-size="9.2" font-weight="700" fill="#ffffff">Secured Azure Data, Knowledge &amp; Databricks Platform (100% Private Link)</text>
-  <text x="403" y="194" text-anchor="middle" font-size="8" fill="#1e293b">1. Blob raw-artifacts (WORM) | 2. Blob extracted-state (JSON + BBoxes) | 3. Cosmos DB (Dossiers &amp; PII Vault)</text>
-  <text x="403" y="208" text-anchor="middle" font-size="8" fill="#1e293b">4. Azure AI Search (Hybrid BM25 + HNSW SQ8 + L2 Reranker) | 5. Azure SQL (PAS Policies &amp; AvbVersionId)</text>
-  <text x="403" y="223" text-anchor="middle" font-size="8.1" font-weight="700" fill="#b45309">6. NEW: Azure Databricks Lakehouse &amp; Mosaic AI (Unity Catalog, 500k+ Spark Backtest, GraphFrames Fraud)</text>
+  <!-- ROW 2: DATA PLATFORM & RULES ENGINE (y=152..220, h=68) -->
+  <rect x="190" y="152" width="426" height="68" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+  <rect x="190" y="152" width="426" height="18" rx="4" fill="#334155"/>
+  <text x="403" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Central Data, Knowledge &amp; Analytics Platform (Azure &amp; Databricks)</text>
+  <text x="403" y="181" text-anchor="middle" font-size="8" fill="#1e293b">• Audit-Proof Original Archive, Operational Claim File &amp; Strictly Isolated Privacy Vault</text>
+  <text x="403" y="195" text-anchor="middle" font-size="8" fill="#1e293b">• Policy Administration System (SQL) &amp; Policy Terms Knowledge Base (Azure AI Search)</text>
+  <text x="403" y="209" text-anchor="middle" font-size="8" font-weight="700" fill="#0369a1">• Azure Databricks: Cross-Claim Fraud Network Detection, Rule Simulation &amp; Actuarial Data</text>
 
-  <!-- Deterministic Rules Runtime -->
-  <rect x="642" y="164" width="252" height="74" rx="6" fill="#ffffff" stroke="#b45309" stroke-width="1.5"/>
-  <rect x="642" y="164" width="252" height="19" rx="5" fill="#b45309"/>
-  <text x="768" y="177" text-anchor="middle" font-size="9.2" font-weight="700" fill="#ffffff">Deterministic Rules Runtime</text>
-  <text x="650" y="195" font-size="8.2" fill="#334155">• Unified Versioned Rule Repository</text>
-  <text x="650" y="209" font-size="8.2" fill="#334155">• Historical AVB &amp; Corporate Policies</text>
-  <text x="650" y="223" font-size="8.2" font-weight="700" fill="#b45309">• Exact Tariff, Cap &amp; Deductible Math</text>
+  <rect x="642" y="152" width="252" height="68" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
+  <rect x="642" y="152" width="252" height="18" rx="4" fill="#334155"/>
+  <text x="768" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Deterministic Calculation Engine</text>
+  <text x="650" y="182" font-size="8.1" fill="#334155">• Unified, Versioned Rule Repository</text>
+  <text x="650" y="196" font-size="8.1" fill="#334155">• Binding Limit, Cap &amp; Deductible Math</text>
+  <text x="650" y="210" font-size="8.1" font-weight="700" fill="#0f172a">• Zero AI Estimation on Monetary Payouts</text>
 
-  <!-- Policy Management -->
-  <rect x="920" y="164" width="174" height="74" rx="6" fill="#ffffff" stroke="#b45309" stroke-width="1.5"/>
-  <rect x="920" y="164" width="174" height="19" rx="5" fill="#92400e"/>
-  <text x="1007" y="177" text-anchor="middle" font-size="9.2" font-weight="700" fill="#ffffff">Policy Management</text>
-  <text x="928" y="195" font-size="8.1" fill="#334155">• NL-to-DSL &amp; Z3 SMT Solver</text>
-  <text x="928" y="209" font-size="8.1" fill="#334155">• Databricks 500k Backtest</text>
-  <text x="928" y="223" font-size="8.1" font-weight="700" fill="#92400e">• 4-Eyes Risk Sign-Off</text>
+  <rect x="920" y="152" width="174" height="68" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
+  <rect x="920" y="152" width="174" height="18" rx="4" fill="#475569"/>
+  <text x="1007" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Policy Management</text>
+  <text x="928" y="182" font-size="8" fill="#334155">• Business Rule Authoring</text>
+  <text x="928" y="196" font-size="8" fill="#334155">• Conflict Check &amp; Simulation</text>
+  <text x="928" y="210" font-size="8" font-weight="700" fill="#0f172a">• Mandatory 4-Eyes Approval</text>
 
-  <!-- ROW 3: CIRCUIT BREAKER / HITL & OUTCOMES (y=264..336, h=72) -->
-  <!-- Stage 4: Governance & HITL -->
-  <rect x="190" y="264" width="265" height="72" rx="6" fill="#fff1f2" stroke="#be123c" stroke-width="1.5"/>
-  <rect x="190" y="264" width="265" height="19" rx="5" fill="#be123c"/>
-  <text x="322" y="277" text-anchor="middle" font-size="9.2" font-weight="700" fill="#ffffff">4. Circuit Breaker &amp; HITL Platform</text>
-  <text x="198" y="294" font-size="8.1" fill="#881337">• Asymmetrical: Auto-Reject Strictly Blocked</text>
-  <text x="198" y="307" font-size="8.1" fill="#881337">• Path 1 (OCR Fix): Resume Orchestrator</text>
-  <text x="198" y="321" font-size="8.1" font-weight="700" fill="#881337">• Path 2 (Decision): Direct Executor (No LLM)</text>
+  <!-- ROW 3: HITL & OUTCOMES (y=246..310, h=64) -->
+  <rect x="190" y="246" width="265" height="64" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+  <rect x="190" y="246" width="265" height="18" rx="4" fill="#1e293b"/>
+  <text x="322" y="258" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">4. Safety Guardrails &amp; Human Review (HITL)</text>
+  <text x="198" y="275" font-size="8" font-weight="700" fill="#0f172a">• No Automated Rejection (GDPR Art. 22)</text>
+  <text x="198" y="288" font-size="8" fill="#334155">• Escalation on High Value, Fraud &amp; Ambiguity</text>
+  <text x="198" y="301" font-size="8" fill="#334155">• Decision Brief with Source Highlighting</text>
 
-  <!-- Outcomes -->
-  <rect x="482" y="264" width="612" height="72" rx="6" fill="#ffffff" stroke="#0f766e" stroke-width="1.5"/>
-  <rect x="482" y="264" width="612" height="19" rx="5" fill="#1e293b"/>
-  <text x="788" y="277" text-anchor="middle" font-size="9.2" font-weight="700" fill="#ffffff">Defined Claims Processing Outcomes (3 Terminal States)</text>
+  <rect x="482" y="246" width="612" height="64" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <rect x="482" y="246" width="612" height="18" rx="4" fill="#0369a1"/>
+  <text x="788" y="258" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Defined Claims Processing Outcomes</text>
 
-  <rect x="494" y="289" width="188" height="40" rx="4" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2"/>
-  <text x="588" y="305" text-anchor="middle" font-size="8.8" font-weight="700" fill="#115e59">1. STP Dark Processing</text>
-  <text x="588" y="319" text-anchor="middle" font-size="7.8" fill="#0f766e">Auto SEPA Payout &amp; EOB Letter</text>
+  <rect x="494" y="269" width="188" height="35" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="1.2"/>
+  <text x="588" y="284" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0f172a">1. Dark Processing (STP)</text>
+  <text x="588" y="297" text-anchor="middle" font-size="7.6" fill="#475569">Direct Payout &amp; Settlement Letter</text>
 
-  <rect x="694" y="289" width="188" height="40" rx="4" fill="#f8fafc" stroke="#0369a1" stroke-width="1.2"/>
-  <text x="788" y="305" text-anchor="middle" font-size="8.8" font-weight="700" fill="#0c4a6e">2. Customer Comm Loop</text>
-  <text x="788" y="319" text-anchor="middle" font-size="7.8" fill="#0369a1">Checklist Doc Request (Paused)</text>
+  <rect x="694" y="269" width="188" height="35" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+  <text x="788" y="284" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0f172a">2. Customer Dialogue Loop</text>
+  <text x="788" y="297" text-anchor="middle" font-size="7.6" fill="#475569">Targeted Follow-Up for Missing Docs</text>
 
-  <rect x="894" y="289" width="188" height="40" rx="4" fill="#fff1f2" stroke="#be123c" stroke-width="1.2"/>
-  <text x="988" y="305" text-anchor="middle" font-size="8.8" font-weight="700" fill="#881337">3. HITL Resolution</text>
-  <text x="988" y="319" text-anchor="middle" font-size="7.8" fill="#be123c">Finalized by Specialist Adjuster</text>
+  <rect x="894" y="269" width="188" height="35" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+  <text x="988" y="284" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0f172a">3. Specialist Resolution (HITL)</text>
+  <text x="988" y="297" text-anchor="middle" font-size="7.6" fill="#475569">Final Decision by Human Adjuster</text>
 
-  <!-- ORTHOGONAL ROUTING CHANNELS (ZERO NODE CROSSINGS!) -->
-  <!-- Claimant -> Omnichannel -->
-  <path d="M 83 74 V 96" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
-  <!-- Omnichannel -> Stage 1 -->
-  <path d="M 154 115 H 190" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
-  <!-- Stage 1 -> Stage 2 -->
-  <path d="M 392 87 H 414" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
-  <!-- Stage 2 -> Stage 3 -->
-  <path d="M 616 87 H 642" fill="none" stroke="#0f766e" stroke-width="1.6" marker-end="url(#arr-teal)"/>
-  <!-- Stage 3 <-> Langfuse -->
-  <path d="M 894 87 H 920" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
+  <!-- ORTHOGONAL CONNECTORS -->
+  <path d="M 83 70 V 90" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 154 106 H 190" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <path d="M 392 80 H 414" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <path d="M 616 80 H 642" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
+  <path d="M 894 80 H 920" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
 
-  <!-- Stage 1 -> Data Spine (Vertical) -->
-  <path d="M 291 136 V 164" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
-  <!-- Stage 2 -> Data Spine (Vertical) -->
-  <path d="M 515 136 V 164" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
-  <!-- Stage 3 -> Data Spine (Orthogonal via Corridor 1 y=150) -->
-  <path d="M 672 136 V 150 H 585 V 164" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arr-teal)"/>
+  <path d="M 291 124 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 515 124 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 672 124 V 138 H 585 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
 
-  <!-- Stage 3 <-> Rules Engine (Direct Vertical) -->
-  <path d="M 768 136 V 164" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
-  <!-- Policy Management -> Rules Engine (Direct Horizontal) -->
-  <path d="M 920 201 H 894" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#arr-slate)"/>
+  <path d="M 768 124 V 152" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 920 186 H 894" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
 
-  <!-- Stage 3 -> Circuit Breaker / HITL (Orthogonal via vertical corridor x=629 and horizontal corridor y=251) -->
-  <path d="M 652 136 V 150 H 629 V 251 H 322 V 264" fill="none" stroke="#be123c" stroke-width="1.5" marker-end="url(#arr-rose)"/>
+  <path d="M 652 124 V 138 H 629 V 233 H 322 V 246" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 875 124 V 138 H 907 V 246" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#a-blue)"/>
 
-  <!-- Stage 3 -> Outcomes (Orthogonal via vertical corridor x=907) -->
-  <path d="M 875 136 V 150 H 907 V 264" fill="none" stroke="#0f766e" stroke-width="1.6" marker-end="url(#arr-teal)"/>
-
-  <!-- HITL <-> Adjuster (Direct Horizontal) -->
-  <path d="M 190 298 H 154" fill="none" stroke="#be123c" stroke-width="1.5" marker-end="url(#arr-rose)"/>
-  <!-- HITL -> Outcomes (Direct Horizontal) -->
-  <path d="M 455 298 H 482" fill="none" stroke="#be123c" stroke-width="1.5" marker-end="url(#arr-rose)"/>
+  <path d="M 190 278 H 154" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
+  <path d="M 455 278 H 482" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#a-slate)"/>
 </svg>

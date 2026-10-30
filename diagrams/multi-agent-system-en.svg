@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 348" width="100%" height="100%" font-family="Inter, Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="m-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#475569"/>
+    </marker>
+    <marker id="m-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#0284c7"/>
+    </marker>
+  </defs>
+
+  <rect width="1120" height="348" rx="6" fill="#ffffff"/>
+
+  <!-- TOP ROW: CONTROL PLANE (y=10..76, h=66) -->
+  <rect x="14" y="10" width="180" height="66" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <rect x="14" y="10" width="180" height="18" rx="4" fill="#334155"/>
+  <text x="104" y="22" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">0. Processing Queue</text>
+  <text x="104" y="40" text-anchor="middle" font-size="8" fill="#334155">Ordered Case Handover</text>
+  <text x="104" y="54" text-anchor="middle" font-size="8" font-weight="700" fill="#0f172a">Strict Sequence per Claim</text>
+  <text x="104" y="67" text-anchor="middle" font-size="7.6" fill="#475569">Decouples Peak Loads</text>
+
+  <rect x="218" y="10" width="186" height="66" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
+  <rect x="218" y="10" width="186" height="18" rx="4" fill="#334155"/>
+  <text x="311" y="22" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">1. Claim-Type Preparation</text>
+  <text x="311" y="40" text-anchor="middle" font-size="8" fill="#334155">Loads Document Checklist</text>
+  <text x="311" y="54" text-anchor="middle" font-size="8" fill="#334155">&amp; Review Plan by Line</text>
+  <text x="311" y="67" text-anchor="middle" font-size="7.6" font-weight="700" fill="#0369a1">(e.g., Glass, Water, Auto)</text>
+
+  <rect x="428" y="10" width="390" height="66" rx="5" fill="#f8fafc" stroke="#0284c7" stroke-width="1.7"/>
+  <rect x="428" y="10" width="390" height="18" rx="4" fill="#0369a1"/>
+  <text x="623" y="22" text-anchor="middle" font-size="9.4" font-weight="700" fill="#ffffff">2. Central Claims Orchestrator (Process Control)</text>
+  <text x="623" y="39" text-anchor="middle" font-size="8" fill="#0f172a">• Coordinates All 5 Specialized Agents Step-by-Step According to Review Plan</text>
+  <text x="623" y="52" text-anchor="middle" font-size="8" fill="#334155">• Guardrails Against Manipulated Documents &amp; Unsubstantiated Claims</text>
+  <text x="623" y="65" text-anchor="middle" font-size="8" font-weight="700" fill="#0369a1">• Seamlessly Pauses Workflows When Follow-Up Documents Are Requested</text>
+
+  <rect x="842" y="10" width="264" height="66" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+  <rect x="842" y="10" width="264" height="18" rx="4" fill="#1e293b"/>
+  <text x="974" y="22" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">Safety Guardrail &amp; HITL Handover</text>
+  <text x="850" y="39" font-size="8" font-weight="700" fill="#0f172a">• No Automated Rejection (GDPR)</text>
+  <text x="850" y="52" font-size="8" fill="#334155">• Stops AI on Fraud Suspicion &amp; Limits</text>
+  <text x="850" y="65" font-size="8" font-weight="700" fill="#0369a1">• Handover to Specialist Adjuster</text>
+
+  <!-- MIDDLE ROW: 5 SPECIALIZED AGENTS (y=102..232, h=130) -->
+  <rect x="14" y="102" width="202" height="130" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="14" y="102" width="202" height="18" rx="4" fill="#0369a1"/>
+  <text x="115" y="114" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">A1. Customer Communication</text>
+  <rect x="22" y="126" width="186" height="25" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="115" y="137" text-anchor="middle" font-size="7.8" font-weight="700" fill="#0f172a">Internal Quality &amp; Citation Check</text>
+  <text x="115" y="147" text-anchor="middle" font-size="7.3" fill="#475569">Verifies Every Letter Before Dispatch</text>
+  <text x="22" y="166" font-size="7.9" fill="#334155">• Checks Document Completeness</text>
+  <text x="22" y="181" font-size="7.9" fill="#334155">• Requests Missing Documents</text>
+  <text x="22" y="196" font-size="7.9" font-weight="700" fill="#0f172a">• Drafts Settlement Letters</text>
+  <text x="22" y="211" font-size="7.5" fill="#475569">  incl. Applicable Policy Citations</text>
+
+  <rect x="234" y="102" width="202" height="130" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="234" y="102" width="202" height="18" rx="4" fill="#0369a1"/>
+  <text x="335" y="114" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">A2. Coverage Pre-Check</text>
+  <rect x="242" y="126" width="186" height="25" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="335" y="137" text-anchor="middle" font-size="7.8" font-weight="700" fill="#0f172a">Qualitative Clause Matching</text>
+  <text x="335" y="147" text-anchor="middle" font-size="7.3" fill="#475569">Prepares Facts for Calculation Engine</text>
+  <text x="242" y="166" font-size="7.9" fill="#334155">• Reads Policy Status &amp; Modules</text>
+  <text x="242" y="181" font-size="7.9" font-weight="700" fill="#0f172a">• Matches Cause of Loss Against</text>
+  <text x="242" y="194" font-size="7.9" font-weight="700" fill="#0f172a">  Applicable Policy Terms (AVB)</text>
+  <text x="242" y="211" font-size="7.9" fill="#334155">• Flags Relevant Exclusions</text>
+
+  <rect x="454" y="102" width="202" height="130" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="454" y="102" width="202" height="18" rx="4" fill="#0369a1"/>
+  <text x="555" y="114" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">A3. Fraud &amp; Risk Review</text>
+  <rect x="462" y="126" width="186" height="25" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="555" y="137" text-anchor="middle" font-size="7.8" font-weight="700" fill="#0f172a">Document &amp; Network Check</text>
+  <text x="555" y="147" text-anchor="middle" font-size="7.3" fill="#475569">Single-Case + Databricks Query</text>
+  <text x="462" y="166" font-size="7.9" fill="#334155">• Checks Photos for Duplicates</text>
+  <text x="462" y="181" font-size="7.9" fill="#334155">• Reviews Prior Claims History</text>
+  <text x="462" y="196" font-size="7.9" font-weight="700" fill="#0f172a">• Queries Fraud Network Score</text>
+  <text x="462" y="209" font-size="7.9" font-weight="700" fill="#0f172a">  (Workshop / Appraiser Patterns)</text>
+
+  <rect x="674" y="102" width="206" height="130" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="674" y="102" width="206" height="18" rx="4" fill="#0369a1"/>
+  <text x="777" y="114" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">A4. Invoice &amp; Line-Item Review</text>
+  <rect x="682" y="126" width="190" height="25" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="777" y="137" text-anchor="middle" font-size="7.8" font-weight="700" fill="#0f172a">Internal Line-Item Validation</text>
+  <text x="777" y="147" text-anchor="middle" font-size="7.3" fill="#475569">Verifies Mapped Service Categories</text>
+  <text x="682" y="166" font-size="7.9" fill="#334155">• Maps Invoice Lines to Standardized</text>
+  <text x="682" y="179" font-size="7.9" fill="#334155">  Repair &amp; Service Positions</text>
+  <text x="682" y="196" font-size="7.9" font-weight="700" fill="#0f172a">• Hands Over to Calculation Engine</text>
+  <text x="682" y="209" font-size="7.5" fill="#475569">  for Binding Payout Calculation</text>
+
+  <rect x="898" y="102" width="208" height="130" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+  <rect x="898" y="102" width="208" height="18" rx="4" fill="#0369a1"/>
+  <text x="1002" y="114" text-anchor="middle" font-size="8.8" font-weight="700" fill="#ffffff">A5. Payout &amp; Accounting</text>
+  <rect x="906" y="126" width="192" height="25" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="1002" y="137" text-anchor="middle" font-size="7.8" font-weight="700" fill="#0f172a">Protected Payout Release</text>
+  <text x="1002" y="147" text-anchor="middle" font-size="7.3" fill="#475569">Active Only on Full STP Approval</text>
+  <text x="906" y="166" font-size="7.9" fill="#334155">• Updates Claim Reserves</text>
+  <text x="906" y="181" font-size="7.9" font-weight="700" fill="#0f172a">• Resolves IBAN in Privacy Vault</text>
+  <text x="906" y="196" font-size="7.9" fill="#334155">• Posts SEPA Disbursement in SAP</text>
+  <text x="906" y="211" font-size="7.9" fill="#334155">• Closes Claim File as Settled</text>
+
+  <!-- BOTTOM ROW: 1:1 ALIGNED SYSTEM & DATA ACCESS PER AGENT (y=258..338, h=80) -->
+  <rect x="14" y="258" width="202" height="80" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/>
+  <rect x="14" y="258" width="202" height="17" rx="4" fill="#334155"/>
+  <text x="115" y="269" text-anchor="middle" font-size="8.2" font-weight="700" fill="#ffffff">Claim File, Policy Search &amp; Vault</text>
+  <text x="22" y="286" font-size="7.6" fill="#334155">• Reads Open Checklist from File</text>
+  <text x="22" y="300" font-size="7.6" font-weight="700" fill="#0369a1">• Pulls AVB Citations (Azure AI Search)</text>
+  <text x="22" y="314" font-size="7.6" font-weight="700" fill="#0f172a">• Resolves Address Only Upon Dispatch</text>
+  <text x="22" y="327" font-size="7.4" fill="#475569">  (Controlled Privacy Vault Lookup)</text>
+
+  <rect x="234" y="258" width="202" height="80" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/>
+  <rect x="234" y="258" width="202" height="17" rx="4" fill="#334155"/>
+  <text x="335" y="269" text-anchor="middle" font-size="8.2" font-weight="700" fill="#ffffff">Policy System &amp; Terms Base</text>
+  <text x="242" y="286" font-size="7.6" font-weight="700" fill="#0f172a">• Reads Policy &amp; Modules (SQL)</text>
+  <text x="242" y="300" font-size="7.6" fill="#334155">• Searches Coverage &amp; Exclusion</text>
+  <text x="242" y="313" font-size="7.6" fill="#334155">  Clauses of Contract Generation</text>
+  <text x="242" y="327" font-size="7.4" font-weight="700" fill="#0369a1">  in Azure AI Search</text>
+
+  <rect x="454" y="258" width="202" height="80" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/>
+  <rect x="454" y="258" width="202" height="17" rx="4" fill="#334155"/>
+  <text x="555" y="269" text-anchor="middle" font-size="8.2" font-weight="700" fill="#ffffff">Image Archive, Policy DB &amp; Databricks</text>
+  <text x="462" y="286" font-size="7.6" fill="#334155">• Checks Photo Hashes in Raw Archive</text>
+  <text x="462" y="300" font-size="7.6" fill="#334155">• Reads Prior Claims in Policy DB</text>
+  <text x="462" y="314" font-size="7.6" font-weight="700" fill="#0f172a">• Queries Azure Databricks for</text>
+  <text x="462" y="327" font-size="7.6" font-weight="700" fill="#0369a1">  Real-Time Fraud Network Score</text>
+
+  <rect x="674" y="258" width="206" height="80" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/>
+  <rect x="674" y="258" width="206" height="17" rx="4" fill="#334155"/>
+  <text x="777" y="269" text-anchor="middle" font-size="8.2" font-weight="700" fill="#ffffff">Repair Guidelines &amp; Calc Engine</text>
+  <text x="682" y="286" font-size="7.6" fill="#334155">• Matches Repair Guidelines</text>
+  <text x="682" y="300" font-size="7.6" font-weight="700" fill="#0f172a">• Passes Standardized Items to</text>
+  <text x="682" y="313" font-size="7.6" font-weight="700" fill="#0f172a">  Deterministic Calculation Engine</text>
+  <text x="682" y="327" font-size="7.4" fill="#475569">• Receives Exact Binding Payout</text>
+
+  <rect x="898" y="258" width="208" height="80" rx="5" fill="#f1f5f9" stroke="#334155" stroke-width="1.4"/>
+  <rect x="898" y="258" width="208" height="17" rx="4" fill="#334155"/>
+  <text x="1002" y="269" text-anchor="middle" font-size="8.2" font-weight="700" fill="#ffffff">Privacy Vault, Policy DB &amp; SAP</text>
+  <text x="906" y="286" font-size="7.6" font-weight="700" fill="#0f172a">• Resolves IBAN in Privacy Vault</text>
+  <text x="906" y="300" font-size="7.6" font-weight="700" fill="#0369a1">• Executes SEPA Payment in SAP</text>
+  <text x="906" y="314" font-size="7.6" fill="#334155">• Updates Claim Reserve &amp;</text>
+  <text x="906" y="327" font-size="7.6" fill="#334155">  Closes File in Policy System</text>
+
+  <!-- ORTHOGONAL BUS ROUTING -->
+  <path d="M 194 43 H 218" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+  <path d="M 404 43 H 428" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#m-blue)"/>
+  <path d="M 818 43 H 842" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+
+  <!-- Orchestrator to 5 Agents -->
+  <path d="M 623 76 V 89" fill="none" stroke="#0284c7" stroke-width="1.6"/>
+  <path d="M 115 89 H 1002" fill="none" stroke="#0284c7" stroke-width="1.5"/>
+  <path d="M 115 89 V 102" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#m-blue)"/>
+  <path d="M 335 89 V 102" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#m-blue)"/>
+  <path d="M 555 89 V 102" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#m-blue)"/>
+  <path d="M 777 89 V 102" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#m-blue)"/>
+  <path d="M 1002 89 V 102" fill="none" stroke="#0284c7" stroke-width="1.5" marker-end="url(#m-blue)"/>
+
+  <!-- Direct 1:1 Vertical Connectors -->
+  <path d="M 115 232 V 258" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+  <path d="M 335 232 V 258" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+  <path d="M 555 232 V 258" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+  <path d="M 777 232 V 258" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+  <path d="M 1002 232 V 258" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#m-slate)"/>
+</svg>

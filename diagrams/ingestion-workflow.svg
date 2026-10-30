@@ -38,15 +38,15 @@
 
   <rect x="434" y="46" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
   <text x="516" y="61" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Sprache &amp; Telefonie</text>
-  <text x="441" y="75" font-size="7.7" fill="#334155">• Echtzeit-Verschriftlichung</text>
+  <text x="441" y="75" font-size="7.7" fill="#334155">• Automatische Verschriftlichung</text>
   <text x="441" y="88" font-size="7.7" fill="#334155">• Trennung der Sprecher</text>
   <text x="441" y="101" font-size="7.7" fill="#334155">• Erkennung von Fachbegriffen</text>
 
   <rect x="257" y="128" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-  <text x="339" y="143" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Schadensfotos &amp; Bildschutz</text>
-  <text x="264" y="157" font-size="7.7" fill="#334155">• Analyse von Unfallfotos</text>
-  <text x="264" y="170" font-size="7.7" fill="#334155">• Automatische Verpixelung</text>
-  <text x="264" y="183" font-size="7.7" fill="#334155">  unbeteiligter Dritter (DSGVO)</text>
+  <text x="339" y="143" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Schadensfoto-Analyse</text>
+  <text x="264" y="157" font-size="7.7" fill="#334155">• Erkennt beschädigte Teile</text>
+  <text x="264" y="170" font-size="7.7" fill="#334155">• Schätzt Schadenschwere ein</text>
+  <text x="264" y="183" font-size="7.7" fill="#334155">• Prüft Bild-Metadaten</text>
 
   <rect x="434" y="128" width="164" height="74" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
   <text x="516" y="143" text-anchor="middle" font-size="8.3" font-weight="700" fill="#0369a1">Medizin &amp; Übersetzung</text>

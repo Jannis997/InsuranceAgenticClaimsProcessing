@@ -12,31 +12,31 @@ control: "Prozesssteuerung & Sicherheits-Schranken" {
   style.fill: "#f8fafc"
   style.stroke: "#cbd5e1"
   queue: "Auftrags-Warteschlange\nGeordnete Fallübergabe" { style.fill: "#ffffff"; style.stroke: "#334155" }
-  loader: "Schadensart-Vorbereitung\nLädt Checkliste & Arbeitsanweisung" { style.fill: "#ffffff"; style.stroke: "#334155" }
-  orchestrator: "Zentraler Claims Orchestrator (Microsoft Foundry)\nKoordiniert alle Prüfschritte, schützt vor Manipulation & pausiert Vorgänge bei Rückfragen" { style.fill: "#f8fafc"; style.stroke: "#0284c7"; style.bold: true }
-  breaker: "Sicherheits-Schranke & Sachbearbeiter-Übergabe\nKeine automatische Ablehnung (DSGVO Art. 22) | Übergabe bei Großschäden & Betrugsverdacht" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  loader: "Schadensart-Vorbereitung\nLädt Prüfplan & Checkliste" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  orchestrator: "Zentraler Claims Orchestrator (Prozess-Steuerung)\nKoordiniert alle Prüfschritte, schützt vor Manipulation & pausiert Vorgänge bei Rückfragen" { style.fill: "#f8fafc"; style.stroke: "#0284c7"; style.bold: true }
+  breaker: "Sicherheits-Schranke & Sachbearbeiter-Übergabe (HITL)\nStoppt KI bei Ablehnung, Betrugsverdacht, Personenschaden oder Großschaden" { style.fill: "#ffffff"; style.stroke: "#334155" }
   queue -> loader -> orchestrator
-  orchestrator <-> breaker
+  orchestrator -> breaker
 }
 
 agents: "Fünf spezialisierte KI-Agenten mit streng getrennten Zugriffsrechten" {
   style.fill: "#ffffff"
   style.stroke: "#0284c7"
-  a1: "1. Kundenkommunikation\n• Prüft Vollständigkeit der Belege\n• Erstellt Abrechnungsschreiben\n• Interne Qualitätskontrolle vor Versand" { style.fill: "#f8fafc"; style.stroke: "#334155" }
-  a2: "2. Deckungsprüfung\n• Prüft Vertrag & Selbstbehalt\n• Gleicht exakt mit den damals\n  gültigen Bedingungen (AVB) ab" { style.fill: "#f8fafc"; style.stroke: "#334155" }
-  a3: "3. Betrugs- & Risikoprüfung\n• Prüft Fotos auf Dubletten\n• Erkennt organisierte Betrugsnetze\n  über Azure Databricks" { style.fill: "#f8fafc"; style.stroke: "#334155" }
-  a4: "4. Rechnungs- & Tarifprüfung\n• Ordnet Rechnungspositionen zu\n• Interne Gebühren-Kontrolle\n• Ruft deterministische Rechen-Engine" { style.fill: "#f8fafc"; style.stroke: "#334155" }
-  a5: "5. Auszahlung & Buchung\n• Bucht Schadenrückstellungen\n• Stößt SEPA-Auszahlung bei\n  eindeutiger Freigabe an" { style.fill: "#f8fafc"; style.stroke: "#334155" }
+  a1: "A1. Kundenkommunikation\n• Prüft Dokumenten-Checkliste\n• Erstellt Abrechnungsschreiben\n• Interne Qualitätskontrolle vor Versand" { style.fill: "#f8fafc"; style.stroke: "#334155" }
+  a2: "A2. Deckungs-Vorprüfung\n• Gleicht Schadenursache mit AVB ab\n• Strukturiert Vertragsfakten für\n  die verbindliche Rechen-Engine" { style.fill: "#f8fafc"; style.stroke: "#334155" }
+  a3: "A3. Betrugs- & Risikoprüfung\n• Prüft Fotos auf Dubletten\n• Fragt Betrugsnetzwerk-Score\n  in Azure Databricks ab" { style.fill: "#f8fafc"; style.stroke: "#334155" }
+  a4: "A4. Rechnungs- & Positionsprüfung\n• Übersetzt Rechnungszeilen in normierte\n  Reparatur- & Leistungspositionen\n• Übergibt an Rechen-Engine" { style.fill: "#f8fafc"; style.stroke: "#334155" }
+  a5: "A5. Auszahlung & Buchung\n• Bucht Schadenrückstellungen\n• Stößt SEPA-Auszahlung bei\n  eindeutiger Freigabe an" { style.fill: "#f8fafc"; style.stroke: "#334155" }
 }
 
-backends: "Verbindliche Kernsysteme & Wissensquellen" {
+backends: "Genutzte Systeme & Abfragen je Agent (1:1 Zuordnung)" {
   style.fill: "#f1f5f9"
   style.stroke: "#1e293b"
-  b1: "Schadenakte & Datenschutz-Tresor\nZuordnung der Empfängerdaten\nerst beim finalen Versand" { style.fill: "#ffffff"; style.stroke: "#334155" }
-  b2: "Historisches Bedingungswerk\nSuche in exakt der vertraglich\nvereinbarten Tarifgeneration" { style.fill: "#ffffff"; style.stroke: "#334155" }
-  b3: "Azure Databricks Analyseplattform\nAbgleich mit Betrugsnetzwerken\n& historischen Schadenmustern" { style.fill: "#ffffff"; style.stroke: "#334155" }
-  b4: "Deterministische Rechen-Engine\nVerbindliche Berechnung von\nHöchstgrenzen & Abzügen" { style.fill: "#ffffff"; style.stroke: "#334155" }
-  b5: "Bestands- & Zahlungssystem (SAP)\nVertragsdaten, Rückstellungen\n& SEPA-Banküberweisung" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  b1: "Schadenakte, AVB-Suche & Tresor\n• Liest offene Checkliste aus Akte\n• Holt AVB-Zitate aus Azure AI Search\n• Löst Adresse erst für Versand auf" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  b2: "Bestandssystem & Bedingungswerk\n• Liest Vertragsstatus & Bausteine (SQL)\n• Sucht Deckungs- & Ausschlussklauseln\n  in den gültigen Bedingungen (AI Search)" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  b3: "Bild-Archiv, Bestand & Databricks\n• Prüft Foto-Fingerabdrücke im Archiv\n• Liest Vorschadenhistorie im Bestand\n• Ruft Betrugsnetzwerk-Score ab" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  b4: "Tarif-Richtlinien & Rechen-Engine\n• Gleicht Reparaturvorgaben ab\n• Berechnet in der Rechen-Engine\n  verbindlich Limits, Abzüge & SB" { style.fill: "#ffffff"; style.stroke: "#334155" }
+  b5: "Datenschutz-Tresor, Bestand & SAP\n• Löst IBAN im Tresor für Zahlung auf\n• Führt SEPA-Überweisung in SAP aus\n• Verbucht Reserve & Abschlussstatus" { style.fill: "#ffffff"; style.stroke: "#334155" }
 }
 
 control.orchestrator -> agents.a1 -> backends.b1

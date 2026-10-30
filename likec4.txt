@@ -197,7 +197,7 @@ model {
       | Sicherheits-Aspekt | Umsetzung in Azure |
       | :--- | :--- |
       | **Netzwerk-Isolation** | Dediziertes Spoke-VNet (`10.42.0.0/16`) mit NSGs & Azure Firewall Egress-Filtering |
-      | **Private Endpoints** | Alle 5 Data Stores, Event Hubs, AI Foundry & Langfuse sind **ausschließlich** über `Azure Private Link` erreichbar (`publicNetworkAccess: Disabled`) |
+      | **Private Endpoints** | Alle 6 Data & Analytics Stores, Event Hubs, AI Foundry & Langfuse sind **ausschließlich** über `Azure Private Link` erreichbar (`publicNetworkAccess: Disabled`) |
       | **Authentifizierung (IAM)** | System-Assigned **Managed Identities** (Entra ID RBAC) für jeden Agenten und Service – keinerlei Passwörter oder API-Keys im Code |
       | **Verschlüsselung** | TLS 1.3 in Transit + Customer-Managed Keys (CMK) in Azure Key Vault at Rest |
       | **Data Residency & AI Privacy**| EU Data Boundary (Germany West Central / Sweden Central), Zero Data Retention bei Azure AI Services (kein Microsoft-Modelltraining) |
@@ -296,9 +296,9 @@ model {
           privacy 'Strict No-Trace Policy (Zero Data Retention)'
         }
       }
-      pii_tokenizer = compute '4. PII Tokenizer & Canonical Assembler' {
+      pii_tokenizer = compute '4. PII Tokenizer, Quality Gate & Canonical Assembler' {
         #pii_protected #security
-        summary 'Ersetzt PII durch konsistente Tokens (<PII:IBAN_1>, <PII:VIN_1>), speichert Mapping im Vault & JSON in blob_state'
+        summary 'Prüft Beleglesbarkeit (OCR-Konfidenz), ersetzt PII durch Tokens (<PII:IBAN_1>), speichert Mapping im Vault & JSON in blob_state'
         icon bootstrap:key-fill
       }
     }
@@ -307,12 +307,12 @@ model {
     // B. KLASSIFIKATION & DETERMINISTISCHE SCHADENANLAGE
     // -----------------------------------------------------------------------
     classification_pipeline = pipeline '2. Klassifikation & Deterministische Schadenanlage' {
-      summary 'Prüft Konfidenz, klassifiziert via Microsoft-Decision-1 (SystemOne API) & legt Schaden im PAS an'
+      summary 'Klassifiziert Schadensart & Schwere via Microsoft-Decision-1 (SystemOne API), bindet historische AVB & legt Schaden im PAS an'
       icon bootstrap:check-circle
       description '''
-        **Workflow nach der Textextraktion:**
+        **Workflow nach der Informationsextraktion:**
+        - Wurde bereits bei der Extraktion eine unzureichende Beleglesbarkeit (`< 0.80`) festgestellt, leitet die Eingangs-Weiche den Beleg zur kurzen Datenbestätigung an das HITL-System.
         - Ist die Meldung bereits aus dem Portal vorklassifiziert, wird die KI-Klassifikation übersprungen.
-        - Ist die Extraktions-Konfidenz eines Pflichtfelds zu niedrig (`< 0.80`), geht ein Korrektur-Task an das HITL-System.
         - Unstrukturierte Eingänge werden über **`Microsoft-Decision-1` (`/providers/microsoft/v1/systemone`)** typisiert klassifiziert:
           - `choice`: Exakte Schadensart (`AUTO_GLASS`, `WATER_DAMAGE`, `BODILY_INJURY`) + Wahrscheinlichkeitsverteilung.
           - `score`: Geordnete Schaden-Schwere (`Cosmetic`, `Minor`, `Major`, `Critical`).
@@ -320,8 +320,8 @@ model {
         - Für authentifizierte Kunden wird deterministisch der Vertrag geprüft, die **zum Vertragsabschluss gültige AVB-Generation (`AvbVersionId`)** ermittelt und die Schadenakte angelegt.
       '''
 
-      check_preclassified = compute '1. Vor-Klassifikations- & Qualitäts-Weiche' {
-        summary 'Prüft OCR-Konfidenz (>=0.80) & ob Schadensart bereits durch Kanal bekannt ist'
+      check_preclassified = compute '1. Eingangs- & Vor-Klassifikations-Weiche' {
+        summary 'Leitet unleserliche Belege (<0.80) an HITL & prüft, ob Schadensart bereits durch Portal bekannt ist'
         icon bootstrap:signpost-2
       }
       classifier_service = ai_service '2. Microsoft-Decision-1 Classifier (SystemOne API)' {
@@ -413,22 +413,22 @@ model {
       // --- AGENT 2: COVERAGE & BENEFITS ---
       coverage_agent = agent 'Coverage & Benefits Agent' {
         #versioning
-        summary 'Prüft Deckung & Ausschlüsse exakt gegen die bei Vertragsabschluss gültige AVB-Generation'
+        summary 'Inhaltliche Deckungs-Vorprüfung: Gleicht Schadenursache mit der historischen AVB-Generation ab & strukturiert Fakten für die Rules Engine'
         icon bootstrap:file-earmark-check-fill
 
         tool_get_policy = mcp_tool 'MCP: get_policy_at_loss_date' {
           #mcp #versioning
-          summary 'Liest Vertrag, Deckungen & die historisch gebundene AvbVersionId aus Azure SQL (PAS)'
+          summary 'Liest Vertrag, Deckungsbausteine & die historisch gebundene AvbVersionId aus Azure SQL (PAS)'
         }
 
         tool_search_clauses = mcp_tool 'MCP: search_historical_avb_clauses' {
           #mcp #versioning
-          summary 'Vektorsuche in Azure AI Search mit striktem Filter auf die AvbVersionId des Vertrags'
+          summary 'Sucht Deckungs- & Ausschlussklauseln in Azure AI Search mit striktem Filter auf die AvbVersionId des Vertrags'
         }
 
         tool_save_coverage = mcp_tool 'MCP: record_coverage_determination' {
           #mcp
-          summary 'Speichert Deckungsentscheidung, geprüfte Limits & gefundene AVB-Zitate im Claim Dossier'
+          summary 'Speichert Ergebnis der inhaltlichen Deckungs-Vorprüfung, Vertragsfakten & AVB-Zitate im Claim Dossier'
         }
       }
 
@@ -451,12 +451,12 @@ model {
       // --- AGENT 4: ADJUDICATION & PRICING ---
       adjudication_agent = agent 'Adjudication & Pricing Agent' {
         #versioning #critic_pattern
-        summary 'Mappt Rechnungspositionen auf Tarifcodes (mit Coding Critic) & ruft die Rules Engine auf'
+        summary 'Übersetzt Rechnungszeilen in normierte Reparatur- & Leistungspositionen (mit Coding Critic) & ruft die Rules Engine auf'
         icon bootstrap:calculator-fill
 
         coding_critic = critic 'Internal Coding & Tariff Critic' {
           #critic_pattern
-          summary 'Prüft das Mapping von Freitext-Rechnungspositionen auf offizielle Gebühren-/Reparaturcodes'
+          summary 'Prüft die Zuordnung von Freitext-Rechnungszeilen auf normierte Reparatur- & Leistungspositionen (Tarifcodes)'
           icon bootstrap:check2-all
         }
 
@@ -563,7 +563,7 @@ model {
         **Auf Level 1 als kompakte Einheit dargestellt – im Drill-Down (Level 2C) mit allen 3 Rollen & 5 Prüfschritten:**
         1. **Zwei Intakes:** Vertragliche AVBs (`actuary_legal`) & interne Unternehmensregeln (`business_analyst`).
         2. **KI-Transformation:** Übersetzung in typisiertes DSL + Unit-Tests.
-        3. **Z3-Konfliktprüfung & Backtesting:** Mathematische Widerspruchsprüfung & Simulation gegen 10.000 historische Claims.
+        3. **Z3-Konfliktprüfung & Databricks Mass-Backtesting:** Mathematische Widerspruchsprüfung & Simulation gegen 500.000+ historische Delta-Lake-Claims in Azure Databricks.
         4. **4-Augen-Freigabe:** `risk_compliance_manager` prüft den finanziellen Impact und gibt das Deployment frei.
       '''
 
@@ -1211,7 +1211,7 @@ views {
       - **Kernfluss (1 &rarr; 2 &rarr; 3 &rarr; 4):** Von `1. Ingestion, Extraction & PII-Tokenization` über `2. Klassifikation & Schadenanlage` in das `3. Multi-Agent Claim Processing System` und bei Bedarf in `4. Circuit Breaker & HITL`.
       - **Kompakte Blöcke mit Drill-Down (Lupe anklicken!):**
         - `Policy Management & Rule Authoring` kapselt die 3 Rollen (Business Analyst, Aktuariat, Risk Manager) und den 4-Augen-Freigabeprozess (Level 2C).
-        - `Secured Azure Data & Knowledge Platform` fasst alle 5 Private-Link-Speicher zusammen (inkl. vollständiger **Security- & Data-Privacy-Matrix** beim Anklicken!).
+        - `Secured Azure Data, Knowledge & Databricks Platform` fasst alle 6 Private-Link-Speicher & Analyse-Systeme zusammen (inkl. vollständiger **Security- & Data-Privacy-Matrix** beim Anklicken!).
         - `Event Hubs`, `Front Door / APIM` und `Core ERP` liegen sauber in den jeweiligen Subsystemen (Level 2).
     '''
 
@@ -1292,7 +1292,7 @@ views {
       **Hier werden die 3 Fachrollen sichtbar, die auf Level 1 ausgeblendet sind:**
       1. **Intake:** Vertragliche AVBs (`actuary_legal`) oder interne Unternehmensregeln (`business_analyst`).
       2. **DSL-Transformation:** `authoring_agent` erzeugt YAML-DSL und Unit-Tests.
-      3. **Konflikt- & Impact-Analyse (`conflict_simulator`):** Prüft per Z3-Solver auf logische Widersprüche und simuliert gegen 10.000 historische Claims aus `table_claim_dossier`.
+      3. **Konflikt- & Impact-Analyse (`conflict_simulator`):** Prüft per Z3-Solver auf logische Widersprüche und simuliert über `spark_photon_backtester` in Azure Databricks gegen 500.000+ historische Claims aus `unity_catalog_delta`.
       4. **4-Augen-Prüfung (`impact_approval_portal`):** Der `risk_compliance_manager` prüft das finanzielle Impact-Delta und gibt die Regel frei.
     '''
 
@@ -1315,9 +1315,9 @@ views {
   // LEVEL 2D: DRILL-DOWN MULTI-AGENT SYSTEM (INKL. SERVICE BUS, LANGFUSE, STORES & ERP)
   // -------------------------------------------------------------------------
   view view_multi_agent_system of azure_vnet.multi_agent_system {
-    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 5 Stores'
+    title 'Level 2D: Multi-Agent System – Service Bus, Langfuse Prompts, Sub-Agenten & 6 Data/ML Stores'
     description '''
-      **Detailansicht des Multi-Agent-Systems (hier mit aufgeschlüsselten Datenbanken & ERP):**
+      **Detailansicht des Multi-Agent-Systems (hier mit allen 6 aufgeschlüsselten Daten-/ML-Plattformen & ERP):**
       - `claims_event_bus` puffert die eingehenden Fälle.
       - `playbook_loader` lädt für die jeweilige Schadensart die Systemprompts, Agenten-Skills und Dokumenten-Checklisten aus `langfuse.prompt_registry`.
       - Klicke auf einen beliebigen der 5 Agenten, um in seine internen MCP-Tools, Critics und Datenbank-Tabellen hineinzuzoomen (Level 3A–3E)!
@@ -1399,6 +1399,7 @@ views {
       azure_vnet.governance_svc.adjuster_app,
       azure_vnet.data_stores.vector_search.table_vector_index,
       azure_vnet.data_stores.cosmos_claims.table_claim_dossier,
+      azure_vnet.data_stores.databricks_lakehouse.unity_catalog_delta,
       azure_vnet.langfuse,
       azure_vnet.langfuse.*
 
@@ -1480,11 +1481,11 @@ views {
   // LEVEL 3C: DEEP-DIVE FRAUD & RISK AGENT
   // -------------------------------------------------------------------------
   view view_fraud_agent of azure_vnet.multi_agent_system.fraud_agent {
-    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik & Anomalie-Scoring'
+    title 'Level 3C: Deep-Dive Fraud & Risk Agent – Bild-Forensik, Vorschäden & Databricks Betrugsring-ML'
     description '''
       **Interner Aufbau des Fraud & Risk Agenten:**
       - `tool_check_image_hash` prüft hochgeladene Fotos/PDFs in `blob_raw` auf Bildmanipulation, EXIF-Anomalien und Dubletten über bestehende Dossiers (`table_claim_dossier`).
-      - `tool_score_anomaly` korreliert Rechnungsmerkmale (`blob_state`) mit der Vorschadenhistorie (`table_pas_claims`) und der Risikoklasse (`table_customers`).
+      - `tool_score_anomaly` korreliert Rechnungsmerkmale (`blob_state`), Vorschadenhistorie (`table_pas_claims`) und Kundenrisiko (`table_customers`) und ruft über `mosaic_fraud_ml` in Azure Databricks den Echtzeit-Betrugsring-Score (GraphFrames & XGBoost) ab.
     '''
 
     include
@@ -1551,14 +1552,14 @@ views {
   }
 
   // -------------------------------------------------------------------------
-  // LEVEL 3F: DRILL-DOWN IN ALLE 5 DATENBANKEN, SCHEMATA & SECURITY/PRIVACY
+  // LEVEL 3F: DRILL-DOWN IN ALLE 6 DATEN- & ANALYSE-PLATTFORMEN, SCHEMATA & SECURITY
   // -------------------------------------------------------------------------
   view view_database_schemas of azure_vnet.data_stores {
-    title 'Level 3F: Detailansicht der 5 Enterprise Data Stores, Private Link & Schemata'
+    title 'Level 3F: Detailansicht der 6 Enterprise Data & Analytics Stores (inkl. Databricks), Private Link & Schemata'
     description '''
-      **Vollständige Datenbank-, Security- & Schema-Übersicht:**
-      - Hier sind alle 5 Speicher einzeln aufgefächert (die auf Level 1 für die Übersichtlichkeit zu einer Plattform-Box zusammengefasst sind).
-      - Enthält `Azure Key Vault & Private Link DNS` sowie den `pii_token_vault`.
+      **Vollständige Datenbank-, Lakehouse-, Security- & Schema-Übersicht:**
+      - Hier sind alle 6 Speicher- und Analyse-Plattformen einzeln aufgefächert (die auf Level 1 für die Übersichtlichkeit zu einer Plattform-Box zusammengefasst sind).
+      - Enthält `Azure Key Vault & Private Link DNS`, den isolierten `pii_token_vault` sowie das `Azure Databricks Lakehouse & Mosaic AI`.
       - Klicke auf ein beliebiges Element, um rechts im Inspektor die Markdown-Tabellen und Privacy-Klassifizierungen zu sehen!
     '''
 

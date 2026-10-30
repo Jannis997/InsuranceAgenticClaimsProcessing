@@ -1,4 +1,2 @@
-node_modules/
-dist/
-.likec4/
-architecture.c4
+changes.xml
+apply_xml.py

@@ -1,4 +1,4 @@
-# D2 Diagram 1 (English): Level 1 Clean Architecture Overview (Paste into https://play.d2lang.com)
+# Executive Architecture Overview - English (Paste into https://play.d2lang.com)
 direction: right
 
 vars: {
@@ -9,136 +9,79 @@ vars: {
 }
 
 classes: {
-  actor_box: {
-    shape: person
+  card: {
     style: {
-      fill: "#f1f5f9"
+      fill: "#ffffff"
       stroke: "#334155"
       stroke-width: 2
+      border-radius: 6
       font-color: "#0f172a"
     }
   }
-  core_stage: {
+  accent: {
     style: {
       fill: "#f8fafc"
-      stroke: "#0369a1"
+      stroke: "#0284c7"
       stroke-width: 2
       border-radius: 6
       font-color: "#0f172a"
     }
   }
-  agent_stage: {
-    style: {
-      fill: "#f0fdfa"
-      stroke: "#0f766e"
-      stroke-width: 2
-      border-radius: 6
-      font-color: "#0f172a"
-    }
-  }
-  rules_stage: {
-    style: {
-      fill: "#fffbeb"
-      stroke: "#b45309"
-      stroke-width: 2
-      border-radius: 6
-      font-color: "#0f172a"
-    }
-  }
-  gov_stage: {
-    style: {
-      fill: "#fff1f2"
-      stroke: "#be123c"
-      stroke-width: 2
-      border-radius: 6
-      font-color: "#0f172a"
-    }
-  }
-  data_spine: {
-    shape: cylinder
+  platform: {
     style: {
       fill: "#f1f5f9"
       stroke: "#1e293b"
       stroke-width: 2
+      border-radius: 6
       font-color: "#0f172a"
     }
   }
 }
 
-entry: "External Channels & Actors" {
-  style.fill: "#ffffff"
+entry: "Customer & Adjuster Access" {
+  style.fill: "#f8fafc"
   style.stroke: "#cbd5e1"
-
-  claimant: "Policyholder\n(Claimant)" {
-    class: actor_box
-  }
-  channels: "Omnichannel & IVR\n(Web, App, Email, Voice Live)" {
-    class: core_stage
-  }
-  adjuster: "Specialist Adjuster\n(HITL Workbench)" {
-    class: actor_box
-  }
-  claimant -> channels: "Submits Claim & Docs"
+  claimant: "Policyholder\n(Claim Submission & Docs)" { class: card }
+  channels: "Input Channels\n(Portal, App, Email, Phone)" { class: card }
+  adjuster: "Specialist Adjuster\n(Human Review on Escalation)" { class: card }
+  claimant -> channels
 }
 
-azure_vnet: "Azure Virtual Network (Isolated Spoke 10.42.0.0/16 — Zero Public Access / 100% Private Link & CMK)" {
-  style.stroke-dash: 5
-  style.stroke: "#0284c7"
+vnet: "Secured Azure Cloud Environment (Zero Public Internet Access / 100% Private Network Connectivity)" {
   style.fill: "#ffffff"
+  style.stroke: "#0284c7"
+  style.stroke-dash: 5
 
-  pipeline_row: "Core Processing Pipeline" {
+  flow: "Operational Claims Processing Chain" {
     style.stroke: transparent
     style.fill: transparent
-
-    extraction: "1. Ingestion & PII-Tokenization\n• Front Door WAF, APIM & Event Hub\n• Content Understanding & Doc Intel v4\n• Speech MAI-Transcribe-2 & Face Blur\n• PII Tokenizer (<PII:IBAN_1>)" {
-      class: core_stage
-    }
-    classification: "2. Classification & Claim Setup\n• OCR Confidence Gate (>= 0.80)\n• Microsoft-Decision-1 Classifier\n• Historical AvbVersionId Binding\n• Deterministic PAS Claim Creation" {
-      class: core_stage
-    }
-    multi_agent: "3. Multi-Agent Claim Processing\n• Service Bus Queue (session: claimId)\n• Magentic Claims Orchestrator\n• 5 Hosted Agents + Generator-Critics\n• Prompt Shields & Model Router" {
-      class: agent_stage
-    }
-    langfuse: "Langfuse LLMOps & Eval\n• Self-Hosted OTel PII Guard\n• Prompt & Skill Registry\n• RAG Triad & Agent Evaluation" {
-      class: core_stage
-    }
-
-    extraction -> classification: "Sanitized JSON (<PII:..._1>)"
-    classification -> multi_agent: "Queued Claim Event"
-    multi_agent <-> langfuse: "Prompts & OTel Spans"
+    step1: "1. Ingestion & Data Privacy\n• Structured AI Information Extraction\n• Original Archive & Readability Check\n• Early Anonymization of Personal Data" { class: accent }
+    step2: "2. Classification & Claim Setup\n• Categorization by Claim Type & Severity\n• Customer & Policy Master Data Match\n• Binding Claim Creation in Core System" { class: accent }
+    step3: "3. Multi-Agent Claim Review\n• Central Coordination via Orchestrator\n• 5 Specialized Agents & Internal Critics" { class: accent }
+    monitoring: "AI Quality & Monitoring\n• Privacy-Safe Audit Logging\n• Continuous Quality Evaluation" { class: card }
+    step1 -> step2 -> step3
+    step3 <-> monitoring
   }
 
-  platform_row: "Data Spine, Rules & Governance" {
+  foundation: "Data Platform, Rules Runtime & Escalation" {
     style.stroke: transparent
     style.fill: transparent
-
-    data_stores: "Secured Azure Data, Knowledge & Databricks Platform (Private Link)\n1. Blob raw-artifacts (WORM) | 2. Blob extracted-state (JSON + BBoxes)\n3. Cosmos DB (Dossiers & Isolated PII Vault) | 4. Azure AI Search (Hybrid RRF + L2)\n5. Azure SQL (PAS Core) | 6. Azure Databricks Lakehouse (Unity Catalog, 500k Backtest, GraphFrames Fraud)" {
-      class: data_spine
-    }
-    rules_engine: "Deterministic Rules Runtime\n• Unified Versioned Rule Repo\n• Exact Tariff, Cap & Deductible Math" {
-      class: rules_stage
-    }
-    rule_authoring: "Policy Management (4-Eyes)\n• NL-to-DSL & Z3 Conflict Solver\n• Databricks 500k Claims Backtest" {
-      class: rules_stage
-    }
-    governance: "4. Circuit Breaker & HITL Platform\n• Asymmetrical: No Auto-Reject (GDPR Art. 22)\n• Path 1 (OCR Fix): Resume Orchestrator\n• Path 2 (Final Decision): Direct Executor" {
-      class: gov_stage
-    }
-    outcomes: "Claims Processing Outcomes\n1. STP Dark Processing | 2. Customer Comm Loop | 3. HITL Resolution" {
-      class: agent_stage
-    }
-
-    rule_authoring -> rules_engine: "4-Eyes Sign-Off"
-    governance -> outcomes: "Path 2: Direct Settlement"
+    data: "Central Data, Knowledge & Analytics Platform (Azure & Databricks)\n• Audit-Proof Original Archive, Operational Claim File & Isolated Privacy Vault\n• Policy Admin System (SQL), Policy Knowledge Base & Databricks Fraud/Simulation Analytics" { class: platform }
+    rules: "Deterministic Calculation Engine\n• Binding Limit, Cap & Deductible Math" { class: card }
+    policy: "Policy Management (4-Eyes)\n• Business Authoring, Simulation & Sign-Off" { class: card }
+    hitl: "4. Safety Guardrails & Human Review (HITL)\n• No Automated Rejection (GDPR Art. 22)\n• Prepared Case File with Source Highlights" { class: card }
+    outcomes: "Defined Claims Processing Outcomes\n1. Dark Processing (STP) | 2. Customer Dialogue Loop | 3. Specialist Resolution (HITL)" { class: platform }
+    policy -> rules
+    hitl -> outcomes
   }
 
-  pipeline_row.extraction -> platform_row.data_stores: "WORM Raw & PII Vault"
-  pipeline_row.classification -> platform_row.data_stores: "Reads Policy & AvbVersionId"
-  pipeline_row.multi_agent <-> platform_row.data_stores: "MCP Tools (RAG, Dossier, Fraud ML)"
-  pipeline_row.multi_agent <-> platform_row.rules_engine: "Evaluates Payout Rules"
-  pipeline_row.multi_agent -> platform_row.governance: "Guardrail Escalation"
-  pipeline_row.multi_agent -> platform_row.outcomes: "STP / Customer Loop"
+  flow.step1 -> foundation.data
+  flow.step2 -> foundation.data
+  flow.step3 <-> foundation.data
+  flow.step3 <-> foundation.rules
+  flow.step3 -> foundation.hitl
+  flow.step3 -> foundation.outcomes
 }
 
-entry.channels -> azure_vnet.pipeline_row.extraction: "HTTPS + Entra Auth"
-azure_vnet.platform_row.governance <-> entry.adjuster: "BBox Dossier & Decision"
+entry.channels -> vnet.flow.step1
+vnet.foundation.hitl <-> entry.adjuster

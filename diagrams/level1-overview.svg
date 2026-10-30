@@ -33,16 +33,16 @@
   <rect x="190" y="36" width="202" height="19" rx="4" fill="#0369a1"/>
   <text x="291" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">1. Ingestion &amp; Datenschutz</text>
   <text x="198" y="66" font-size="8.1" fill="#334155">• Annahme aller Dokument- &amp; Sprachkanäle</text>
-  <text x="198" y="80" font-size="8.1" fill="#334155">• Strukturierte KI-Belegauswertung</text>
-  <text x="198" y="94" font-size="8.1" fill="#334155">• Original-Archivierung (Revisionssicher)</text>
+  <text x="198" y="80" font-size="8.1" fill="#334155">• Strukturierte KI-Informationsextraktion</text>
+  <text x="198" y="94" font-size="8.1" fill="#334155">• Original-Archiv &amp; Lesbarkeitsprüfung</text>
   <text x="198" y="108" font-size="8.1" font-weight="700" fill="#0369a1">• Frühe Anonymisierung persönlicher Daten</text>
 
   <rect x="414" y="36" width="202" height="88" rx="5" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
   <rect x="414" y="36" width="202" height="19" rx="4" fill="#0369a1"/>
   <text x="515" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">2. Klassifikation &amp; Schadenanlage</text>
-  <text x="422" y="66" font-size="8.1" fill="#334155">• Qualitätsprüfung der Beleglesbarkeit</text>
-  <text x="422" y="80" font-size="8.1" fill="#334155">• Einordnung nach Schadensart &amp; Schwere</text>
-  <text x="422" y="94" font-size="8.1" font-weight="700" fill="#0369a1">• Bindung historischer Vertragsbedingungen</text>
+  <text x="422" y="66" font-size="8.1" fill="#334155">• Einordnung nach Schadensart &amp; Schwere</text>
+  <text x="422" y="80" font-size="8.1" fill="#334155">• Abgleich mit Kunden- &amp; Vertragsstamm</text>
+  <text x="422" y="94" font-size="8.1" font-weight="700" fill="#0369a1">• Zuordnung der gültigen Vertragsbasis</text>
   <text x="422" y="108" font-size="8.1" fill="#334155">• Verbindliche Anlage im Bestandssystem</text>
 
   <rect x="642" y="36" width="252" height="88" rx="5" fill="#ffffff" stroke="#1e293b" stroke-width="1.6"/>
@@ -50,7 +50,7 @@
   <text x="768" y="49" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">3. Multi-Agenten-Schadenprüfung</text>
   <text x="650" y="66" font-size="8.1" font-weight="700" fill="#0f172a">• Zentraler Orchestrator steuert Bearbeitung</text>
   <text x="650" y="80" font-size="8.1" fill="#334155">• 5 Spezial-Agenten (Kunde, Deckung,</text>
-  <text x="650" y="94" font-size="8.1" fill="#334155">  Betrugsprüfung, Tarif &amp; Auszahlung)</text>
+  <text x="650" y="94" font-size="8.1" fill="#334155">  Betrugsprüfung, Rechnung &amp; Auszahlung)</text>
   <text x="650" y="108" font-size="8.1" fill="#334155">• Interne Prüf-Agenten &amp; KI-Leitplanken</text>
 
   <rect x="920" y="36" width="174" height="88" rx="5" fill="#ffffff" stroke="#475569" stroke-width="1.4"/>
@@ -66,14 +66,14 @@
   <rect x="190" y="152" width="426" height="18" rx="4" fill="#334155"/>
   <text x="403" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Zentrale Daten-, Wissens- &amp; Analyseplattform (Azure &amp; Databricks)</text>
   <text x="403" y="181" text-anchor="middle" font-size="8" fill="#1e293b">• Revisionssicheres Original-Archiv, operative Schadenakte &amp; streng isolierter Datenschutz-Tresor</text>
-  <text x="403" y="195" text-anchor="middle" font-size="8" fill="#1e293b">• Vertrags-Bestandssystem (SQL) &amp; historische Bedingungs-Wissensbasis (Azure AI Search)</text>
+  <text x="403" y="195" text-anchor="middle" font-size="8" fill="#1e293b">• Vertrags-Bestandssystem (SQL) &amp; Bedingungs-Wissensbasis (Azure AI Search)</text>
   <text x="403" y="209" text-anchor="middle" font-size="8" font-weight="700" fill="#0369a1">• Azure Databricks: Übergreifende Betrugsnetzwerk-Erkennung, Regelsimulation &amp; Aktuariat</text>
 
   <rect x="642" y="152" width="252" height="68" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
   <rect x="642" y="152" width="252" height="18" rx="4" fill="#334155"/>
   <text x="768" y="164" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">Deterministische Rechen-Engine</text>
   <text x="650" y="182" font-size="8.1" fill="#334155">• Einheitliches, versioniertes Regelwerk</text>
-  <text x="650" y="196" font-size="8.1" fill="#334155">• Verbindliche Tarif- &amp; Abzugsberechnung</text>
+  <text x="650" y="196" font-size="8.1" fill="#334155">• Verbindliche Limit- &amp; Abzugsberechnung</text>
   <text x="650" y="210" font-size="8.1" font-weight="700" fill="#0f172a">• Keine KI-Schätzung bei Geldbeträgen</text>
 
   <rect x="920" y="152" width="174" height="68" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.4"/>
@@ -88,8 +88,8 @@
   <rect x="190" y="246" width="265" height="18" rx="4" fill="#1e293b"/>
   <text x="322" y="258" text-anchor="middle" font-size="8.9" font-weight="700" fill="#ffffff">4. Sicherheits-Schranken &amp; Fachprüfung (HITL)</text>
   <text x="198" y="275" font-size="8" font-weight="700" fill="#0f172a">• Keine automatische Ablehnung (DSGVO Art. 22)</text>
-  <text x="198" y="288" font-size="8" fill="#334155">• Pfad 1 (Beleg-Bestätigung): KI-Prozess läuft weiter</text>
-  <text x="198" y="301" font-size="8" fill="#334155">• Pfad 2 (Sachentscheid): Direkte Abwicklung</text>
+  <text x="198" y="288" font-size="8" fill="#334155">• Übergabe bei Großschaden, Betrug &amp; Unklarheit</text>
+  <text x="198" y="301" font-size="8" fill="#334155">• Entscheidungsvorlage mit Beleg-Markierung</text>
 
   <rect x="482" y="246" width="612" height="64" rx="5" fill="#f8fafc" stroke="#334155" stroke-width="1.4"/>
   <rect x="482" y="246" width="612" height="18" rx="4" fill="#0369a1"/>
