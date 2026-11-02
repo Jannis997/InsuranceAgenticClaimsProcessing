@@ -1202,20 +1202,20 @@
         ],
       ],
       labelBBox: {
-        x: 4009,
-        y: 1086,
+        x: 4164,
+        y: 984,
         width: 156,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
-          x: 3337,
-          y: 1070,
+          x: 3340,
+          y: 998,
         },
         {
-          x: 3663,
-          y: 1108,
+          x: 3915,
+          y: 1008,
         },
         {
           x: 4510,
@@ -1507,12 +1507,12 @@
         ],
       ],
       labelBBox: {
-        x: 4405,
-        y: 986,
+        x: 4387,
+        y: 957,
         width: 178,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
           x: 5634,
@@ -1647,12 +1647,12 @@
         ],
       ],
       labelBBox: {
-        x: 4631,
-        y: 932,
+        x: 4615,
+        y: 921,
         width: 147,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
           x: 3317,
@@ -2213,40 +2213,20 @@
         ],
       ],
       labelBBox: {
-        x: 4176,
-        y: 1000,
+        x: 3681,
+        y: 1867,
         width: 171,
         height: 18,
       },
-      isLabelCustomized: false,
+      isLabelCustomized: true,
       controlPoints: [
         {
-          x: 3339,
-          y: 1022,
+          x: 3681,
+          y: 1867,
         },
         {
-          x: 5168,
-          y: 1022,
-        },
-        {
-          x: 5221,
-          y: 1445,
-        },
-        {
-          x: 5164,
-          y: 3143,
-        },
-        {
-          x: 4319,
-          y: 3068,
-        },
-        {
-          x: 4318,
-          y: 3109,
-        },
-        {
-          x: 4285,
-          y: 3087,
+          x: 3918,
+          y: 2265,
         },
       ],
       navigateTo: null,
